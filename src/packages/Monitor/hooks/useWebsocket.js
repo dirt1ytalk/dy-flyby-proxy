@@ -29,6 +29,19 @@ export function useWebsocket(options, allGiftData) {
         if (!msgType) {
             return;
         }
+
+        // {
+        //     "type": "blab",
+        //     "uid": "17484032",
+        //     "nn": "爱队",
+        //     "lbl": "1",
+        //     "bl": "4",
+        //     "ba": "1",
+        //     "bnn": "淑怡",
+        //     "diaf": "0",
+        //     "rid": "290935"
+        // }
+
         if (msgType === "chatmsg" && options.value.switch.includes("danmaku")) {
             let data = stt.deserialize(msg);
             if (!checkDanmakuValid(data)) {
@@ -112,24 +125,19 @@ export function useWebsocket(options, allGiftData) {
                     }
                     giftList.value.push(obj);
                     break;
-                case ("blab"):
+                case "blab":
                     //粉丝牌升级
                     obj = {
-                        sptype: "粉丝牌升级",
-                        nn: data.nick,
-                        lv: data.level,
-                        fl: data.fl,
+                        sptype: "粉丝牌升到",
+                        nn: data.nn,
+                        blv: data.bl,
                         gfid: "0",
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
                     }
-                    if (giftList.value.length + 1 > options.value.threshold) {
-                        giftList.value.shift();
-                    }
-                    if (obj.fl >= 15) {
-                        giftList.value.push(obj);
-                    }
+                    giftList.value.push(obj)
+                    break;
                 default:
                     break;
             }

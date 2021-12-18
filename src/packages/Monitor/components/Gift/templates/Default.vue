@@ -1,12 +1,13 @@
 <template>
-  <div :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
-    <div class="item__gift">
-      <img class="avatar" :src="`${'type' in data ? DIAMOND_URL : GIFT_IMG_PREFIX}${'type' in data ? '' : giftData.pic}`" loading="lazy" />
+    <div v-if="'sptype' in data"> {{data.nn}} 粉丝牌升到 {{data.blv}} 级</div>
+    <div v-else :class="`item ${showAnimation?'fadeInLeft' : ''} ${getItemClass(data)}`">
+        <div class="item__gift">
+            <img class="avatar" :src="`${'type' in data ? DIAMOND_URL : GIFT_IMG_PREFIX}${'type' in data ? '' : giftData.pic}`" loading="lazy" />
+        </div>
+        <div class="item__cnt">{{'type' in data ? data.type : giftData.n}}*{{data.gfcnt}}</div>
+        <div class="item__name">{{data.nn}}</div>
+        <div v-if="Number(data.hits)>=5" class="item__hits">累计x{{data.hits}}</div>
     </div>
-    <div class="item__cnt">{{ 'sptype' in data ? data.sptype : 'tpye' in data ? type : giftData.n }}*{{ data.gfcnt }} {{ 'sptype' in data ? ' - ' + data.fl : ""}}</div>
-    <div class="item__name">{{ data.nn }}</div>
-    <div v-if="Number(data.hits) >= 5" class="item__hits">累计x{{ data.hits }}</div>    
-  </div>
 </template>
 
 <script setup>

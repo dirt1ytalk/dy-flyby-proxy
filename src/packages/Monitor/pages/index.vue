@@ -255,7 +255,7 @@ let maxOrder = computed(() => {
 })
 
 onMounted(async () => {
-  let rid = 520
+  let rid = 78622
   let propsOptions = window.options
   if (propsOptions && propsOptions !== '') {
     // 当网页参数传了options，就使用网页的options

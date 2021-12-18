@@ -9,7 +9,7 @@
 
 .FansMedal-name {
     display: block;
-    margin-left: 20px;
+    margin-left: 17px;
     margin-top: 3px;
     line-height: 16px;
     font-size: 12px;
@@ -20,9 +20,10 @@
 .FansMedalBox-diamondsIcon {
     width: 27px!important;
     height: 19px!important;
-    position: absolute;
+    position: relative;
     bottom: 0;
     right: 0;
+    display: inline;
 }
 
 .is-diamonds {

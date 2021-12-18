@@ -45,10 +45,11 @@
     </el-container>
 </template>
 <script>
+import Flyby from '../packages/Monitor/components/Danmaku/Danmaku.vue'
+import Enter from '../packages/Monitor/components/Enter/Enter.vue'
+import Gifts from '../packages/Monitor/components/Gift/Gift.vue'
+
 export default {
     
 }
 </script>
-<style lang="">
-    
-</style>

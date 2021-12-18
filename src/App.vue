@@ -1,5 +1,5 @@
 <template>
-    <Layout></Layout>
+    <Monitor></Monitor>
 </template>
 
 <script setup>

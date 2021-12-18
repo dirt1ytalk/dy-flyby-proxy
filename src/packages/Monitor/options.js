@@ -7,9 +7,9 @@ export const defaultOptions = {
     align: "left",
     // 每个模块的占比%
     size: {
-        enter: 15,
-        gift: 25,
-        danmaku: 30,
+        enter: 33,
+        gift: 33,
+        danmaku: 33,
     },
     // 每个模块的排序
     order: {

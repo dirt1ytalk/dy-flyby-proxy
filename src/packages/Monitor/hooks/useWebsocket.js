@@ -53,7 +53,7 @@ export function useWebsocket(options, allGiftData) {
             }
             danmakuList.value.push(obj);
         }
-        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc") && options.value.switch.includes("gift")) {
+        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab") && options.value.switch.includes("gift")) {
             let data = stt.deserialize(msg);
             // 续费钻粉
             // {"type":"rndfbc","uid":"573096","rid":"5189167","nick":"一只小洋丶","icon":"avatar_v3/202111/d7d383be4c874af0b50e3d9eb58ad462","level":"39","nl":"0","pg":"1","fl":"24","bn":"歆崽"}
@@ -112,6 +112,24 @@ export function useWebsocket(options, allGiftData) {
                     }
                     giftList.value.push(obj);
                     break;
+                case ("blab"):
+                    //粉丝牌升级
+                    obj = {
+                        sptype: "粉丝牌升级",
+                        nn: data.nick,
+                        lv: data.level,
+                        fl: data.fl,
+                        gfid: "0",
+                        gfcnt: "1",
+                        hits: "1",
+                        key: new Date().getTime() + Math.random(),
+                    }
+                    if (giftList.value.length + 1 > options.value.threshold) {
+                        giftList.value.shift();
+                    }
+                    if (obj.fl >= 15) {
+                        giftList.value.push(obj);
+                    }
                 default:
                     break;
             }

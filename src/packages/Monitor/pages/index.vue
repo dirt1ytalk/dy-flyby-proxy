@@ -61,8 +61,8 @@
     <Enter v-if="options.switch.includes('enter')" :maxOrder="maxOrder" :options="options" :enterList="enterList"></Enter>
     <Danmaku v-if="options.switch.includes('danmaku')" :maxOrder="maxOrder" :options="options" :danmakuList="danmakuList"></Danmaku>
   </div> -->
-  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '50%' }">
-    <div class="popup-top">
+  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '33%' }">
+    <!-- <div class="popup-top">
       <div @click="onClickChangeMode">
         <svg
           v-if="options.mode === 'night'"
@@ -99,7 +99,7 @@
           ></path>
         </svg>
       </div>
-    </div>
+    </div> -->
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
         <!-- <Field label="布局">
@@ -123,16 +123,16 @@
             </RadioGroup>
           </template>
         </Field>
-        <Field label="字号">
-          <template #input>
-            <Slider v-model="options.fontSize" :min="12" :max="30" />
-          </template>
-        </Field>
         <Field label="背景透明">
           <template #input>
             <Switch v-model="options.transparent" size="20" />
           </template>
         </Field> -->
+        <Field label="字号">
+          <template #input>
+            <Slider v-model="options.fontSize" :min="12" :max="30" />
+          </template>
+        </Field>
         <Field label="显示动画">
           <template #input>
             <Switch v-model="options.animation" size="20" />

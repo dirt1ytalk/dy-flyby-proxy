@@ -5,7 +5,7 @@
             :data="item"
             :key="item.key"
             :mode="options.mode"
-            :keywords="options.enter.keywords"
+            :keywords="options.danmaku.vip"
             :showAnimation="options.animation"
             :showLevel="options.enter.show.includes('level')"
             :showNoble="options.enter.show.includes('noble')"

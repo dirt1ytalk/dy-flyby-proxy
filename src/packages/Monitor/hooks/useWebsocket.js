@@ -173,6 +173,9 @@ export function useWebsocket(options, allGiftData) {
         }
         if (msgType === "uenter" && options.value.switch.includes("enter")) {
             let data = stt.deserialize(msg);
+            if (!checkEnterValid(data)) {
+                return;
+            }
             let obj = {
                 nn: data.nn,
                 avatar: data.ic, // 头像地址 https://apic.douyucdn.cn/upload/ + avatar + _small.jpg
@@ -203,6 +206,22 @@ export function useWebsocket(options, allGiftData) {
             }
         }
         // 判断关键昵称
+        let nicknames = options.value.danmaku.ban.nicknames ? options.value.danmaku.ban.nicknames.trim() : "";
+        if (nicknames !== "") {
+            let arr = nicknames.split(" ");
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] !== "" && data.nn.indexOf(arr[i]) !== -1) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    const checkEnterValid = (data) =>{
+        if (Number(data.level) <= Number(options.value.danmaku.ban.level)) {
+            return false;
+        }
         let nicknames = options.value.danmaku.ban.nicknames ? options.value.danmaku.ban.nicknames.trim() : "";
         if (nicknames !== "") {
             let arr = nicknames.split(" ");

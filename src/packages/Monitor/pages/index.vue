@@ -116,7 +116,7 @@
         <Field v-model="options.danmaku.ban.level" label="屏蔽等级≤" type="digit" placeholder="请输入屏蔽的等级"></Field>
         <Field v-model="options.danmaku.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:关键词1 关键词2"></Field>
         <Field v-model="options.danmaku.ban.nicknames" label="屏蔽昵称" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
-        <Field v-model="options.danmaku.vip" label="弹幕特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
+        <Field v-model="options.danmaku.vip" label="特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="礼物">
         <Field v-model="options.gift.ban.price" label="屏蔽单价<" type="number" placeholder="请输入单价(非亲密度)"></Field>
@@ -133,7 +133,6 @@
             </CheckboxGroup>
           </template>
         </Field>
-        <Field v-model="options.enter.keywords" label="进场特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="Fail Safe">
         <Field label="布局 - 弹幕">

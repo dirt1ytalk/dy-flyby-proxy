@@ -7,6 +7,7 @@ export function useWebsocket(options, allGiftData) {
     let ws = null;
     let stt = new STT();
     let danmakuList = ref([]);
+    let danmakuListVIP = ref([]);
     let enterList = ref([]);
     let giftList = ref([]);
 
@@ -66,6 +67,33 @@ export function useWebsocket(options, allGiftData) {
             }
             danmakuList.value.push(obj);
         }
+
+        if (msgType === "chatmsg" && options.value.switch.includes("danmakuvip")) {
+            let data = stt.deserialize(msg);
+            if (!checkDanmakuIsVIP(data)) {
+                return;
+            }
+            let obj = {
+                nn: data.nn, // 昵称
+                avatar: data.ic, // 头像地址 https://apic.douyucdn.cn/upload/ + avatar + _small.jpg
+                lv: data.level, // 等级
+                txt: data.txt, // 弹幕内容
+                color: data.col, // 弹幕颜色 undefine就是普通弹幕 2蓝色 3绿色 6粉色 4橙色 5紫色 1红色
+                fansName: data.bnn, // 粉丝牌名字
+                fansLv: data.bl, // 粉丝牌等级
+                diamond: data.diaf, // 是否是钻粉
+                noble: data.nl, // 贵族等级
+                nobleC: data.nc, // 贵族弹幕是否开启，1开
+                roomAdmin: data.rg, // 房管，data.rg为4则是房管
+                key: data.cid, // 时间戳
+            };
+            if (danmakuListVIP.value.length + 1 > options.value.threshold) {
+                danmakuListVIP.value.shift();
+            }
+            danmakuListVIP.value.push(obj);
+            console.log(danmakuListVIP)
+        }
+
         if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab") && options.value.switch.includes("gift")) {
             let data = stt.deserialize(msg);
             // 续费钻粉
@@ -128,7 +156,7 @@ export function useWebsocket(options, allGiftData) {
                 case "blab":
                     //粉丝牌升级
                     obj = {
-                        sptype: "粉丝牌升到",
+                        sptype: "粉丝牌升级",
                         nn: data.nn,
                         blv: data.bl,
                         gfid: "0",
@@ -186,6 +214,20 @@ export function useWebsocket(options, allGiftData) {
         return true;
     }
 
+    //判断是否特别关注
+    const checkDanmakuIsVIP = (data) => {
+        let nicknames = options.value.danmaku.vip ? options.value.danmaku.vip.trim() : "";
+        if (nicknames !== "") {
+            let arr = nicknames.split(" ");
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] !== "" && data.nn.indexOf(arr[i]) !== -1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     const checkGiftValid = (data) => {
         let giftData = allGiftData.value[data.gfid];
         // 屏蔽单价
@@ -207,5 +249,5 @@ export function useWebsocket(options, allGiftData) {
         return true;
     }
 
-    return { connectWs, danmakuList, enterList, giftList }
+    return { connectWs, danmakuList, danmakuListVIP, enterList, giftList }
 }

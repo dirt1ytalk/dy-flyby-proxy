@@ -30,6 +30,15 @@ export function useWebsocket(options, allGiftData) {
         if (!msgType) {
             return;
         }
+        //debug
+        let excludes = [
+            "anbc",
+            "rnewbc"
+        ]
+        if (excludes.includes(msgType)) {
+            let dataObj = stt.deserialize(msg);
+            console.log(dataObj)
+        }
 
         // {
         //     "type": "blab",
@@ -154,7 +163,7 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "blab":
                     //粉丝牌升级
-                    if(data.bl >= 15){
+                    if (data.bl >= 15) {
                         obj = {
                             sptype: "粉丝牌升级",
                             nn: data.nn,
@@ -218,7 +227,7 @@ export function useWebsocket(options, allGiftData) {
         return true;
     }
 
-    const checkEnterValid = (data) =>{
+    const checkEnterValid = (data) => {
         if (Number(data.level) <= Number(options.value.danmaku.ban.level)) {
             return false;
         }
@@ -249,22 +258,24 @@ export function useWebsocket(options, allGiftData) {
     }
 
     const checkGiftValid = (data) => {
+        //console.log(data);
         let giftData = allGiftData.value[data.gfid];
         // 屏蔽单价
         if (Number(giftData.pc) < Number(options.value.gift.ban.price) * 100) {
-            return false;
-        }
-
-        // 屏蔽关键词
-        let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
-        if (keywords !== "") {
-            let giftName = giftData.n;
-            let arr = keywords.split(" ");
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
-                    return false;
+            //判断连击或捆绑是否总值大于50
+            if (Number(giftData.pc) * Number(data.hits) > 5000 || Number(giftData.pc) * Number(data.gfcnt) > 5000) {
+                 // 屏蔽关键词
+                let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
+                if (keywords !== "") {
+                    let giftName = giftData.n;
+                    let arr = keywords.split(" ");
+                    for (let i = 0; i < arr.length; i++) {
+                        if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
+                            return false;
+                        }
+                    }
                 }
-            }
+            } else return false;
         }
         return true;
     }

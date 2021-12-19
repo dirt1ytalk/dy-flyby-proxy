@@ -8,7 +8,13 @@
               <div>弹幕</div>
             </template>
             <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
-              <Danmaku style="height: 280px;" v-if="options.switch.includes('danmaku')" :maxOrder="maxOrder" :options="options" :danmakuList="danmakuList"></Danmaku>
+              <Danmaku
+                style="height: 280px"
+                v-if="options.switch.includes('danmaku')"
+                :maxOrder="maxOrder"
+                :options="options"
+                :danmakuList="danmakuList"
+              ></Danmaku>
             </div>
           </el-card>
         </el-col>
@@ -37,7 +43,13 @@
               <div>特别关注弹幕</div>
             </template>
             <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
-              <Danmakuvip style="height: 280px;" v-if="options.switch.includes('danmakuvip')" :maxOrder="maxOrder" :options="options" :danmakuList="danmakuListVIP"></Danmakuvip>
+              <Danmakuvip
+                style="height: 280px"
+                v-if="options.switch.includes('danmakuvip')"
+                :maxOrder="maxOrder"
+                :options="options"
+                :danmakuList="danmakuListVIP"
+              ></Danmakuvip>
             </div>
           </el-card>
         </el-col>
@@ -73,6 +85,11 @@
             </CheckboxGroup>
           </template>
         </Field>
+        <Field label="动画">
+          <template #input>
+            <Switch v-model="options.animation" size="20" />
+          </template>
+        </Field>
         <Field label="字号">
           <template #input>
             <Slider v-model="options.fontSize" :min="12" :max="30" />
@@ -80,10 +97,8 @@
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 旧数据会被删除"></Field>
         <div>
-        <span class="text-xs ml-4">
-            Recomposed By: 星落 | Based on github: qianjiachun/douyu-monitor
-        </span>
-      </div>
+          <span class="text-xs ml-4"> Recomposed by: 星落 | Based on github: qianjiachun/douyu-monitor </span>
+        </div>
       </Tab>
       <Tab title="弹幕">
         <Field label="显示">
@@ -101,7 +116,7 @@
         <Field v-model="options.danmaku.ban.level" label="屏蔽等级≤" type="digit" placeholder="请输入屏蔽的等级"></Field>
         <Field v-model="options.danmaku.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:关键词1 关键词2"></Field>
         <Field v-model="options.danmaku.ban.nicknames" label="屏蔽昵称" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
-         <Field v-model="options.danmaku.vip" label="弹幕特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
+        <Field v-model="options.danmaku.vip" label="弹幕特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="礼物">
         <Field v-model="options.gift.ban.price" label="屏蔽单价<" type="number" placeholder="请输入单价(非亲密度)"></Field>
@@ -121,22 +136,22 @@
         <Field v-model="options.enter.keywords" label="进场特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="Fail Safe">
-          <Field label="布局 - 弹幕">
+        <Field label="布局 - 弹幕">
           <template #input>
             <Slider v-model="options.size.danmaku" :disabled="maxOrder === options.order.danmaku" />
           </template>
         </Field>
-         <Field label="布局 - 特别关注弹幕">
+        <Field label="布局 - 特别关注弹幕">
           <template #input>
             <Slider v-model="options.size.danmakuvip" :disabled="maxOrder === options.order.danmakuvip" />
           </template>
         </Field>
-          <Field label="布局 - 礼物">
+        <Field label="布局 - 礼物">
           <template #input>
             <Slider v-model="options.size.gift" :disabled="maxOrder === options.order.gift" />
           </template>
         </Field>
-          <Field label="布局 - 进场">
+        <Field label="布局 - 进场">
           <template #input>
             <Slider v-model="options.size.enter" :disabled="maxOrder === options.order.enter" />
           </template>
@@ -332,7 +347,7 @@ watch(
   width: 100%;
   height: 100%;
   overflow: hidden;
-  display: flex;
+  //display: flex;
   flex-direction: v-bind(directionStyle);
   font-size: v-bind(fontSizeStyle);
   user-select: none;

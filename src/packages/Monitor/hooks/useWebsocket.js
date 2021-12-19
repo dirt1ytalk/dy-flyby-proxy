@@ -154,16 +154,18 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "blab":
                     //粉丝牌升级
-                    obj = {
-                        sptype: "粉丝牌升级",
-                        nn: data.nn,
-                        blv: data.bl,
-                        gfid: "0",
-                        gfcnt: "1",
-                        hits: "1",
-                        key: new Date().getTime() + Math.random(),
+                    if(data.bl >= 15){
+                        obj = {
+                            sptype: "粉丝牌升级",
+                            nn: data.nn,
+                            blv: data.bl,
+                            gfid: "0",
+                            gfcnt: "1",
+                            hits: "1",
+                            key: new Date().getTime() + Math.random(),
+                        }
+                        giftList.value.push(obj)
                     }
-                    giftList.value.push(obj)
                     break;
                 default:
                     break;

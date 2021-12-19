@@ -28,7 +28,7 @@ export const defaultOptions = {
     // 背景透明
     transparent: false,
     // 开启动画
-    animation: true,
+    animation: false,
     // 弹幕设置
     danmaku: {
         // 设置弹幕显示内容，如果在数组里就显示

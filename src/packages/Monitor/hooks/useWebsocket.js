@@ -91,7 +91,6 @@ export function useWebsocket(options, allGiftData) {
                 danmakuListVIP.value.shift();
             }
             danmakuListVIP.value.push(obj);
-            console.log(danmakuListVIP)
         }
 
         if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab") && options.value.switch.includes("gift")) {

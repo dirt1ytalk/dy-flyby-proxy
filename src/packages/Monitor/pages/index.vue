@@ -60,7 +60,7 @@
       </el-row>
     </el-main>
   </el-container>
-  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '33%' }">
+  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '45%' }">
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
         <Field label="模块">
@@ -99,13 +99,13 @@
           </template>
         </Field>
         <Field v-model="options.danmaku.ban.level" label="屏蔽等级≤" type="digit" placeholder="请输入屏蔽的等级"></Field>
-        <Field v-model="options.danmaku.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:弹幕1 弹幕2"></Field>
-        <Field v-model="options.danmaku.ban.nicknames" label="屏蔽昵称" placeholder="模糊匹配 空格隔开 例如:昵称1 昵称2"></Field>
-         <Field v-model="options.danmaku.vip" label="特别关注昵称" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
+        <Field v-model="options.danmaku.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:关键词1 关键词2"></Field>
+        <Field v-model="options.danmaku.ban.nicknames" label="屏蔽昵称" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
+         <Field v-model="options.danmaku.vip" label="弹幕特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="礼物">
-        <Field v-model="options.gift.ban.price" label="屏蔽单价<" type="number" placeholder="请输入单价"></Field>
-        <Field v-model="options.gift.totalPrice" label="高亮总价≥" type="number" placeholder="请输入总价"></Field>
+        <Field v-model="options.gift.ban.price" label="屏蔽单价<" type="number" placeholder="请输入单价(非亲密度)"></Field>
+        <Field v-model="options.gift.totalPrice" label="高亮总价≥" type="number" placeholder="请输入总价(非亲密度)"></Field>
         <Field v-model="options.gift.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:荧光棒 鱼丸"></Field>
       </Tab>
       <Tab title="进场">
@@ -118,7 +118,7 @@
             </CheckboxGroup>
           </template>
         </Field>
-        <Field v-model="options.enter.keywords" label="关键昵称" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
+        <Field v-model="options.enter.keywords" label="进场特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="Fail Safe">
           <Field label="布局 - 弹幕">

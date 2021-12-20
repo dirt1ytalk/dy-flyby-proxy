@@ -8,6 +8,7 @@
             :mode="options.mode"
             :showAnimation="options.animation"
             :totalPrice="options.gift.totalPrice"
+            :showImg="options.gift.showImg"
         ></Deafult>
         <!-- <div v-show="isLock" class="gobottom" @click.stop="goToScrollBottom(dom_gift)">回到底部</div> -->
     </div>

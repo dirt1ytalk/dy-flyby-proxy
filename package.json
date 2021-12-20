@@ -1,8 +1,8 @@
 {
-  "name": "douyu-monitor",
-  "version": "0.0.0",
+  "name": "520弹幕助手",
+  "version": "1.0.0",
   "author": "星落",
-  "description": "520",
+  "description": "https://www.douyu.com/520",
   "main": "main.js",
   "scripts": {
     "dev": "vite",
@@ -40,7 +40,9 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "./dist/favicon.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

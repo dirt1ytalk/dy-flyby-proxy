@@ -119,6 +119,11 @@
         <Field v-model="options.danmaku.vip" label="特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="礼物">
+        <Field label="显示图片">
+          <template #input>
+            <Switch v-model="options.gift.showImg" size="20" />
+          </template>
+        </Field>
         <Field v-model="options.gift.ban.price" label="屏蔽单价<" type="number" placeholder="请输入单价(非亲密度)"></Field>
         <Field v-model="options.gift.totalPrice" label="高亮总价≥" type="number" placeholder="请输入总价(非亲密度)"></Field>
         <Field v-model="options.gift.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:荧光棒 鱼丸"></Field>

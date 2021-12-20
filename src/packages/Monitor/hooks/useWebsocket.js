@@ -31,14 +31,14 @@ export function useWebsocket(options, allGiftData) {
             return;
         }
         //debug
-        let excludes = [
-            "anbc",
-            "rnewbc"
-        ]
-        if (excludes.includes(msgType)) {
-            let dataObj = stt.deserialize(msg);
-            console.log(dataObj)
-        }
+        // let excludes = [
+        //     "anbc",
+        //     "rnewbc"
+        // ]
+        // if (excludes.includes(msgType)) {
+        //     let dataObj = stt.deserialize(msg);
+        //     console.log(dataObj)
+        // }
 
         // {
         //     "type": "blab",
@@ -163,9 +163,10 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "anbc":
                     //开通贵族
-                    if (!checkNobelValid()) {
+                    if (!checkNobelValid(data)) {
                         return;
                     }
+                    console.log(data);
                     obj = {
                         sptypen: "开通贵族",
                         nn: data.unk,
@@ -182,9 +183,10 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "rnewbc":
                     //续费贵族
-                    if (!checkNobelValid()) {
+                    if (!checkNobelValid(data)) {
                         return;
                     }
+                    console.log(data);
                     obj = {
                         sptypern: "续费贵族",
                         nn: data.unk,
@@ -299,9 +301,10 @@ export function useWebsocket(options, allGiftData) {
         //console.log(data);
         let giftData = allGiftData.value[data.gfid];
         // 屏蔽单价
-        if (Number(giftData.pc) < Number(options.value.gift.ban.price) * 100) {
-            //判断连击或捆绑是否总值大于50
-            if (Number(giftData.pc) * Number(data.hits) > 5000 || Number(giftData.pc) * Number(data.gfcnt) > 5000) {
+        let expThreshold = Number(options.value.gift.ban.price) * 100
+        if (Number(giftData.pc) < expThreshold) {
+            //判断连击或捆绑是否总值大于阈值
+            if (Number(giftData.pc) * Number(data.hits) > expThreshold || Number(giftData.pc) * Number(data.gfcnt) > expThreshold) {
                  // 屏蔽关键词
                 let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
                 if (keywords !== "") {

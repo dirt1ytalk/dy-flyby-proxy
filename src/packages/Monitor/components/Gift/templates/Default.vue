@@ -3,9 +3,9 @@
     <div v-else-if="'sptypen' in data" class="item_sp">{{data.nn}} 开通了 {{nobleData[nlv][name]}}</div>
     <div v-else-if="'sptypern' in data" class="item_sp">{{data.nn}} 续费了 {{nobleData[nlv][name]}}</div>
     <div v-else :class="`item ${showAnimation?'fadeInLeft' : ''} ${getItemClass(data)}`">
-        <!-- <div class="item__gift">
+        <div v-if="showImg" class="item__gift">
             <img class="avatar" :src="`${'type' in data ? DIAMOND_URL : GIFT_IMG_PREFIX}${'type' in data ? '' : giftData.pic}`" loading="lazy" />
-        </div> -->
+        </div>
         <div class="item__cnt">{{'type' in data ? data.type : giftData.n}}*{{data.gfcnt}}</div>
         <div class="item__name">{{data.nn}}</div>
         <div v-if="Number(data.hits)>1" class="item__hits">累计x{{data.hits}}</div>
@@ -18,7 +18,7 @@ const DIAMOND_URL = 'https://shark2.douyucdn.cn/front-publish/live-player-aside-
 const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
 
 import {nobleData} from "@/global/utils/dydata/nobleData.js"
-let props = defineProps(['data', 'giftData', 'mode', 'showAnimation', 'totalPrice'])
+let props = defineProps(['data', 'giftData', 'mode', 'showAnimation', 'totalPrice', 'showImg'])
 
 function getItemClass(item) {
   if ('type' in item) {
@@ -28,7 +28,7 @@ function getItemClass(item) {
       return 'highlight-day'
     }
   }
-  if (Number(props.giftData.pc) * Number(item.gfcnt) >= Number(props.totalPrice) * 100) {
+  if (Number(props.giftData.pc) * Number(item.gfcnt) >= Number(props.totalPrice) * 100 || Number(props.giftData.pc) * Number(item.hits) >= Number(props.totalPrice) * 100) {
     if (props.mode === 'night') {
       return 'highlight-night'
     } else {

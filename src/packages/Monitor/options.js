@@ -54,6 +54,7 @@ export const defaultOptions = {
     gift: {
         // 高亮价格
         totalPrice: 100,
+        showImg: false,
         // 屏蔽项
         ban: {
             // 价格低于

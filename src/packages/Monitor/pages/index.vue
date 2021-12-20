@@ -175,7 +175,7 @@ import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, R
 import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
 
-import { giftData } from '@/global/utils/dydata/giftData.js'
+//import { giftData } from '@/global/utils/dydata/giftData.js'
 import { saveLocalData, getLocalData, deepCopy, getClassStyle, getStrMiddle } from '@/global/utils'
 import { defaultOptions } from '../options'
 
@@ -215,6 +215,7 @@ onMounted(async () => {
   }
 
   let data = await getRoomGiftData(rid)
+  let giftData = await getGiftData()
   let roomGiftData = { prefix: 'https://gfs-op.douyucdn.cn/dygift' }
   if ('giftList' in data.data) {
     for (let i = 0; i < data.data.giftList.length; i++) {
@@ -237,6 +238,37 @@ function getRoomGiftData(rid) {
     })
       .then((res) => {
         return res.json()
+      })
+      .then((ret) => {
+        resolve(ret)
+      })
+      .catch((err) => {
+        console.log('请求失败!', err)
+      })
+  })
+}
+
+function getGiftData() {
+  return new Promise((resolve) => {
+    fetch('giftdata.txt')
+      .then((res) => {
+        return res.text()
+      })
+      .then((ret) => {
+        let json = ret.substring(String('DYConfigCallback(').length, ret.length)
+        json = json.substring(0, json.lastIndexOf(')'))
+        json = JSON.parse(json)
+        let obj = {}
+        for (const key in json.data) {
+          let item = json.data[key]
+          obj[key] = {
+            n: item.name,
+            pic: item.himg.replace('https://gfs-op.douyucdn.cn/dygift', ''),
+            pc: item.pc,
+          }
+        }
+        //console.log(obj);
+        return obj
       })
       .then((ret) => {
         resolve(ret)

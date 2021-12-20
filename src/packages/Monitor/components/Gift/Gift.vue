@@ -9,7 +9,7 @@
             :showAnimation="options.animation"
             :totalPrice="options.gift.totalPrice"
         ></Deafult>
-        <div v-show="isLock" class="gobottom" @click.stop="goToScrollBottom(dom_gift)">回到底部</div>
+        <!-- <div v-show="isLock" class="gobottom" @click.stop="goToScrollBottom(dom_gift)">回到底部</div> -->
     </div>
 </template>
 
@@ -38,17 +38,17 @@ let { borderBottomStyle, borderRightStyle } = useBorderStyle(props, "gift");
 let { isLock, onScroll, onScrollUpdate, goToScrollBottom } = useScroll();
 let dom_gift = ref(null);
 
-onUpdated(() => {
-    onScrollUpdate(dom_gift.value);
-})
-onMounted(() => {
-    dom_gift.value.addEventListener("mousewheel", () => {
-        onScroll(dom_gift.value);
-    })
-    dom_gift.value.addEventListener("touchmove", () => {
-        onScroll(dom_gift.value);
-    })
-})
+// onUpdated(() => {
+//     onScrollUpdate(dom_gift.value);
+// })
+// onMounted(() => {
+//     dom_gift.value.addEventListener("mousewheel", () => {
+//         onScroll(dom_gift.value);
+//     })
+//     dom_gift.value.addEventListener("touchmove", () => {
+//         onScroll(dom_gift.value);
+//     })
+// })
 
 </script>
 

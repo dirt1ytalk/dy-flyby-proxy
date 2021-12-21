@@ -303,20 +303,21 @@ export function useWebsocket(options, allGiftData) {
         // 屏蔽单价
         let expThreshold = Number(options.value.gift.ban.price) * 100
         if (Number(giftData.pc) < expThreshold) {
-            //判断连击或捆绑是否总值大于阈值
-            if (Number(giftData.pc) * Number(data.hits) > expThreshold || Number(giftData.pc) * Number(data.gfcnt) > expThreshold) {
-                 // 屏蔽关键词
-                let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
-                if (keywords !== "") {
-                    let giftName = giftData.n;
-                    let arr = keywords.split(" ");
-                    for (let i = 0; i < arr.length; i++) {
-                        if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
-                            return false;
-                        }
-                    }
+            //判断连击或捆绑是否总值小于阈值, 如是, 则抛弃该礼物
+            if (Number(giftData.pc) * Number(data.hits) < expThreshold && Number(giftData.pc) * Number(data.gfcnt) < expThreshold) {
+                return false;
+            }
+        }
+        // 屏蔽关键词
+        let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
+        if (keywords !== "") {
+            let giftName = giftData.n;
+            let arr = keywords.split(" ");
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
+                    return false;
                 }
-            } else return false;
+            }
         }
         return true;
     }

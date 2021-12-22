@@ -1,15 +1,15 @@
 <template>
   <el-container>
     <el-main>
-      <el-row class="mb-2" :gutter="10">
-        <el-col :span="12">
-          <el-card class="h-84">
+      <el-row class="mb-1" :gutter="5">
+        <el-col :span="14">
+          <el-card>
             <!-- <template #header>
               <div>弹幕</div>
             </template> -->
             <div class="monitor" ref="domMonitor">
               <Danmaku
-                style="height: 280px"
+                style="height: 260px"
                 v-if="options.switch.includes('danmaku')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -20,11 +20,11 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="12">
-          <el-card class="h-84">
-            <div class="monitor" ref="domMonitor">
+        <el-col :span="10">
+          <el-card>
+            <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Gift
-                style="height: 280px"
+                style="height: 260px"
                 v-if="options.switch.includes('gift')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -35,10 +35,10 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-row :gutter="10">
-        <el-col :span="12">
-          <el-card class="h-84">
-            <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
+      <el-row :gutter="5">
+        <el-col :span="13">
+          <el-card>
+            <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
                 style="height: 200px"
                 v-if="options.switch.includes('danmakuvip')"
@@ -49,9 +49,9 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="12">
-          <el-card class="h-84">
-            <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
+        <el-col :span="11">
+          <el-card>
+            <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Enter
                 style="height: 200px"
                 v-if="options.switch.includes('enter')"
@@ -65,7 +65,7 @@
       </el-row>
     </el-main>
   </el-container>
-  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '45%' }">
+  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '50%' }">
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
         <Field label="模块">
@@ -83,6 +83,11 @@
             <Switch v-model="options.animation" size="20" />
           </template>
         </Field>
+         <!-- <Field label=面板透明度>
+          <template #input>
+            <Slider v-model="options.opacity" :min="0" :max="1" :step="0.1" />
+          </template>
+        </Field> -->
         <Field label="字号">
           <template #input>
             <Slider v-model="options.fontSize" :min="12" :max="30" />
@@ -184,7 +189,7 @@ let options = ref(deepCopy(defaultOptions))
 let allGiftData = ref({})
 let isShowOption = ref(false)
 let activeTab = ref(0)
-let { directionStyle, fontSizeStyle, avatarImgSizeStyle } = useNormalStyle(options)
+let { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgAlphaValue } = useNormalStyle(options)
 let { connectWs, danmakuList, danmakuListVIP, enterList, giftList } = useWebsocket(options, allGiftData)
 let { toClipboard } = useClipboard()
 
@@ -236,17 +241,27 @@ function addToVIP(nn) {
     Dialog.confirm({
       title: '提示',
       message: '确认添加 ' + nn + ' 到特别关注？',
-    }).then(() => {
-      options.value.danmaku.vip = nn
-    }).catch(() => {})
+    })
+      .then(() => {
+        options.value.danmaku.vip = nn
+      })
+      .catch(() => {})
   } else {
-    Dialog.confirm({
-      title: '提示',
-      message: '确认添加 ' + nn + ' 到特别关注？',
-    }).then(() => {
-      let aft = bef.concat(' ', nn)
-      options.value.danmaku.vip = aft
-    }).catch(() => {})
+    if (bef.includes(nn)) {
+      Dialog.alert({
+        title: '用户已存在',
+        message: nn + ' 已存在于特别关注中',
+      }).then(() => {})
+    } else
+      Dialog.confirm({
+        title: '提示',
+        message: '确认添加 ' + nn + ' 到特别关注？',
+      })
+        .then(() => {
+          let aft = bef.concat(' ', nn)
+          options.value.danmaku.vip = aft
+        })
+        .catch(() => {})
   }
 }
 
@@ -255,24 +270,32 @@ function addToBan(nn) {
   if (!bef) {
     Dialog.confirm({
       title: '提示',
-      message: '确认添加 ' + nn + ' 到屏蔽列表？',
-    }).then(() => {
-      options.value.danmaku.ban.nicknames = nn
-    }).catch(() => {})
+      message: '确认添加 ' + nn + ' 到屏蔽名单？',
+    })
+      .then(() => {
+        options.value.danmaku.ban.nicknames = nn
+      })
+      .catch(() => {})
   } else {
-    Dialog.confirm({
-      title: '提示',
-      message: '确认添加 ' + nn + ' 到屏蔽列表？',
-    }).then(() => {
-      let aft = bef.concat(' ', nn)
-      options.value.danmaku.ban.nicknames = aft
-    }).catch(() => {})
+    if (bef.includes(nn)) {
+      Dialog.alert({
+        title: '用户已存在',
+        message: nn + ' 已存在于屏蔽名单中',
+      }).then(() => {})
+    } else
+      Dialog.confirm({
+        title: '提示',
+        message: '确认添加 ' + nn + ' 到屏蔽名单？',
+      })
+        .then(() => {
+          let aft = bef.concat(' ', nn)
+          options.value.danmaku.ban.nicknames = aft
+        })
+        .catch(() => {})
   }
 }
 
-function addToGiftFilter() {
-
-}
+function addToGiftFilter() {}
 
 function getRoomGiftData(rid) {
   return new Promise((resolve) => {

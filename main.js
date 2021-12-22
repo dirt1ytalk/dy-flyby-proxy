@@ -19,9 +19,9 @@ function createWindow() {
 
 const menu = new Menu()
 menu.append(new MenuItem({
-  label: 'Opacity',
+  label: 'Functions',
   submenu: [{
-    role: 'Bump',
+    label: 'Bump Opacity',
     accelerator: '=',
     click: () => {
       let current = win.getOpacity();
@@ -30,7 +30,7 @@ menu.append(new MenuItem({
       }
     }
   }, {
-    role: 'Drop',
+    label: 'Drop Opacity',
     accelerator: '-',
     click: () => {
       let current = win.getOpacity();
@@ -38,8 +38,16 @@ menu.append(new MenuItem({
         win.setOpacity(current - 0.05)
       }
     }
-  }]
-}))
+  },
+  {
+    label: 'DevTools',
+    accelerator: 'Ctrl+Shift+I',
+    click: function(item, focusedWindow) {
+      if (focusedWindow)
+        focusedWindow.toggleDevTools();
+    }
+  }
+]}))
 
 Menu.setApplicationMenu(menu)
 

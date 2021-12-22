@@ -1,29 +1,28 @@
 <template>
   <el-container>
     <el-main>
-      <el-row class="mb-4" :gutter="10">
+      <el-row class="mb-2" :gutter="10">
         <el-col :span="12">
-          <el-card class="h-96">
-            <template #header>
+          <el-card class="h-84">
+            <!-- <template #header>
               <div>弹幕</div>
-            </template>
-            <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
+            </template> -->
+            <div class="monitor" ref="domMonitor">
               <Danmaku
                 style="height: 280px"
                 v-if="options.switch.includes('danmaku')"
                 :maxOrder="maxOrder"
                 :options="options"
                 :danmakuList="danmakuList"
+                @addToVIP="addToVIP"
+                @addToBan="addToBan"
               ></Danmaku>
             </div>
           </el-card>
         </el-col>
         <el-col :span="12">
-          <el-card class="h-96">
-            <template #header>
-              <div>礼物</div>
-            </template>
-            <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
+          <el-card class="h-84">
+            <div class="monitor" ref="domMonitor">
               <Gift
                 style="height: 280px"
                 v-if="options.switch.includes('gift')"
@@ -38,13 +37,10 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="12">
-          <el-card class="h-96">
-            <template #header>
-              <div>特别关注弹幕</div>
-            </template>
+          <el-card class="h-84">
             <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
-                style="height: 280px"
+                style="height: 200px"
                 v-if="options.switch.includes('danmakuvip')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -54,13 +50,10 @@
           </el-card>
         </el-col>
         <el-col :span="12">
-          <el-card class="h-96">
-            <template #header>
-              <div>进场</div>
-            </template>
+          <el-card class="h-84">
             <div class="monitor" @click.prevent="onClickMonitor" ref="domMonitor">
               <Enter
-                style="height: 280px"
+                style="height: 200px"
                 v-if="options.switch.includes('enter')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -233,8 +226,53 @@ onMounted(async () => {
     }
   }
   allGiftData.value = { ...roomGiftData, ...giftData }
+  //console.log(allGiftData.value)
   connectWs(rid)
 })
+
+function addToVIP(nn) {
+  let bef = options.value.danmaku.vip
+  if (!bef) {
+    Dialog.confirm({
+      title: '提示',
+      message: '确认添加 ' + nn + ' 到特别关注？',
+    }).then(() => {
+      options.value.danmaku.vip = nn
+    }).catch(() => {})
+  } else {
+    Dialog.confirm({
+      title: '提示',
+      message: '确认添加 ' + nn + ' 到特别关注？',
+    }).then(() => {
+      let aft = bef.concat(' ', nn)
+      options.value.danmaku.vip = aft
+    }).catch(() => {})
+  }
+}
+
+function addToBan(nn) {
+  let bef = options.value.danmaku.ban.nicknames
+  if (!bef) {
+    Dialog.confirm({
+      title: '提示',
+      message: '确认添加 ' + nn + ' 到屏蔽列表？',
+    }).then(() => {
+      options.value.danmaku.ban.nicknames = nn
+    }).catch(() => {})
+  } else {
+    Dialog.confirm({
+      title: '提示',
+      message: '确认添加 ' + nn + ' 到屏蔽列表？',
+    }).then(() => {
+      let aft = bef.concat(' ', nn)
+      options.value.danmaku.ban.nicknames = aft
+    }).catch(() => {})
+  }
+}
+
+function addToGiftFilter() {
+
+}
 
 function getRoomGiftData(rid) {
   return new Promise((resolve) => {
@@ -257,12 +295,17 @@ function getGiftData() {
   return new Promise((resolve) => {
     fetch('giftdata.txt')
       .then((res) => {
+        //console.log(res.text())
         return res.text()
       })
       .then((ret) => {
         let json = ret.substring(String('DYConfigCallback(').length, ret.length)
+        //console.log('raw: ' + json)
         json = json.substring(0, json.lastIndexOf(')'))
+        //console.log('sub: ' + json)
+        //todo - fix
         json = JSON.parse(json)
+        //console.log('res: ' + JSON.stringify(json))
         let obj = {}
         for (const key in json.data) {
           let item = json.data[key]
@@ -273,6 +316,7 @@ function getGiftData() {
           }
         }
         //console.log(obj);
+        //console.log('resFinal: ' + JSON.stringify(obj))
         return obj
       })
       .then((ret) => {

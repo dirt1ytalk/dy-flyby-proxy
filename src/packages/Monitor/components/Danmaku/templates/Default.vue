@@ -30,7 +30,7 @@
     <span v-if="showAvatar" class="item__avatar"
       ><img class="avatar" :src="`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`" loading="lazy"
     /></span>
-    <span class="item__name">{{ data.nn }}：</span>
+    <span class="item__name" @click.left.prevent="addToVIPHandler(data.nn)" @click.right.prevent="addToBanListHandler(data.nn)">{{ data.nn }}：</span>
     <span :style="`color:${danmakuColor[data.color]};`" class="item__txt">{{ data.txt }}</span>
   </div>
 </template>
@@ -38,7 +38,20 @@
 <script setup>
 import { nobleData } from '@/global/utils/dydata/nobleData.js'
 import { danmakuColor } from '@/global/utils/dydata/danmakuColor.js'
+//import { toRefs } from 'vue'
 let props = defineProps(['data', 'mode', 'showAnimation', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
+
+const emit = defineEmits(['passToIndexForVIP', 'passToIndexForBan'])
+
+//左键点击添加至特别关注
+function addToVIPHandler(nn) {
+  emit('passToIndexForVIP', nn)
+}
+
+//右键点击添加至屏蔽
+function addToBanListHandler(nn) {
+  emit('passToIndexForBan', nn)
+}
 
 // 控制日夜模式背景颜色
 function getItemClass(data) {

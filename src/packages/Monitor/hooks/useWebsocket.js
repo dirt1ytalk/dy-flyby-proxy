@@ -300,6 +300,7 @@ export function useWebsocket(options, allGiftData) {
     const checkGiftValid = (data) => {
         //console.log(data);
         let giftData = allGiftData.value[data.gfid];
+        //console.log(giftData);
         // 屏蔽单价
         let expThreshold = Number(options.value.gift.ban.price) * 100
         if (Number(giftData.pc) < expThreshold) {

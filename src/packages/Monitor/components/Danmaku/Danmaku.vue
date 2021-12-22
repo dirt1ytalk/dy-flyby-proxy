@@ -12,6 +12,8 @@
             :showDiamond="options.danmaku.show.includes('diamond')"
             :showRoomAdmin="options.danmaku.show.includes('roomAdmin')"
             :showAvatar="options.danmaku.show.includes('avatar')"
+            @passToIndexForVIP="passToIndexForVIP"
+            @passToIndexForBan="passToIndexForBan"
         ></Deafult>
         <div v-show="isLock" class="gobottom" @click.stop="goToScrollBottom(dom_danmaku)">回到底部</div>
     </div>
@@ -52,6 +54,16 @@ onMounted(() => {
         onScroll(dom_danmaku.value);
     })
 })
+
+const emit = defineEmits(["addToVIP", "addToBan"])
+
+function passToIndexForVIP(nn){
+    emit("addToVIP", nn)
+}
+
+function passToIndexForBan(nn){
+    emit("addToBan", nn)
+}
 
 </script>
 

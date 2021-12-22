@@ -1,7 +1,7 @@
 <template>
     <div ref="dom_gift" class="gift">
         <Deafult
-            v-for="item in giftList"
+            v-for="item in giftListAll"
             :data="item"
             :key="item.key"
             :giftData="allGiftData[item.gfid]"
@@ -27,7 +27,7 @@ let props = defineProps({
     options: {
         type: Object,
     },
-    giftList: {
+    giftListAll: {
         type: Array,
     },
     allGiftData: {

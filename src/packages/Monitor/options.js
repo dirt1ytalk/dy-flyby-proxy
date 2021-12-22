@@ -9,20 +9,20 @@ export const defaultOptions = {
     align: "left",
     // 每个模块的占比%
     size: {
-        enter: 25,
+        giftunfiltered: 25,
         gift: 25,
         danmaku: 25,
         danmakuvip: 25
     },
     // 每个模块的排序
     order: {
-        enter: 0,
-        gift: 1,
-        danmaku: 2,
-        danmakuvip: 3
+        gift: 0,
+        danmaku: 1,
+        danmakuvip: 2,
+        giftunfiltered: 3
     },
     // 每个模块开关，按顺序排
-    switch: ["enter", "gift", "danmaku", "danmakuvip"],
+    switch: ["gift", "danmaku", "danmakuvip", "giftunfiltered"],
     // 数据阈值
     threshold: 100,
     // 字号

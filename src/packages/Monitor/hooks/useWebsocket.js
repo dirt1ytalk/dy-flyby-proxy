@@ -10,6 +10,7 @@ export function useWebsocket(options, allGiftData) {
     let danmakuListVIP = ref([]);
     let enterList = ref([]);
     let giftList = ref([]);
+    let giftListAll = ref([]);
 
     const connectWs = (rid) => {
         if (rid === "") {
@@ -100,6 +101,26 @@ export function useWebsocket(options, allGiftData) {
                 danmakuListVIP.value.shift();
             }
             danmakuListVIP.value.push(obj);
+        }
+
+        if(msgType === "dgb" && options.value.switch.includes("giftunfiltered")) {
+            let data = stt.deserialize(msg)
+            let obj = {}
+            if (!checkAllGift(data)) {
+                return
+            }
+            obj = {
+                nn: data.nn, // 昵称
+                lv: data.level, // 等级
+                gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                gfcnt: data.gfcnt, // 礼物数量
+                hits: data.hits, // 连击
+                key: new Date().getTime() + Math.random(),
+            }
+            if (giftListAll.value.length + 1 > options.value.threshold) {
+                giftListAll.value.shift();
+            }
+            giftListAll.value.push(obj);
         }
 
         if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "anbc" || msgType === "rnewbc") && options.value.switch.includes("gift")) {
@@ -297,6 +318,30 @@ export function useWebsocket(options, allGiftData) {
         return false;
     }
 
+    const checkAllGift = (data) => {
+        let giftData = allGiftData.value[data.gfid];
+
+        let expThreshold = Number(options.value.gift.ban.price) * 100
+        if (Number(giftData.pc) < expThreshold) {
+            //判断连击或捆绑是否总值大于阈值, 如是, 则抛弃该礼物
+            if (Number(giftData.pc) * Number(data.hits) > expThreshold || Number(giftData.pc) * Number(data.gfcnt) > expThreshold) {
+                return false;
+            }
+        }
+
+        let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
+        if (keywords !== "") {
+            let giftName = giftData.n;
+            let arr = keywords.split(" ");
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     const checkGiftValid = (data) => {
         //console.log(data);
         let giftData = allGiftData.value[data.gfid];
@@ -330,5 +375,5 @@ export function useWebsocket(options, allGiftData) {
         return true
     }
 
-    return { connectWs, danmakuList, danmakuListVIP, enterList, giftList }
+    return { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListAll }
 }

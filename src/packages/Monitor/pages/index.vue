@@ -36,7 +36,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="5">
-        <el-col :span="13">
+        <el-col :span="14">
           <el-card>
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
@@ -49,16 +49,17 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="10">
           <el-card>
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
-              <Enter
+              <GiftAll
                 style="height: 200px"
-                v-if="options.switch.includes('enter')"
+                v-if="options.switch.includes('giftunfiltered')"
                 :maxOrder="maxOrder"
                 :options="options"
-                :enterList="enterList"
-              ></Enter>
+                :giftListAll="giftListAll"
+                :allGiftData="allGiftData"
+              ></GiftAll>
             </div>
           </el-card>
         </el-col>
@@ -71,7 +72,7 @@
         <Field label="模块">
           <template #input>
             <CheckboxGroup v-model="options.switch" direction="horizontal" @change="onChangeSwitch">
-              <Checkbox name="enter" shape="square">进场</Checkbox>
+              <Checkbox name="giftunfiltered" shape="square">未过滤礼物</Checkbox>
               <Checkbox name="gift" shape="square">礼物</Checkbox>
               <Checkbox name="danmaku" shape="square">弹幕</Checkbox>
               <Checkbox name="danmakuvip" shape="square">特别关注弹幕</Checkbox>
@@ -122,11 +123,11 @@
             <Switch v-model="options.gift.showImg" size="20" />
           </template>
         </Field>
-        <Field v-model="options.gift.ban.price" label="屏蔽单价<" type="number" placeholder="请输入单价(非亲密度)"></Field>
+        <Field v-model="options.gift.ban.price" label="过滤单价<" type="number" placeholder="请输入单价(非亲密度)"></Field>
         <Field v-model="options.gift.totalPrice" label="高亮总价≥" type="number" placeholder="请输入总价(非亲密度)"></Field>
         <Field v-model="options.gift.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:荧光棒 鱼丸"></Field>
       </Tab>
-      <Tab title="进场">
+      <!-- <Tab title="进场">
         <Field label="显示">
           <template #input>
             <CheckboxGroup v-model="options.enter.show" direction="horizontal">
@@ -136,7 +137,7 @@
             </CheckboxGroup>
           </template>
         </Field>
-      </Tab>
+      </Tab> -->
       <Tab title="Fail Safe">
         <Field label="布局 - 弹幕">
           <template #input>
@@ -155,7 +156,7 @@
         </Field>
         <Field label="布局 - 进场">
           <template #input>
-            <Slider v-model="options.size.enter" :disabled="maxOrder === options.order.enter" />
+            <Slider v-model="options.size.giftunfiltered" :disabled="maxOrder === options.order.enter" />
           </template>
         </Field>
       </Tab>
@@ -171,7 +172,8 @@ import useClipboard from 'vue-clipboard3'
 import Danmaku from '../components/Danmaku/Danmaku.vue'
 import Danmakuvip from '../components/DanmakuVIP/Danmaku.vue'
 import Gift from '../components/Gift/Gift.vue'
-import Enter from '../components/Enter/Enter.vue'
+//import Enter from '../components/Enter/Enter.vue'
+import GiftAll from '../components/GiftUnfiltered/Gift.vue'
 
 import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, Radio, Switch, Dialog } from 'vant'
 
@@ -190,7 +192,7 @@ let allGiftData = ref({})
 let isShowOption = ref(false)
 let activeTab = ref(0)
 let { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgAlphaValue } = useNormalStyle(options)
-let { connectWs, danmakuList, danmakuListVIP, enterList, giftList } = useWebsocket(options, allGiftData)
+let { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListAll } = useWebsocket(options, allGiftData)
 let { toClipboard } = useClipboard()
 
 let maxOrder = computed(() => {

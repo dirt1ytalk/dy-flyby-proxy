@@ -94,7 +94,7 @@
             <Slider v-model="options.fontSize" :min="12" :max="30" />
           </template>
         </Field>
-        <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 旧数据会被删除"></Field>
+        <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <div>
           <span class="text-xs ml-4"> Recomposed by: 星落 | Based on github: qianjiachun/douyu-monitor </span>
         </div>
@@ -114,7 +114,7 @@
         </Field>
         <Field v-model="options.danmaku.ban.level" label="屏蔽等级≤" type="digit" placeholder="请输入屏蔽的等级"></Field>
         <Field v-model="options.danmaku.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:关键词1 关键词2"></Field>
-        <Field v-model="options.danmaku.ban.nicknames" label="屏蔽昵称" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
+        <Field v-model="options.danmaku.ban.nicknames" label="屏蔽列表" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
         <Field v-model="options.danmaku.vip" label="特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="礼物">
@@ -123,8 +123,8 @@
             <Switch v-model="options.gift.showImg" size="20" />
           </template>
         </Field>
-        <Field v-model="options.gift.ban.price" label="过滤单价<" type="number" placeholder="请输入单价(非亲密度)"></Field>
-        <Field v-model="options.gift.totalPrice" label="高亮总价≥" type="number" placeholder="请输入总价(非亲密度)"></Field>
+        <Field v-model="options.gift.ban.price" label="过滤阈值<" type="number" placeholder="低于此阈值(鱼翅价值)的礼物不会在上方面板显示"></Field>
+        <Field v-model="options.gift.totalPrice" label="高亮阈值≥" type="number" placeholder="高于此阈值(鱼翅价值)的礼物会在上方面板高亮显示"></Field>
         <Field v-model="options.gift.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:荧光棒 鱼丸"></Field>
       </Tab>
       <!-- <Tab title="进场">
@@ -154,7 +154,7 @@
             <Slider v-model="options.size.gift" :disabled="maxOrder === options.order.gift" />
           </template>
         </Field>
-        <Field label="布局 - 进场">
+        <Field label="布局 - 未过滤礼物">
           <template #input>
             <Slider v-model="options.size.giftunfiltered" :disabled="maxOrder === options.order.enter" />
           </template>

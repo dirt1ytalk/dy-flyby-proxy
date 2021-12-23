@@ -1,7 +1,7 @@
 <template>
     <div v-if="'sptype' in data" class="item_sp"> {{data.nn}} 粉丝牌升到 {{data.blv}} 级</div>
-    <div v-else-if="'sptypen' in data" class="item_sp">{{data.nn}} 开通了 {{nobleData[nlv][name]}}</div>
-    <div v-else-if="'sptypern' in data" class="item_sp">{{data.nn}} 续费了 {{nobleData[nlv][name]}}</div>
+    <div v-else-if="'sptypen' in data" class="item_sp">{{data.nn}} 开通了 {{nobleData[data.nlv]["name"]}}</div>
+    <div v-else-if="'sptypern' in data" class="item_sp">{{data.nn}} 续费了 {{nobleData[data.nlv]["name"]}}</div>
     <div v-else :class="`item ${showAnimation?'fadeInLeft' : ''} ${getItemClass(data)}`">
         <div v-if="showImg" class="item__gift">
             <img class="avatar" :src="`${'type' in data ? DIAMOND_URL : GIFT_IMG_PREFIX}${'type' in data ? '' : giftData.pic}`" loading="lazy" />

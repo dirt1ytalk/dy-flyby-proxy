@@ -105,7 +105,7 @@ export function useWebsocket(options, allGiftData) {
 
         if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "anbc" || msgType === "rnewbc") && options.value.switch.includes("gift")) {
             let data = stt.deserialize(msg);
-            console.log('matched filter: ' + JSON.stringify(data))
+            //console.log('matched filter: ' + JSON.stringify(data))
             // 续费钻粉
             // {"type":"rndfbc","uid":"573096","rid":"5189167","nick":"一只小洋丶","icon":"avatar_v3/202111/d7d383be4c874af0b50e3d9eb58ad462","level":"39","nl":"0","pg":"1","fl":"24","bn":"歆崽"}
 
@@ -118,7 +118,7 @@ export function useWebsocket(options, allGiftData) {
                     //let data = stt.deserialize(msg)
                     if (!checkGiftValid(data)) {
                         if (checkAllGift(data)) {
-                            console.log("all: gift check passed")
+                            //console.log("all: gift check passed")
                             obj = {
                                 nn: data.nn, // 昵称
                                 lv: data.level, // 等级
@@ -130,12 +130,12 @@ export function useWebsocket(options, allGiftData) {
                             if (giftListAll.value.length + 1 > options.value.threshold) {
                                 giftListAll.value.shift();
                             }
-                            console.log("all: pushing to giftlistAll")
+                            //console.log("all: pushing to giftlistAll")
                             giftListAll.value.push(obj);
                             return;
                         } else return
                     }
-                    console.log("valid: gift check passed")
+                    //console.log("valid: gift check passed")
                     obj = {
                         nn: data.nn, // 昵称
                         lv: data.level, // 等级
@@ -147,7 +147,7 @@ export function useWebsocket(options, allGiftData) {
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
-                    console.log("valid: pushing to giftlist")
+                    //console.log("valid: pushing to giftlist")
                     giftList.value.push(obj);
                     break;
                 case "odfbc":
@@ -190,7 +190,7 @@ export function useWebsocket(options, allGiftData) {
                     if (!checkNobelValid(data)) {
                         return;
                     }
-                    console.log(data);
+                    //console.log(data);
                     obj = {
                         sptypen: "开通贵族",
                         nn: data.unk,
@@ -211,7 +211,7 @@ export function useWebsocket(options, allGiftData) {
                     if (!checkNobelValid(data)) {
                         return;
                     }
-                    console.log(data);
+                    //console.log(data);
                     obj = {
                         sptypern: "续费贵族",
                         nn: data.unk,
@@ -325,16 +325,16 @@ export function useWebsocket(options, allGiftData) {
 
     const checkAllGift = (data) => {
         let giftData = allGiftData.value[data.gfid];
-        console.log('all: start all gift evaluation')
+        //console.log('all: start all gift evaluation')
         let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
         if (keywords !== "") {
-            console.log("all: matching keywords...")
+            //console.log("all: matching keywords...")
             let giftName = giftData.n;
-            console.log("all: gift name:" + giftName)
+            //console.log("all: gift name:" + giftName)
             let arr = keywords.split(" ");
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
-                    console.log("all: keyword machted, ditching gift object")
+                    //console.log("all: keyword machted, ditching gift object")
                     return false;
                 }
             }
@@ -344,7 +344,7 @@ export function useWebsocket(options, allGiftData) {
 
     const checkGiftValid = (data) => {
         //console.log(data);
-        console.log('valid: start valid gift evaluation')
+        //console.log('valid: start valid gift evaluation')
         let giftData = allGiftData.value[data.gfid];
         //console.log(giftData);
         // 屏蔽单价
@@ -352,20 +352,20 @@ export function useWebsocket(options, allGiftData) {
         if (Number(giftData.pc) < expThreshold) {
             //判断连击或捆绑是否总值小于阈值, 如是, 则抛弃该礼物
             if (Number(giftData.pc) * Number(data.hits) < expThreshold && Number(giftData.pc) * Number(data.gfcnt) < expThreshold) {
-                console.log("valid: gift total value not valid")
+                //console.log("valid: gift total value not valid")
                 return false;
             }
         }
-        console.log("valid: gift total value valid, matching keywords...")
+        //console.log("valid: gift total value valid, matching keywords...")
         // 屏蔽关键词
         let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
         if (keywords !== "") {
             let giftName = giftData.n;
-            console.log("valid: gift name:" + giftName)
+            //console.log("valid: gift name:" + giftName)
             let arr = keywords.split(" ");
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
-                    console.log("valid: keyword matched, ditching gift object")
+                    //console.log("valid: keyword matched, ditching gift object")
                     return false;
                 }
             }

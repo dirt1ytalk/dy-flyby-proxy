@@ -246,22 +246,22 @@ export function useWebsocket(options, allGiftData) {
                     break;
             }
         }
-        if (msgType === "uenter" && options.value.switch.includes("enter")) {
+        if (msgType === "uenter" && options.value.switch.includes("danmakuvip")) {
             let data = stt.deserialize(msg);
-            if (!checkEnterValid(data)) {
+            if (!checkDanmakuIsVIP(data)) {
                 return;
             }
             let obj = {
-                nn: data.nn,
+                nn: data.nn, // 昵称
                 avatar: data.ic, // 头像地址 https://apic.douyucdn.cn/upload/ + avatar + _small.jpg
                 lv: data.level, // 等级
-                noble: data.nl, // 贵族等级
-                key: new Date().getTime() + Math.random(),
+                txt: "进入了直播间", // 弹幕内容
+                key: new Date().getTime() + Math.random() // 时间戳
+            };
+            if (danmakuListVIP.value.length + 1 > options.value.threshold) {
+                danmakuListVIP.value.shift();
             }
-            if (enterList.value.length + 1 > options.value.threshold) {
-                enterList.value.shift();
-            }
-            enterList.value.push(obj);
+            danmakuListVIP.value.push(obj);
         }
     }
 

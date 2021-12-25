@@ -9,6 +9,8 @@ function createWindow() {
     resizable: false,
     autoHideMenuBar: true,
     opacity: 1,
+    frame: false,
+    transparent: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -20,25 +22,7 @@ function createWindow() {
 const menu = new Menu()
 menu.append(new MenuItem({
   label: 'Functions',
-  submenu: [{
-    label: 'Bump Opacity',
-    accelerator: '=',
-    click: () => {
-      let current = win.getOpacity();
-      if (current < 1) {
-        win.setOpacity(current + 0.05)
-      }
-    }
-  }, {
-    label: 'Drop Opacity',
-    accelerator: '-',
-    click: () => {
-      let current = win.getOpacity();
-      if (current > 0) {
-        win.setOpacity(current - 0.05)
-      }
-    }
-  },
+  submenu: [
   {
     label: 'DevTools',
     accelerator: 'Ctrl+Shift+I',

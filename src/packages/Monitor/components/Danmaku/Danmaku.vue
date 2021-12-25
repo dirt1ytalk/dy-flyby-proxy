@@ -42,7 +42,6 @@ let { flexStyle, orderStyle, justifyContentStyle, textAlignStyle } = useFlexStyl
 let { borderBottomStyle, borderRightStyle } = useBorderStyle(props, "danmaku");
 let { isLock, onScroll, onScrollUpdate, goToScrollBottom } = useScroll();
 
-
 onUpdated(() => {
     onScrollUpdate(dom_danmaku.value);
 })

@@ -10,10 +10,7 @@
       <img :src="`${data.noble in nobleData ? nobleData.prefix + nobleData[data.noble].pic : ''}`" loading="lazy" />
     </span>
     <!-- 粉丝牌 -->
-    <div
-      v-if="!!data.fansName && showFans"
-      :class="`item__fans ${!!data.diamond && showDiamond ? '' : ''} FansMedal fansLevel-${data.fansLv}`"
-    >
+    <div v-if="!!data.fansName && showFans" :class="`item__fans ${!!data.diamond && showDiamond ? '' : ''} FansMedal fansLevel-${data.fansLv}`">
       <span class="FansMedal-name">{{ data.fansName }}</span>
     </div>
     <span v-if="data.roomAdmin == '4' && showRoomAdmin" class="item__roomAdmin">

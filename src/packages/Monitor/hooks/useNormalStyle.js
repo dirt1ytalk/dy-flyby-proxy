@@ -15,7 +15,7 @@ export function useNormalStyle(options) {
     });
 
     let bgAlphaValue = computed(() => {
-        return `rgba(0,0,0,${options.value.opacity})`
+        return `rgba(255,255,255,${options.value.opacity})`
     });
 
 

@@ -1,9 +1,9 @@
 <template>
-  <el-container>
+  <el-container style="-webkit-app-region: drag">
     <el-main>
-      <el-row class="mb-1" :gutter="5">
+      <el-row class="mb-1" :gutter="5" style="-webkit-app-region: drag">
         <el-col :span="14">
-          <el-card>
+          <el-card class="bg">
             <!-- <template #header>
               <div>弹幕</div>
             </template> -->
@@ -21,7 +21,7 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card>
+          <el-card class="bg">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Gift
                 style="height: 260px"
@@ -37,7 +37,7 @@
       </el-row>
       <el-row :gutter="5">
         <el-col :span="14">
-          <el-card>
+          <el-card class="bg" style="-webkit-app-region: no-drag;">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
                 style="height: 200px"
@@ -50,7 +50,7 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card>
+          <el-card class="bg" style="-webkit-app-region: no-drag;">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <GiftAll
                 style="height: 200px"
@@ -84,11 +84,11 @@
             <Switch v-model="options.animation" size="20" />
           </template>
         </Field>
-         <!-- <Field label=面板透明度>
+         <Field label=面板不透明度>
           <template #input>
-            <Slider v-model="options.opacity" :min="0" :max="1" :step="0.1" />
+            <Slider v-model="options.opacity" :min="0" :max="1" :step="0.05" />
           </template>
-        </Field> -->
+        </Field>
         <Field label="字号">
           <template #input>
             <Slider v-model="options.fontSize" :min="12" :max="30" />
@@ -96,7 +96,7 @@
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <div>
-          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.2.1 | Based on github: qianjiachun/douyu-monitor </span>
+          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.2.2 | Based on github: qianjiachun/douyu-monitor </span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -448,7 +448,8 @@ watch(
 <style lang="scss" scoped>
 @import '@/global/styles/themes/index.scss';
 .monitor {
-  @include backgroundColor('backgroundColor');
+  //@include backgroundColor('backgroundColor');
+  //background-color: v-bind(bgAlphaValue);
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -456,7 +457,13 @@ watch(
   flex-direction: v-bind(directionStyle);
   font-size: v-bind(fontSizeStyle);
   user-select: none;
+  -webkit-app-region: no-drag;
 }
+
+.bg{
+  background-color: v-bind(bgAlphaValue);
+}
+
 .popup {
   .popup-top {
     user-select: none;

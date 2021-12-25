@@ -103,7 +103,7 @@ export function useWebsocket(options, allGiftData) {
             danmakuListVIP.value.push(obj);
         }
 
-        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "anbc" || msgType === "rnewbc") && options.value.switch.includes("gift")) {
+        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "configscreen" || msgType === "anbc" || msgType === "rnewbc") && options.value.switch.includes("gift")) {
             let data = stt.deserialize(msg);
             //console.log('matched filter: ' + JSON.stringify(data))
             // 续费钻粉
@@ -239,8 +239,24 @@ export function useWebsocket(options, allGiftData) {
                             hits: "1",
                             key: new Date().getTime() + Math.random(),
                         }
-                        giftList.value.push(obj)
+                        giftList.value.push(obj);
                     }
+                    break;
+                case "configscreen":
+                    //粉丝牌30以上升级
+                    if (data.rid !== "520"){
+                        return;
+                    }
+                    obj = {
+                        sptype: "粉丝牌升级",
+                        nn: data.userName,
+                        blv: data.otherContent,
+                        gfid: "0",
+                        gfcnt: "1",
+                        hits: "1",
+                        key: new Date().getTime() + Math.random(),
+                    }
+                    giftList.value.push(obj);
                     break;
                 default:
                     break;

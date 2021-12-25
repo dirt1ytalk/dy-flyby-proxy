@@ -116,37 +116,74 @@ export function useWebsocket(options, allGiftData) {
                 case "dgb":
                     // 正常礼物
                     //let data = stt.deserialize(msg)
+                    //console.log(JSON.stringify(data))
                     if (!checkGiftValid(data)) {
                         if (checkAllGift(data)) {
                             //console.log("all: gift check passed")
-                            obj = {
-                                nn: data.nn, // 昵称
-                                lv: data.level, // 等级
-                                gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-                                gfcnt: data.gfcnt, // 礼物数量
-                                hits: data.hits, // 连击
-                                key: new Date().getTime() + Math.random(),
+                            if(data.bcnt !== 1){
+                                obj = {
+                                    nn: data.nn, // 昵称
+                                    lv: data.level, // 等级
+                                    gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                                    gfcnt: data.gfcnt, // 礼物数量
+                                    hits: data.bcnt, // 连击
+                                    key: new Date().getTime() + Math.random(),
+                                }
+                            } else {
+                                obj = {
+                                    nn: data.nn, // 昵称
+                                    lv: data.level, // 等级
+                                    gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                                    gfcnt: data.gfcnt, // 礼物数量
+                                    hits: data.hits, // 连击
+                                    key: new Date().getTime() + Math.random(),
+                                }
                             }
                             if (giftListAll.value.length + 1 > options.value.threshold) {
                                 giftListAll.value.shift();
                             }
-                            //console.log("all: pushing to giftlistAll")
+                            //let indexForLast = giftList.value.length - 1;
+                            //let lastElement = giftList.value[indexForLast];
+                            giftListAll.value.forEach((item, i, arr) => {
+                                if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits){
+                                    arr.splice(i, 1);
+                                }
+                            })
+                            //console.log("valid: pushing to giftlist")
                             giftListAll.value.push(obj);
                             return;
                         } else return
                     }
                     //console.log("valid: gift check passed")
-                    obj = {
-                        nn: data.nn, // 昵称
-                        lv: data.level, // 等级
-                        gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-                        gfcnt: data.gfcnt, // 礼物数量
-                        hits: data.hits, // 连击
-                        key: new Date().getTime() + Math.random(),
+                    if(data.bcnt !== 1){
+                        obj = {
+                            nn: data.nn, // 昵称
+                            lv: data.level, // 等级
+                            gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                            gfcnt: data.gfcnt, // 礼物数量
+                            hits: data.bcnt, // 连击
+                            key: new Date().getTime() + Math.random(),
+                        }
+                    } else {
+                        obj = {
+                            nn: data.nn, // 昵称
+                            lv: data.level, // 等级
+                            gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                            gfcnt: data.gfcnt, // 礼物数量
+                            hits: data.hits, // 连击
+                            key: new Date().getTime() + Math.random(),
+                        }
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
+                    //let indexForLast = giftList.value.length - 1;
+                    //let lastElement = giftList.value[indexForLast];
+                    giftList.value.forEach((item, i, arr) => {
+                        if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits){
+                            arr.splice(i, 1);
+                        }
+                    })
                     //console.log("valid: pushing to giftlist")
                     giftList.value.push(obj);
                     break;

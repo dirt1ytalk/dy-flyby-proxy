@@ -49,6 +49,7 @@ function getItemClass(item) {
   margin-bottom: 5px;
   justify-content: flex-start;
   text-align: left;
+  color: black;
 }
 
 .item {

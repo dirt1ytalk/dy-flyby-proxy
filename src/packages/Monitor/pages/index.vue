@@ -1,7 +1,7 @@
 <template>
   <el-container style="-webkit-app-region: drag">
     <el-main>
-      <el-row class="mb-1" :gutter="5" style="-webkit-app-region: drag">
+      <el-row class="mb-1" :gutter="5">
         <el-col :span="14">
           <el-card class="bg">
             <!-- <template #header>
@@ -69,7 +69,7 @@
   <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '50%' }">
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
-        <Field label="模块">
+        <!-- <Field label="模块">
           <template #input>
             <CheckboxGroup v-model="options.switch" direction="horizontal" @change="onChangeSwitch">
               <Checkbox name="giftunfiltered" shape="square">未过滤礼物</Checkbox>
@@ -83,7 +83,7 @@
           <template #input>
             <Switch v-model="options.animation" size="20" />
           </template>
-        </Field>
+        </Field> -->
          <Field label=面板不透明度>
           <template #input>
             <Slider v-model="options.opacity" :min="0" :max="1" :step="0.05" />
@@ -96,7 +96,7 @@
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <div>
-          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.2.2 | Based on github: qianjiachun/douyu-monitor </span>
+          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.3.0 | Based on github: qianjiachun/douyu-monitor </span>
         </div>
       </Tab>
       <Tab title="弹幕">

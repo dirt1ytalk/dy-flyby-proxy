@@ -106,7 +106,7 @@ function getItemClass(data) {
   }
 }
 .noble-day {
-  background-color: rgb(255, 243, 223);
+  background-color: rgba(255, 172, 88, 0.3);
   border-top: 1px solid #ffe4b8;
   border-bottom: 1px solid #ffe4b8;
 }

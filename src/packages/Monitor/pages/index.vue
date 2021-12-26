@@ -96,7 +96,7 @@
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <div>
-          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.3.2 | Based on github: qianjiachun/douyu-monitor </span>
+          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.3.3 | Based on github: qianjiachun/douyu-monitor </span>
         </div>
       </Tab>
       <Tab title="弹幕">

@@ -14,10 +14,10 @@ export function useNormalStyle(options) {
         return `${options.value.fontSize * 2}px`;
     });
 
-    let bgAlphaValue = computed(() => {
-        return `rgba(255,255,255,${options.value.opacity})`
+    let bgColorValue = computed(() => {
+        return `${options.value.bgcolora}`
     });
 
 
-    return { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgAlphaValue }
+    return { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgColorValue }
 }

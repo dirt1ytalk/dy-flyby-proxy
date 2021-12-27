@@ -2,7 +2,8 @@ export const defaultOptions = {
     // 日间day 夜间night模式
     mode: "day",
     //面板透明度
-    opacity: 1,
+    //背景颜色(包含alpha)
+    bgcolora: '',
     // 纵向column 横向row
     direction: "column",
     // 左对齐left 右对齐right

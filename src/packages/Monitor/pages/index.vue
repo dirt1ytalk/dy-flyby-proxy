@@ -84,9 +84,14 @@
             <Switch v-model="options.animation" size="20" />
           </template>
         </Field> -->
-         <Field label=面板不透明度>
+         <!-- <Field label=面板不透明度>
           <template #input>
             <Slider v-model="options.opacity" :min="0" :max="1" :step="0.05" />
+          </template>
+        </Field> -->
+        <Field label="面板背景颜色 & 不透明度">
+          <template #input>
+            <el-color-picker show-alpha v-model="options.bgcolora"></el-color-picker>
           </template>
         </Field>
         <Field label="字号">
@@ -191,7 +196,7 @@ let options = ref(deepCopy(defaultOptions))
 let allGiftData = ref({})
 let isShowOption = ref(false)
 let activeTab = ref(0)
-let { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgAlphaValue } = useNormalStyle(options)
+let { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgColorValue } = useNormalStyle(options)
 let { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListAll } = useWebsocket(options, allGiftData)
 let { toClipboard } = useClipboard()
 
@@ -461,7 +466,7 @@ watch(
 }
 
 .bg{
-  background-color: v-bind(bgAlphaValue);
+  background-color: v-bind(bgColorValue);
 }
 
 .popup {

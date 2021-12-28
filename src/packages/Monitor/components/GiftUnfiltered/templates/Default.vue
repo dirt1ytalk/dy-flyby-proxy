@@ -3,11 +3,12 @@
     <div v-else-if="'sptypen' in data" class="item_sp">{{data.nn}} 开通了 {{nobleData[nlv][name]}}</div>
     <div v-else-if="'sptypern' in data" class="item_sp">{{data.nn}} 续费了 {{nobleData[nlv][name]}}</div> -->
     <div :class="`item ${showAnimation?'fadeInLeft' : ''} ${getItemClass(data)}`">
+        <span style="color:black; vertical-align:middle;">{{data.dt}}</span>
         <div v-if="showImg" class="item__gift">
             <img class="avatar" :src="`${'type' in data ? DIAMOND_URL : GIFT_IMG_PREFIX}${'type' in data ? '' : giftData.pic}`" loading="lazy" />
         </div>
-        <div class="item__cnt">{{'type' in data ? data.type : giftData.n}}*{{data.gfcnt}}</div>
         <div class="item__name">{{data.nn}}</div>
+        <div class="item__cnt">{{'type' in data ? data.type : giftData.n}}*{{data.gfcnt}}</div>
         <div v-if="Number(data.hits)>1" class="item__hits">累计x{{data.hits}}</div>
     </div>
 </template>

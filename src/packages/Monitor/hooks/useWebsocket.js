@@ -71,6 +71,7 @@ export function useWebsocket(options, allGiftData) {
                 //nobleC: data.nc, // 贵族弹幕是否开启，1开
                 roomAdmin: data.rg, // 房管，data.rg为4则是房管
                 key: data.cid, // 时间戳
+                dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
             };
             if (danmakuList.value.length + 1 > options.value.threshold) {
                 danmakuList.value.shift();
@@ -96,6 +97,7 @@ export function useWebsocket(options, allGiftData) {
                 //nobleC: data.nc, // 贵族弹幕是否开启，1开
                 roomAdmin: data.rg, // 房管，data.rg为4则是房管
                 key: data.cid, // 时间戳
+                dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
             };
             if (danmakuListVIP.value.length + 1 > options.value.threshold) {
                 danmakuListVIP.value.shift();
@@ -128,6 +130,7 @@ export function useWebsocket(options, allGiftData) {
                                     gfcnt: data.gfcnt, // 礼物数量
                                     hits: data.bcnt, // 连击
                                     key: new Date().getTime() + Math.random(),
+                                    dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                                 }
                             } else {
                                 obj = {
@@ -137,6 +140,7 @@ export function useWebsocket(options, allGiftData) {
                                     gfcnt: data.gfcnt, // 礼物数量
                                     hits: data.hits, // 连击
                                     key: new Date().getTime() + Math.random(),
+                                    dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                                 }
                             }
                             if (giftListAll.value.length + 1 > options.value.threshold) {
@@ -163,6 +167,7 @@ export function useWebsocket(options, allGiftData) {
                             gfcnt: data.gfcnt, // 礼物数量
                             hits: data.bcnt, // 连击
                             key: new Date().getTime() + Math.random(),
+                            dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                         }
                     } else {
                         obj = {
@@ -172,6 +177,7 @@ export function useWebsocket(options, allGiftData) {
                             gfcnt: data.gfcnt, // 礼物数量
                             hits: data.hits, // 连击
                             key: new Date().getTime() + Math.random(),
+                            dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                         }
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
@@ -198,6 +204,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -215,6 +222,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -236,6 +244,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -257,6 +266,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -275,6 +285,7 @@ export function useWebsocket(options, allGiftData) {
                             gfcnt: "1",
                             hits: "1",
                             key: new Date().getTime() + Math.random(),
+                            dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                         }
                         giftList.value.push(obj);
                     }
@@ -292,6 +303,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
                     }
                     giftList.value.push(obj);
                     break;
@@ -309,7 +321,8 @@ export function useWebsocket(options, allGiftData) {
                 avatar: data.ic, // 头像地址 https://apic.douyucdn.cn/upload/ + avatar + _small.jpg
                 lv: data.level, // 等级
                 txt: "进入了直播间", // 弹幕内容
-                key: new Date().getTime() + Math.random() // 时间戳
+                key: new Date().getTime() + Math.random(), // 时间戳
+                dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
             };
             if (danmakuListVIP.value.length + 1 > options.value.threshold) {
                 danmakuListVIP.value.shift();

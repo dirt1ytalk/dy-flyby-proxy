@@ -1,15 +1,25 @@
 <template>
-    <div v-if="'sptype' in data" class="item_sp"> {{data.nn}} 粉丝牌升到 {{data.blv}} 级</div>
-    <div v-else-if="'sptypen' in data" class="item_sp">{{data.nn}} 开通了 {{nobleData[data.nlv]["name"]}}</div>
-    <div v-else-if="'sptypern' in data" class="item_sp">{{data.nn}} 续费了 {{nobleData[data.nlv]["name"]}}</div>
-    <div v-else :class="`item ${showAnimation?'fadeInLeft' : ''} ${getItemClass(data)}`">
-        <div v-if="showImg" class="item__gift">
-            <img class="avatar" :src="`${'type' in data ? DIAMOND_URL : GIFT_IMG_PREFIX}${'type' in data ? '' : giftData.pic}`" loading="lazy" />
-        </div>
-        <div class="item__cnt">{{'type' in data ? data.type : giftData.n}}*{{data.gfcnt}}</div>
-        <div class="item__name">{{data.nn}}</div>
-        <div v-if="Number(data.hits)>1" class="item__hits">累计x{{data.hits}}</div>
+  <div v-if="'sptype' in data" class="item_sp">
+    <span style="color: black; vertical-align: middle"> {{ data.dt }}</span> <span class="item_name_sp">{{ data.nn }}</span> 粉丝牌升到
+    {{ data.blv }} 级
+  </div>
+  <div v-else-if="'sptypen' in data" class="item_sp">
+    <span style="color: black; vertical-align: middle"> {{ data.dt }}</span
+    ><span class="item_name_sp">{{ data.nn }}</span> 开通了 {{ nobleData[data.nlv]['name'] }}
+  </div>
+  <div v-else-if="'sptypern' in data" class="item_sp">
+    <span style="color: black; vertical-align: middle"> {{ data.dt }}</span
+    ><span class="item_name_sp">{{ data.nn }}</span> 续费了 {{ nobleData[data.nlv]['name'] }}
+  </div>
+  <div v-else :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
+    <span style="color: black; vertical-align: middle">{{ data.dt }}</span>
+    <div v-if="showImg" class="item__gift">
+      <img class="avatar" :src="`${'type' in data ? DIAMOND_URL : GIFT_IMG_PREFIX}${'type' in data ? '' : giftData.pic}`" loading="lazy" />
     </div>
+    <div class="item__name">{{ data.nn }}</div>
+    <div class="item__cnt">{{ 'type' in data ? data.type : giftData.n }}*{{ data.gfcnt }}</div>
+    <div v-if="Number(data.hits) > 1" class="item__hits">累计x{{ data.hits }}</div>
+  </div>
 </template>
 
 <script setup>
@@ -17,7 +27,7 @@
 const DIAMOND_URL = 'https://shark2.douyucdn.cn/front-publish/live-player-aside-master/assets/images/diamonds_banner_logo_c077d7b.gif'
 const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
 
-import {nobleData} from "@/global/utils/dydata/nobleData.js"
+import { nobleData } from '@/global/utils/dydata/nobleData.js'
 let props = defineProps(['data', 'giftData', 'mode', 'showAnimation', 'totalPrice', 'showImg'])
 
 function getItemClass(item) {
@@ -28,7 +38,10 @@ function getItemClass(item) {
       return 'highlight-day'
     }
   }
-  if (Number(props.giftData.pc) * Number(item.gfcnt) >= Number(props.totalPrice) * 100 || Number(props.giftData.pc) * Number(item.hits) >= Number(props.totalPrice) * 100) {
+  if (
+    Number(props.giftData.pc) * Number(item.gfcnt) >= Number(props.totalPrice) * 100 ||
+    Number(props.giftData.pc) * Number(item.hits) >= Number(props.totalPrice) * 100
+  ) {
     if (props.mode === 'night') {
       return 'highlight-night'
     } else {
@@ -42,7 +55,7 @@ function getItemClass(item) {
 
 <style lang="scss" scoped>
 @import '@/global/styles/themes/index.scss';
-.item_sp{
+.item_sp {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -50,6 +63,10 @@ function getItemClass(item) {
   justify-content: flex-start;
   text-align: left;
   color: black;
+}
+
+.item_name_sp {
+  @include fontColor('nicknameColor');
 }
 
 .item {

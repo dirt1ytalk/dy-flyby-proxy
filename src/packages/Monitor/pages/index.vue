@@ -37,7 +37,7 @@
       </el-row>
       <el-row :gutter="5">
         <el-col :span="14">
-          <el-card class="bg" style="-webkit-app-region: no-drag;">
+          <el-card class="bg" style="-webkit-app-region: no-drag">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
                 style="height: 200px"
@@ -50,7 +50,7 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card class="bg" style="-webkit-app-region: no-drag;">
+          <el-card class="bg" style="-webkit-app-region: no-drag">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <GiftAll
                 style="height: 200px"
@@ -66,7 +66,7 @@
       </el-row>
     </el-main>
   </el-container>
-  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '50%' }">
+  <Popup class="popup" v-model:show="isShowOption" position="bottom" style="-webkit-app-region: no-drag" :style="{ height: '50%' }">
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
         <!-- <Field label="模块">
@@ -84,7 +84,7 @@
             <Switch v-model="options.animation" size="20" />
           </template>
         </Field> -->
-         <!-- <Field label=面板不透明度>
+        <!-- <Field label=面板不透明度>
           <template #input>
             <Slider v-model="options.opacity" :min="0" :max="1" :step="0.05" />
           </template>
@@ -101,7 +101,7 @@
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <div>
-          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.3.4 | Based on github: qianjiachun/douyu-monitor </span>
+          <span class="text-xs ml-4"> Recomposed by: 星落 | V1.3.5 | Based on github: qianjiachun/douyu-monitor </span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -226,6 +226,7 @@ onMounted(async () => {
 
   let data = await getRoomGiftData(rid)
   let giftData = await getGiftData()
+  //let supGiftData = await getSupplementGiftData()
   let roomGiftData = { prefix: 'https://gfs-op.douyucdn.cn/dygift' }
   if ('giftList' in data.data) {
     for (let i = 0; i < data.data.giftList.length; i++) {
@@ -302,11 +303,9 @@ function addToBan(nn) {
   }
 }
 
-function addToGiftFilter() {}
-
 function getRoomGiftData(rid) {
   return new Promise((resolve) => {
-    fetch('https://gift.douyucdn.cn/api/gift/v2/web/list?rid=' + rid, {
+    fetch('https://gift.douyucdn.cn/api/gift/v3/web/list?rid=' + rid, {
       method: 'GET',
     })
       .then((res) => {
@@ -321,9 +320,47 @@ function getRoomGiftData(rid) {
   })
 }
 
+// function getSupplementGiftData() {
+//   return new Promise((resolve, reject) => {
+//     fetch('giftsup.txt')
+//       .then((res) => {
+//         if(res){
+//           return res.text()
+//         } else {
+//           return Promise.reject('no supplement file found!')
+//         }
+//       })
+//       .then((ret) => {
+//         let obj = {}
+//         let single = ret.split('\n')
+//         single.forEach((element) => {
+//           let data = element.split(',')
+//           obj[data[0]] = {
+//             n: data[1],
+//             pic: '',
+//             pc: data[2],
+//           }
+//         })
+//         return obj
+//       })
+//       .then((ret) => {
+//         resolve(ret)
+//         return
+//       })
+//       .catch((err) => {
+//         console.log('读取补充数据失败!', err)
+//         reject(String(err))
+//         return
+//       })
+//   })
+// }
+
 function getGiftData() {
-  return new Promise((resolve) => {
-    fetch('giftdata.txt')
+  return new Promise((resolve, reject) => {
+    fetch('https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json', {
+      method: 'GET',
+      credentials: 'include',
+    })
       .then((res) => {
         //console.log(res.text())
         return res.text()
@@ -354,7 +391,43 @@ function getGiftData() {
       })
       .catch((err) => {
         console.log('请求失败!', err)
+        alert('获取远程数据失败! 请重启程序再试一次')
       })
+      // .then(() => {
+      //   let val = fetch('giftdata.txt')
+      //   return val
+      // })
+      // .then((res) => {
+      //   return res.text()
+      // })
+      // .then((ret) => {
+      //   let json = ret.substring(String('DYConfigCallback(').length, ret.length)
+      //   //console.log('raw: ' + json)
+      //   json = json.substring(0, json.lastIndexOf(')'))
+      //   //console.log('sub: ' + json)
+      //   //todo - fix
+      //   json = JSON.parse(json)
+      //   //console.log('res: ' + JSON.stringify(json))
+      //   let obj = {}
+      //   for (const key in json.data) {
+      //     let item = json.data[key]
+      //     obj[key] = {
+      //       n: item.name,
+      //       pic: item.himg.replace('https://gfs-op.douyucdn.cn/dygift', ''),
+      //       pc: item.pc,
+      //     }
+      //   }
+      //   return obj
+      // })
+      // .then((ret) => {
+      //   resolve(ret)
+      //   return
+      // })
+      // .catch((err) => {
+      //   console.log('读取本地数据失败!', err)
+      //   reject(String(err))
+      //   return
+      // })
   })
 }
 
@@ -465,7 +538,7 @@ watch(
   -webkit-app-region: no-drag;
 }
 
-.bg{
+.bg {
   background-color: v-bind(bgColorValue);
 }
 

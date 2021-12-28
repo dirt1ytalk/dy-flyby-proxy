@@ -1,5 +1,6 @@
 <template>
   <div :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
+    <span style="color:black; vertical-align:middle;">{{data.dt}}</span>
     <!-- 等级 -->
     <span
       v-if="showLevel"

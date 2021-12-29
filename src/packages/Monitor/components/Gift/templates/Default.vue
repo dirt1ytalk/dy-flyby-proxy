@@ -1,15 +1,15 @@
 <template>
   <div v-if="'sptype' in data" class="item_sp">
-    <span style="color: black; vertical-align: middle"> {{ data.dt }}</span> <span class="item_name_sp">{{ data.nn }}</span> 粉丝牌升到
+    <span style="color: black; vertical-align: middle"> {{ data.dt }}</span> <span class="item_name_sp">&nbsp;{{ data.nn }}&nbsp;</span> 粉丝牌升到
     {{ data.blv }} 级
   </div>
   <div v-else-if="'sptypen' in data" class="item_sp">
     <span style="color: black; vertical-align: middle"> {{ data.dt }}</span
-    ><span class="item_name_sp">{{ data.nn }}</span> 开通了 {{ nobleData[data.nlv]['name'] }}
+    ><span class="item_name_sp">&nbsp;{{ data.nn }}&nbsp;</span> 开通了 {{ nobleData[data.nlv]['name'] }}
   </div>
   <div v-else-if="'sptypern' in data" class="item_sp">
     <span style="color: black; vertical-align: middle"> {{ data.dt }}</span
-    ><span class="item_name_sp">{{ data.nn }}</span> 续费了 {{ nobleData[data.nlv]['name'] }}
+    ><span class="item_name_sp">&nbsp;{{ data.nn }}&nbsp;</span> 续费了 {{ nobleData[data.nlv]['name'] }}
   </div>
   <div v-else :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
     <span style="color: black; vertical-align: middle">{{ data.dt }}</span>

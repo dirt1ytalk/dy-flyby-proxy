@@ -66,7 +66,7 @@
       </el-row>
     </el-main>
   </el-container>
-  <Popup class="popup" v-model:show="isShowOption" position="bottom" style="-webkit-app-region: no-drag" :style="{ height: '50%' }">
+  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '50%', '-webkit-app-region': 'no-drag' }">
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
         <!-- <Field label="模块">
@@ -249,6 +249,9 @@ function addToVIP(nn) {
     Dialog.confirm({
       title: '提示',
       message: '确认添加 ' + nn + ' 到特别关注？',
+      overlayStyle: {
+        '-webkit-app-region': 'no-drag'
+      }
     })
       .then(() => {
         options.value.danmaku.vip = nn
@@ -279,6 +282,9 @@ function addToBan(nn) {
     Dialog.confirm({
       title: '提示',
       message: '确认添加 ' + nn + ' 到屏蔽名单？',
+      overlayStyle: {
+        '-webkit-app-region': 'no-drag'
+      }
     })
       .then(() => {
         options.value.danmaku.ban.nicknames = nn

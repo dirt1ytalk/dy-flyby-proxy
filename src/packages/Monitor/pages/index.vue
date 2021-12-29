@@ -66,7 +66,7 @@
       </el-row>
     </el-main>
   </el-container>
-  <Popup class="popup" v-model:show="isShowOption" position="bottom" :style="{ height: '50%', '-webkit-app-region': 'no-drag' }">
+  <Popup class="popup" v-model:show="isShowOption" position="bottom" :overlay-style="{ '-webkit-app-region': 'no-drag' }" :style="{ height: '50%' }">
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
         <!-- <Field label="模块">
@@ -250,8 +250,8 @@ function addToVIP(nn) {
       title: '提示',
       message: '确认添加 ' + nn + ' 到特别关注？',
       overlayStyle: {
-        '-webkit-app-region': 'no-drag'
-      }
+        '-webkit-app-region': 'no-drag',
+      },
     })
       .then(() => {
         options.value.danmaku.vip = nn
@@ -283,8 +283,8 @@ function addToBan(nn) {
       title: '提示',
       message: '确认添加 ' + nn + ' 到屏蔽名单？',
       overlayStyle: {
-        '-webkit-app-region': 'no-drag'
-      }
+        '-webkit-app-region': 'no-drag',
+      },
     })
       .then(() => {
         options.value.danmaku.ban.nicknames = nn
@@ -399,41 +399,41 @@ function getGiftData() {
         console.log('请求失败!', err)
         alert('获取远程数据失败! 请重启程序再试一次')
       })
-      // .then(() => {
-      //   let val = fetch('giftdata.txt')
-      //   return val
-      // })
-      // .then((res) => {
-      //   return res.text()
-      // })
-      // .then((ret) => {
-      //   let json = ret.substring(String('DYConfigCallback(').length, ret.length)
-      //   //console.log('raw: ' + json)
-      //   json = json.substring(0, json.lastIndexOf(')'))
-      //   //console.log('sub: ' + json)
-      //   //todo - fix
-      //   json = JSON.parse(json)
-      //   //console.log('res: ' + JSON.stringify(json))
-      //   let obj = {}
-      //   for (const key in json.data) {
-      //     let item = json.data[key]
-      //     obj[key] = {
-      //       n: item.name,
-      //       pic: item.himg.replace('https://gfs-op.douyucdn.cn/dygift', ''),
-      //       pc: item.pc,
-      //     }
-      //   }
-      //   return obj
-      // })
-      // .then((ret) => {
-      //   resolve(ret)
-      //   return
-      // })
-      // .catch((err) => {
-      //   console.log('读取本地数据失败!', err)
-      //   reject(String(err))
-      //   return
-      // })
+    // .then(() => {
+    //   let val = fetch('giftdata.txt')
+    //   return val
+    // })
+    // .then((res) => {
+    //   return res.text()
+    // })
+    // .then((ret) => {
+    //   let json = ret.substring(String('DYConfigCallback(').length, ret.length)
+    //   //console.log('raw: ' + json)
+    //   json = json.substring(0, json.lastIndexOf(')'))
+    //   //console.log('sub: ' + json)
+    //   //todo - fix
+    //   json = JSON.parse(json)
+    //   //console.log('res: ' + JSON.stringify(json))
+    //   let obj = {}
+    //   for (const key in json.data) {
+    //     let item = json.data[key]
+    //     obj[key] = {
+    //       n: item.name,
+    //       pic: item.himg.replace('https://gfs-op.douyucdn.cn/dygift', ''),
+    //       pc: item.pc,
+    //     }
+    //   }
+    //   return obj
+    // })
+    // .then((ret) => {
+    //   resolve(ret)
+    //   return
+    // })
+    // .catch((err) => {
+    //   console.log('读取本地数据失败!', err)
+    //   reject(String(err))
+    //   return
+    // })
   })
 }
 

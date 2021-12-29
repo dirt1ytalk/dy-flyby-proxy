@@ -262,11 +262,17 @@ function addToVIP(nn) {
       Dialog.alert({
         title: '用户已存在',
         message: nn + ' 已存在于特别关注中',
+        overlayStyle: {
+        '-webkit-app-region': 'no-drag',
+      },
       }).then(() => {})
     } else
       Dialog.confirm({
         title: '提示',
         message: '确认添加 ' + nn + ' 到特别关注？',
+        overlayStyle: {
+        '-webkit-app-region': 'no-drag',
+      },
       })
         .then(() => {
           let aft = bef.concat(' ', nn)
@@ -295,11 +301,17 @@ function addToBan(nn) {
       Dialog.alert({
         title: '用户已存在',
         message: nn + ' 已存在于屏蔽名单中',
+        overlayStyle: {
+        '-webkit-app-region': 'no-drag',
+      },
       }).then(() => {})
     } else
       Dialog.confirm({
         title: '提示',
         message: '确认添加 ' + nn + ' 到屏蔽名单？',
+        overlayStyle: {
+        '-webkit-app-region': 'no-drag',
+      },
       })
         .then(() => {
           let aft = bef.concat(' ', nn)

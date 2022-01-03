@@ -55,6 +55,8 @@ export function useWebsocket(options, allGiftData) {
 
         if (msgType === "chatmsg" && options.value.switch.includes("danmaku")) {
             let data = stt.deserialize(msg);
+            //message intercept
+            if(data.ail) console.log(JSON.stringify(data))
             if (!checkDanmakuValid(data)) {
                 return;
             }
@@ -70,6 +72,8 @@ export function useWebsocket(options, allGiftData) {
                 noble: data.nl, // 贵族等级
                 //nobleC: data.nc, // 贵族弹幕是否开启，1开
                 roomAdmin: data.rg, // 房管，data.rg为4则是房管
+                //super: data.pg, // 超管，data.pg为5则为超管
+                //vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
                 key: data.cid, // 时间戳
                 dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
             };
@@ -96,6 +100,8 @@ export function useWebsocket(options, allGiftData) {
                 noble: data.nl, // 贵族等级
                 //nobleC: data.nc, // 贵族弹幕是否开启，1开
                 roomAdmin: data.rg, // 房管，data.rg为4则是房管
+                //super: data.pg, // 超管，data.pg为5则为超管
+                //vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
                 key: data.cid, // 时间戳
                 dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
             };
@@ -159,6 +165,7 @@ export function useWebsocket(options, allGiftData) {
                         } else return
                     }
                     //console.log("valid: gift check passed")
+                    //console.log(JSON.stringify(data))
                     if(data.bcnt !== 1){
                         obj = {
                             nn: data.nn, // 昵称

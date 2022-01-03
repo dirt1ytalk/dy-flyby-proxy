@@ -186,7 +186,7 @@ import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
 
 //import { giftData } from '@/global/utils/dydata/giftData.js'
-import { saveLocalData, getLocalData, deepCopy, getClassStyle, getStrMiddle } from '@/global/utils'
+import { saveLocalData, getLocalData, deepCopy, getClassStyle, getStrMiddle, formatObj } from '@/global/utils'
 import { defaultOptions } from '../options'
 
 const LOCAL_NAME = 'monitor_options'
@@ -223,6 +223,8 @@ onMounted(async () => {
     }
     options.value = localData
   }
+
+  options.value = formatObj(options.value, defaultOptions)
 
   let data = await getRoomGiftData(rid)
   let giftData = await getGiftData()
@@ -263,16 +265,16 @@ function addToVIP(nn) {
         title: '用户已存在',
         message: nn + ' 已存在于特别关注中',
         overlayStyle: {
-        '-webkit-app-region': 'no-drag',
-      },
+          '-webkit-app-region': 'no-drag',
+        },
       }).then(() => {})
     } else
       Dialog.confirm({
         title: '提示',
         message: '确认添加 ' + nn + ' 到特别关注？',
         overlayStyle: {
-        '-webkit-app-region': 'no-drag',
-      },
+          '-webkit-app-region': 'no-drag',
+        },
       })
         .then(() => {
           let aft = bef.concat(' ', nn)
@@ -302,16 +304,16 @@ function addToBan(nn) {
         title: '用户已存在',
         message: nn + ' 已存在于屏蔽名单中',
         overlayStyle: {
-        '-webkit-app-region': 'no-drag',
-      },
+          '-webkit-app-region': 'no-drag',
+        },
       }).then(() => {})
     } else
       Dialog.confirm({
         title: '提示',
         message: '确认添加 ' + nn + ' 到屏蔽名单？',
         overlayStyle: {
-        '-webkit-app-region': 'no-drag',
-      },
+          '-webkit-app-region': 'no-drag',
+        },
       })
         .then(() => {
           let aft = bef.concat(' ', nn)
@@ -375,10 +377,11 @@ function getRoomGiftData(rid) {
 
 function getGiftData() {
   return new Promise((resolve, reject) => {
-    fetch('https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json', {
-      method: 'GET',
-      credentials: 'include',
-    })
+    // fetch('https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json', {
+    //   method: 'GET',
+    //   credentials: 'include',
+    // })
+    fetch('giftdata.txt')
       .then((res) => {
         //console.log(res.text())
         return res.text()

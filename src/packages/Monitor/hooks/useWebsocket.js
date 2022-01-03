@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { Ex_WebSocket_UnLogin } from "@/global/utils/websocket.js"
 import { STT } from "@/global/utils/stt.js"
-import { getStrMiddle } from "@/global/utils"
+import { getStrMiddle} from "@/global/utils"
 
 export function useWebsocket(options, allGiftData) {
     let ws = null;
@@ -34,29 +34,44 @@ export function useWebsocket(options, allGiftData) {
         //debug
         // let excludes = [
         //     "anbc",
-        //     "rnewbc"
+        //     "rnewbc",
+        //     "uenter",
+        //     "chatmsg",
+        //     "dgb",
+        //     "odfbc",
+        //     "rndfbc",
+        //     "spbc",
+        //     "synexp",
+        //     "dfrank",
+        //     "noble_num_info",
+        //     "qausrespond",
+        //     "ranklist",
+        //     "fswrank",
+        //     "srres",
+        //     "rtss_update",
+        //     "framl",
+        //     "rri",
+        //     "tsboxb",
+        //     "rankup",
+        //     "upgrade",
+        //     "frank",
+        //     "blab",
+        //     "tsgs",
+        //     "wiru",
+        //     "lucky_wheel_star_pool",
+        //     "cthn"
         // ]
-        // if (excludes.includes(msgType)) {
+        
+        // if (!excludes.includes(msgType)) {
+        //     console.log(msgType)
+        //     console.log(msg)
         //     let dataObj = stt.deserialize(msg);
         //     console.log(dataObj)
         // }
 
-        // {
-        //     "type": "blab",
-        //     "uid": "17484032",
-        //     "nn": "爱队",
-        //     "lbl": "1",
-        //     "bl": "4",
-        //     "ba": "1",
-        //     "bnn": "淑怡",
-        //     "diaf": "0",
-        //     "rid": "290935"
-        // }
 
         if (msgType === "chatmsg" && options.value.switch.includes("danmaku")) {
             let data = stt.deserialize(msg);
-            //message intercept
-            if(data.ail) console.log(JSON.stringify(data))
             if (!checkDanmakuValid(data)) {
                 return;
             }
@@ -111,23 +126,14 @@ export function useWebsocket(options, allGiftData) {
             danmakuListVIP.value.push(obj);
         }
 
-        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "configscreen" || msgType === "anbc" || msgType === "rnewbc") && options.value.switch.includes("gift")) {
+        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "fansupgradebroadcast" || msgType === "anbc" || msgType === "rnewbc") && options.value.switch.includes("gift")) {
             let data = stt.deserialize(msg);
-            //console.log('matched filter: ' + JSON.stringify(data))
-            // 续费钻粉
-            // {"type":"rndfbc","uid":"573096","rid":"5189167","nick":"一只小洋丶","icon":"avatar_v3/202111/d7d383be4c874af0b50e3d9eb58ad462","level":"39","nl":"0","pg":"1","fl":"24","bn":"歆崽"}
-
-            // 开通钻粉
-            // {"type":"odfbc","uid":"341314282","rid":"5189167","nick":"nt五香蛋","icon":"avatar_v3/202103/04d3d252139f4620bd417c6bef673bd6","level":"36","nl":"0","pg":"1","fl":"22","bn":"歆崽"}
             let obj = {};
             switch (msgType) {
                 case "dgb":
                     // 正常礼物
-                    //let data = stt.deserialize(msg)
-                    //console.log(JSON.stringify(data))
                     if (!checkGiftValid(data)) {
                         if (checkAllGift(data)) {
-                            //console.log("all: gift check passed")
                             if(data.bcnt !== 1){
                                 obj = {
                                     nn: data.nn, // 昵称
@@ -152,20 +158,15 @@ export function useWebsocket(options, allGiftData) {
                             if (giftListAll.value.length + 1 > options.value.threshold) {
                                 giftListAll.value.shift();
                             }
-                            //let indexForLast = giftList.value.length - 1;
-                            //let lastElement = giftList.value[indexForLast];
                             giftListAll.value.forEach((item, i, arr) => {
                                 if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits){
                                     arr.splice(i, 1);
                                 }
                             })
-                            //console.log("valid: pushing to giftlist")
                             giftListAll.value.push(obj);
                             return;
                         } else return
                     }
-                    //console.log("valid: gift check passed")
-                    //console.log(JSON.stringify(data))
                     if(data.bcnt !== 1){
                         obj = {
                             nn: data.nn, // 昵称
@@ -190,19 +191,15 @@ export function useWebsocket(options, allGiftData) {
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
-                    //let indexForLast = giftList.value.length - 1;
-                    //let lastElement = giftList.value[indexForLast];
                     giftList.value.forEach((item, i, arr) => {
                         if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits){
                             arr.splice(i, 1);
                         }
                     })
-                    //console.log("valid: pushing to giftlist")
                     giftList.value.push(obj);
                     break;
                 case "odfbc":
                     // 开通钻粉
-                    //let data = stt.deserialize(msg)
                     obj = {
                         type: "开通钻粉",
                         nn: data.nick,
@@ -220,7 +217,6 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "rndfbc":
                     // 续费钻粉
-                    //let data = stt.deserialize(msg)
                     obj = {
                         type: "续费钻粉",
                         nn: data.nick,
@@ -238,11 +234,9 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "anbc":
                     //开通贵族
-                    //let data = stt.deserialize(msg)
                     if (!checkNobelValid(data)) {
                         return;
                     }
-                    //console.log(data);
                     obj = {
                         sptypen: "开通贵族",
                         nn: data.unk,
@@ -260,11 +254,9 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "rnewbc":
                     //续费贵族
-                    //let data = stt.deserialize(msg)
                     if (!checkNobelValid(data)) {
                         return;
                     }
-                    //console.log(data);
                     obj = {
                         sptypern: "续费贵族",
                         nn: data.unk,
@@ -282,7 +274,6 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "blab":
                     //粉丝牌升级
-                    //let data = stt.deserialize(msg)
                     if (data.bl >= 15) {
                         obj = {
                             sptype: "粉丝牌升级",
@@ -297,8 +288,10 @@ export function useWebsocket(options, allGiftData) {
                         giftList.value.push(obj);
                     }
                     break;
-                case "configscreen":
+                    case "fansupgradebroadcast":
                     //粉丝牌30以上升级
+                    //由于斗鱼的在configscreen下播报30级以上粉丝牌升级, 且存在名为"btype@="的子分类
+                    //因此getStrMiddle会将子分类解析为msgType, 针对30级以上粉丝牌升级的子分类为"fansupgradebroadcast"
                     if (data.rid !== "520"){
                         return;
                     }
@@ -398,16 +391,12 @@ export function useWebsocket(options, allGiftData) {
 
     const checkAllGift = (data) => {
         let giftData = allGiftData.value[data.gfid];
-        //console.log('all: start all gift evaluation')
         let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
         if (keywords !== "") {
-            //console.log("all: matching keywords...")
             let giftName = giftData.n;
-            //console.log("all: gift name:" + giftName)
             let arr = keywords.split(" ");
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
-                    //console.log("all: keyword machted, ditching gift object")
                     return false;
                 }
             }
@@ -416,10 +405,7 @@ export function useWebsocket(options, allGiftData) {
     }
 
     const checkGiftValid = (data) => {
-        //console.log(data);
-        //console.log('valid: start valid gift evaluation')
         let giftData = allGiftData.value[data.gfid];
-        //console.log(giftData);
         // 屏蔽单价
         let expThreshold = Number(options.value.gift.ban.price) * 100
         if (Number(giftData.pc) < expThreshold) {
@@ -429,16 +415,13 @@ export function useWebsocket(options, allGiftData) {
                 return false;
             }
         }
-        //console.log("valid: gift total value valid, matching keywords...")
         // 屏蔽关键词
         let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
         if (keywords !== "") {
             let giftName = giftData.n;
-            //console.log("valid: gift name:" + giftName)
             let arr = keywords.split(" ");
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
-                    //console.log("valid: keyword matched, ditching gift object")
                     return false;
                 }
             }

@@ -6,8 +6,10 @@ import styleImport from 'vite-plugin-style-import';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  //base: path.resolve(__dirname, "./dist/"),
   base: "",
+  build: {
+    outDir: "entry"
+  },
   plugins: [
     vue(),
     styleImport({

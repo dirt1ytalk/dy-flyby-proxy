@@ -377,11 +377,11 @@ function getRoomGiftData(rid) {
 
 function getGiftData() {
   return new Promise((resolve, reject) => {
-    // fetch('https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json', {
-    //   method: 'GET',
-    //   credentials: 'include',
-    // })
-    fetch('giftdata.txt')
+    fetch('https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      // fetch('giftdata.txt')
       .then((res) => {
         //console.log(res.text())
         return res.text()

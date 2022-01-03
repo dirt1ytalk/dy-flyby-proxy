@@ -1,17 +1,16 @@
 {
   "name": "dy-flyby-proxy",
-  "version": "1.3.5",
-  "author": "SkySway",
+  "version": "2.0.0",
+  "author": "星落",
   "description": "https://www.douyu.com/520",
   "main": "main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^0.2.4",
@@ -24,11 +23,6 @@
     "vue-clipboard3": "^1.0.1"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.61",
-    "@electron-forge/maker-deb": "^6.0.0-beta.61",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.61",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
-    "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "@vitejs/plugin-vue": "^1.10.1",
     "autoprefixer": "^10.4.0",
     "electron": "^16.0.5",
@@ -39,33 +33,13 @@
     "vite": "^2.6.14",
     "vite-plugin-style-import": "^1.4.0"
   },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "./dist/favicon.ico"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "douyu_monitor"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
+  "build": {
+    "appId": "com.skysway.dyassistant",
+    "productName": "520弹幕助手",
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "520弹幕助手 Setup ${version}.${ext}"
     }
   }
 }

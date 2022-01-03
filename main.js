@@ -14,7 +14,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
-  win.loadFile("dist/index.html");
+  win.loadFile("entry/index.html");
   win.setAlwaysOnTop(true, "normal")
 }
 

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { Ex_WebSocket_UnLogin } from "@/global/utils/websocket.js"
 import { STT } from "@/global/utils/stt.js"
-import { getStrMiddle} from "@/global/utils"
+import { getStrMiddle } from "@/global/utils"
 
 export function useWebsocket(options, allGiftData) {
     let ws = null;
@@ -61,7 +61,7 @@ export function useWebsocket(options, allGiftData) {
         //     "lucky_wheel_star_pool",
         //     "cthn"
         // ]
-        
+
         // if (!excludes.includes(msgType)) {
         //     console.log(msgType)
         //     console.log(msg)
@@ -90,7 +90,7 @@ export function useWebsocket(options, allGiftData) {
                 //super: data.pg, // 超管，data.pg为5则为超管
                 //vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
                 key: data.cid, // 时间戳
-                dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
             };
             if (danmakuList.value.length + 1 > options.value.threshold) {
                 danmakuList.value.shift();
@@ -118,7 +118,7 @@ export function useWebsocket(options, allGiftData) {
                 //super: data.pg, // 超管，data.pg为5则为超管
                 //vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
                 key: data.cid, // 时间戳
-                dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
             };
             if (danmakuListVIP.value.length + 1 > options.value.threshold) {
                 danmakuListVIP.value.shift();
@@ -134,7 +134,7 @@ export function useWebsocket(options, allGiftData) {
                     // 正常礼物
                     if (!checkGiftValid(data)) {
                         if (checkAllGift(data)) {
-                            if(data.bcnt !== 1){
+                            if (data.bcnt !== 1) {
                                 obj = {
                                     nn: data.nn, // 昵称
                                     lv: data.level, // 等级
@@ -142,7 +142,7 @@ export function useWebsocket(options, allGiftData) {
                                     gfcnt: data.gfcnt, // 礼物数量
                                     hits: data.bcnt, // 连击
                                     key: new Date().getTime() + Math.random(),
-                                    dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                                    dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                                 }
                             } else {
                                 obj = {
@@ -152,14 +152,14 @@ export function useWebsocket(options, allGiftData) {
                                     gfcnt: data.gfcnt, // 礼物数量
                                     hits: data.hits, // 连击
                                     key: new Date().getTime() + Math.random(),
-                                    dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                                    dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                                 }
                             }
                             if (giftListAll.value.length + 1 > options.value.threshold) {
                                 giftListAll.value.shift();
                             }
                             giftListAll.value.forEach((item, i, arr) => {
-                                if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits){
+                                if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
                                     arr.splice(i, 1);
                                 }
                             })
@@ -167,7 +167,7 @@ export function useWebsocket(options, allGiftData) {
                             return;
                         } else return
                     }
-                    if(data.bcnt !== 1){
+                    if (data.bcnt !== 1) {
                         obj = {
                             nn: data.nn, // 昵称
                             lv: data.level, // 等级
@@ -175,7 +175,7 @@ export function useWebsocket(options, allGiftData) {
                             gfcnt: data.gfcnt, // 礼物数量
                             hits: data.bcnt, // 连击
                             key: new Date().getTime() + Math.random(),
-                            dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                         }
                     } else {
                         obj = {
@@ -185,14 +185,14 @@ export function useWebsocket(options, allGiftData) {
                             gfcnt: data.gfcnt, // 礼物数量
                             hits: data.hits, // 连击
                             key: new Date().getTime() + Math.random(),
-                            dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                         }
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
                     giftList.value.forEach((item, i, arr) => {
-                        if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits){
+                        if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
                             arr.splice(i, 1);
                         }
                     })
@@ -208,7 +208,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
-                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -225,7 +225,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
-                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -245,7 +245,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
-                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -265,7 +265,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
-                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
@@ -283,16 +283,16 @@ export function useWebsocket(options, allGiftData) {
                             gfcnt: "1",
                             hits: "1",
                             key: new Date().getTime() + Math.random(),
-                            dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                         }
                         giftList.value.push(obj);
                     }
                     break;
-                    case "fansupgradebroadcast":
+                case "fansupgradebroadcast":
                     //粉丝牌30以上升级
                     //由于斗鱼的在configscreen下播报30级以上粉丝牌升级, 且存在名为"btype@="的子分类
                     //因此getStrMiddle会将子分类解析为msgType, 针对30级以上粉丝牌升级的子分类为"fansupgradebroadcast"
-                    if (data.rid !== "520"){
+                    if (data.rid !== "520") {
                         return;
                     }
                     obj = {
@@ -303,7 +303,7 @@ export function useWebsocket(options, allGiftData) {
                         gfcnt: "1",
                         hits: "1",
                         key: new Date().getTime() + Math.random(),
-                        dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
                     giftList.value.push(obj);
                     break;
@@ -322,7 +322,7 @@ export function useWebsocket(options, allGiftData) {
                 lv: data.level, // 等级
                 txt: "进入了直播间", // 弹幕内容
                 key: new Date().getTime() + Math.random(), // 时间戳
-                dt: new Date().toLocaleTimeString(['en-GB'],{hour: '2-digit', minute:'2-digit', second:'2-digit'})
+                dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
             };
             if (danmakuListVIP.value.length + 1 > options.value.threshold) {
                 danmakuListVIP.value.shift();

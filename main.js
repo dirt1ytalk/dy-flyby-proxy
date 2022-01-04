@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, MenuItem, dialog } = require("electron");
+const { app, BrowserWindow, Menu, MenuItem, Notification } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
@@ -40,7 +40,6 @@ menu.append(new MenuItem({
 
 Menu.setApplicationMenu(menu)
 
-
 app.whenReady().then(() => {
   createWindow();
   log.info('Window created, checking for update...')
@@ -56,18 +55,18 @@ app.whenReady().then(() => {
 });
 
 autoUpdater.on('update-available', info => {
-  const dialogOpts = {
-      type: 'info',
-      buttons: ['Yes', 'No'],
-      title: '有新更新',
-      message: '有新更新',
-      detail: '有新版本可用, 您想要下载并安装新版本吗'
-  }
+  new Notification({
+    title: "发现新版本",
+    body: "正在下载新版本"
+  }).show();
+});
 
-  dialog.showMessageBox(dialogOpts, (response) => {
-      if (response === 0) autoUpdater.quitAndInstall()
-  })
-
+autoUpdater.on('update-downloaded', () => {
+  new Notification({
+    title: "正在安装更新",
+    body: "应用将会自动重启以安装更新"
+  }).show();
+  autoUpdater.quitAndInstall(true, true);
 });
 
 app.on("window-all-closed", () => {

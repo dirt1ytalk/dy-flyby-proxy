@@ -40,34 +40,5 @@
       "allowToChangeInstallationDirectory": true,
       "artifactName": "520弹幕助手 Setup ${version}.${ext}"
     }
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "dist/favicon.ico"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "dy_flyby_proxy"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
   }
 }

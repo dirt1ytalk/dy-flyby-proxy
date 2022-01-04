@@ -7,9 +7,9 @@ import styleImport from 'vite-plugin-style-import';
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "",
-  // build: {
-  //   outDir: "entry"
-  // },
+  build: {
+    outDir: "entry"
+  },
   plugins: [
     vue(),
     styleImport({

@@ -1,5 +1,11 @@
-const { app, BrowserWindow, Menu, MenuItem } = require("electron");
+const { app, BrowserWindow, Menu, MenuItem, dialog } = require("electron");
 const path = require("path");
+const { autoUpdater } = require("electron-updater");
+const log = require('electron-log');
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -37,12 +43,31 @@ Menu.setApplicationMenu(menu)
 
 app.whenReady().then(() => {
   createWindow();
+  log.info('Window created, checking for update...')
+  autoUpdater.checkForUpdates()
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
+      log.info('Window created, checking for update...')
+      autoUpdater.checkForUpdates()
     }
   });
+});
+
+autoUpdater.on('update-available', info => {
+  const dialogOpts = {
+      type: 'info',
+      buttons: ['Yes', 'No'],
+      title: '有新更新',
+      message: '有新更新',
+      detail: '有新版本可用, 您想要下载并安装新版本吗'
+  }
+
+  dialog.showMessageBox(dialogOpts, (response) => {
+      if (response === 0) autoUpdater.quitAndInstall()
+  })
+
 });
 
 app.on("window-all-closed", () => {
@@ -50,3 +75,4 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+

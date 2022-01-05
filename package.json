@@ -38,6 +38,7 @@
     "appId": "com.skysway.dyassistant",
     "productName": "520弹幕助手",
     "win": {
+      "icon": "public/icon.ico",
       "publish": [
         {
           "provider": "generic",

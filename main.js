@@ -24,7 +24,7 @@ function createWindow() {
 }
 
 if (process.platform === 'win32') {
-  app.setAppUserModelId("520弹幕助手")
+  app.setAppUserModelId("com.skysway.dyassistant")
 }
 
 const menu = new Menu()
@@ -45,7 +45,7 @@ menu.append(new MenuItem({
 Menu.setApplicationMenu(menu)
 
 let tray = null;
-const icon = nativeImage.createFromPath(path.join(__dirname, "public/favicon.ico"));
+const icon = nativeImage.createFromPath(path.join(__dirname, "public/icon.ico"));
 const contextMenu = Menu.buildFromTemplate(
   [
     {
@@ -75,11 +75,11 @@ app.whenReady().then(() => {
       tray = new Tray(icon);
       tray.setToolTip("520弹幕助手");
       tray.setContextMenu(contextMenu);
-
       createWindow();
     }
-  });
-});
+  }
+  );
+})
 
 autoUpdater.on('update-not-available', info => {
   new Notification({

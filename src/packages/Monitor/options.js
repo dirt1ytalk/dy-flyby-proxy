@@ -24,7 +24,7 @@ export const defaultOptions = {
     // 每个模块开关，按顺序排
     switch: ["gift", "danmaku", "danmakuvip", "giftunfiltered"],
     // 数据阈值
-    threshold: 100,
+    threshold: 1000,
     // 字号
     fontSize: 14,
     // 背景透明
@@ -60,7 +60,7 @@ export const defaultOptions = {
         // 屏蔽项
         ban: {
             // 价格低于
-            price: 0,
+            price: 50,
             // 礼物名称
             keywords: "",
         }

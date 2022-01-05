@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
+const { app, clipboard, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
@@ -45,7 +45,7 @@ menu.append(new MenuItem({
 Menu.setApplicationMenu(menu)
 
 let tray = null;
-const icon = nativeImage.createFromPath("entry/favicon.ico");
+const icon = nativeImage.createFromPath(path.join(__dirname, "public/favicon.ico"));
 const contextMenu = Menu.buildFromTemplate(
   [
     {
@@ -96,9 +96,10 @@ autoUpdater.on('update-available', info => {
 });
 
 autoUpdater.on('error', err => {
+  clipboard.writeText(String(err));
   new Notification({
-    title: "更新失败",
-    body: "错误信息: " + err,
+    title: "无法获取更新",
+    body: "错误信息已复制到剪贴板, 请反馈开发者",
   }).show();
 });
 

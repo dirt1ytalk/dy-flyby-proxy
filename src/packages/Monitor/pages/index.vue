@@ -182,6 +182,13 @@ import GiftAll from '../components/GiftUnfiltered/Gift.vue'
 
 import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, Radio, Switch, Dialog, Notify } from 'vant'
 
+import { ElCard, ElRow, ElCol, ElContainer, ElMain } from 'element-plus'
+import 'element-plus/es/components/card/style/css'
+import 'element-plus/es/components/row/style/css'
+import 'element-plus/es/components/col/style/css'
+import 'element-plus/es/components/container/style/css'
+import 'element-plus/es/components/main/style/css'
+
 import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
 

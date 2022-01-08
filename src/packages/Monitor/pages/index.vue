@@ -101,7 +101,7 @@
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <div>
-          <span class="text-xs ml-4"> Recomposed by: 星落 | V2.0.0 | Based on github: qianjiachun/douyu-monitor </span>
+          <span class="text-xs ml-4"> Recomposed by: 星落 | V2.0.1 | Based on github: qianjiachun/douyu-monitor </span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -180,16 +180,17 @@ import Gift from '../components/Gift/Gift.vue'
 //import Enter from '../components/Enter/Enter.vue'
 import GiftAll from '../components/GiftUnfiltered/Gift.vue'
 
-import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, Radio, Switch, Dialog } from 'vant'
+import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, Radio, Switch, Dialog, Notify } from 'vant'
 
 import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
 
-//import { giftData } from '@/global/utils/dydata/giftData.js'
+import { supGiftData } from '@/global/utils/dydata/supGiftData.js'
 import { saveLocalData, getLocalData, deepCopy, getClassStyle, getStrMiddle, formatObj } from '@/global/utils'
 import { defaultOptions } from '../options'
 
 const LOCAL_NAME = 'monitor_options'
+const ipc = window.ipcRenderer
 
 let domMonitor = ref(null)
 let options = ref(deepCopy(defaultOptions))
@@ -240,7 +241,7 @@ onMounted(async () => {
       }
     }
   }
-  allGiftData.value = { ...roomGiftData, ...giftData }
+  allGiftData.value = { ...roomGiftData, ...giftData, ...supGiftData }
   //console.log(allGiftData.value)
   connectWs(rid)
 })

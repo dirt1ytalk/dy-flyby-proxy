@@ -82,6 +82,7 @@ app.whenReady().then(() => {
 })
 
 autoUpdater.on('update-not-available', info => {
+  //win.webContents.send("no-update", "0")
   new Notification({
     title: "更新检查",
     body: "当前版本 V" + info.version + " 已是最新版本",

@@ -406,6 +406,11 @@ export function useWebsocket(options, allGiftData) {
 
     const checkGiftValid = (data) => {
         let giftData = allGiftData.value[data.gfid];
+        //判断该礼物是否存在于接口数据中,如不存在则将id记录到控制台并抛弃
+        if (!giftData){
+            console.log("未知礼物: ", String(data.gfid));
+            return false;
+        }
         // 屏蔽单价
         let expThreshold = Number(options.value.gift.ban.price) * 100
         if (Number(giftData.pc) < expThreshold) {

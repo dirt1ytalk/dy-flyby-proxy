@@ -3,6 +3,8 @@ import { Ex_WebSocket_UnLogin } from "@/global/utils/websocket.js"
 import { STT } from "@/global/utils/stt.js"
 import { getStrMiddle } from "@/global/utils"
 
+const fs = window.fs
+
 export function useWebsocket(options, allGiftData) {
     let ws = null;
     let stt = new STT();
@@ -331,8 +333,36 @@ export function useWebsocket(options, allGiftData) {
         }
     }
 
+    //记录弹幕信息到本地文件
+    const logToLocalFile = async (data) => {
+        //构建存储目录
+        let parentDir = options.value.logDir
+        let date = new Date()
+        let dateStr = String(date.getMonth() + 1) + '-' + String(date.getDate())    
+        let dirLog = parentDir + '\\520-Log\\' + dateStr
+        
+        //创建文件夹, 如文件夹已存在则指定resolve
+        await fs.promises.mkdir(dirLog, {recursive: true}).catch(err => {
+            if (err.message.includes('EEXIST')) return Promise.resolve()
+        })
+
+        //构建消息体
+        let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        let userNameStr = data.nn;
+        let msgContentStr = data.txt;
+        let arrConcat = [timeStr, ' - ', userNameStr, ': ', msgContentStr];
+        let strToWrite = "".concat(...arrConcat);
+
+        //将消息体附加到文件
+        await fs.promises.appendFile(dirLog + '\\logs.txt', strToWrite + '\n').catch(err => {
+            console.log(err.message)
+            return new Promise.reject()
+        })
+    }
+
     const checkDanmakuValid = (data) => {
         // 判断屏蔽等级
+        logToLocalFile(data)
         if (Number(data.level) <= Number(options.value.danmaku.ban.level)) {
             return false;
         }
@@ -407,7 +437,7 @@ export function useWebsocket(options, allGiftData) {
     const checkGiftValid = (data) => {
         let giftData = allGiftData.value[data.gfid];
         //判断该礼物是否存在于接口数据中,如不存在则将id记录到控制台并抛弃
-        if (!giftData){
+        if (!giftData) {
             console.log("未知礼物: ", String(data.gfid));
             return false;
         }

@@ -64,5 +64,6 @@ export const defaultOptions = {
             // 礼物名称
             keywords: "",
         }
-    }
+    },
+    logDir: ""
 }

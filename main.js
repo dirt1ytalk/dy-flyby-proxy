@@ -1,4 +1,4 @@
-const { app, clipboard, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
+const { app, clipboard, ipcMain, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
@@ -79,6 +79,10 @@ app.whenReady().then(() => {
     }
   }
   );
+})
+
+ipcMain.handle('get-doc-path', () => {
+  return app.getPath("documents")
 })
 
 autoUpdater.on('update-not-available', info => {

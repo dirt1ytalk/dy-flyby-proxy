@@ -335,7 +335,6 @@ export function useWebsocket(options, allGiftData) {
 
     //记录弹幕信息到本地文件
     const logToLocalFile = async (data) => {
-
         //构建消息体
         let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         let userNameStr = data.nn;

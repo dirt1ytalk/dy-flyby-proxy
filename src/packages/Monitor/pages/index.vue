@@ -221,29 +221,18 @@ let maxOrder = computed(() => {
 
 onMounted(async () => {
   let rid = 520
-  let propsOptions = window.options
-  if (propsOptions && propsOptions !== '') {
-    // 当网页参数传了options，就使用网页的options
-    options.value = JSON.parse(propsOptions)
-  } else {
-    let localData = JSON.parse(getLocalData(LOCAL_NAME))
-    if (Object.prototype.toString.call(localData) !== '[object Object]') {
-      localData = deepCopy(defaultOptions)
-    }
-    options.value = localData
+  let localData = JSON.parse(getLocalData(LOCAL_NAME))
+  if (Object.prototype.toString.call(localData) !== '[object Object]') {
+    localData = deepCopy(defaultOptions)
   }
+  options.value = localData
 
   options.value = formatObj(options.value, defaultOptions)
 
-  //如果logDir为空则调用electron.app.getPath获取文档文件夹路径
-  if (!options.value.logDir) {
-    options.value.logDir = await ipc.invoke('get-doc-path')
-  }
-
   //构建日志文件夹路径
-  let parentDir = options.value.logDir
+  let parentDir = await ipc.invoke('get-doc-path')
   let date = new Date()
-  let dateStr = String(date.getMonth() + 1) + '-' + String(date.getDate())
+  let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
   let dirLog = parentDir + '\\520-Log\\' + dateStr
 
   //创建日志文件夹, 如文件夹已存在则指定resolve

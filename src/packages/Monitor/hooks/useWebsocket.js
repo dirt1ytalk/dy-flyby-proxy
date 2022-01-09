@@ -344,7 +344,7 @@ export function useWebsocket(options, allGiftData) {
 
         //将消息体附加到文件
         let dirLog = options.value.logDir
-        await fs.promises.appendFile(dirLog + '\\logs.txt', strToWrite + '\n').catch(err => {
+        await fs.promises.appendFile(dirLog + '\\log.txt', strToWrite + '\n').catch(err => {
             console.log(err.message)
             return new Promise.reject()
         })

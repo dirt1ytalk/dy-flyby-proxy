@@ -233,7 +233,7 @@ onMounted(async () => {
   let parentDir = await ipc.invoke('get-doc-path')
   let date = new Date()
   let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
-  let dirLog = parentDir + '\\520-Log\\' + dateStr
+  let dirLog = parentDir + '\\520-Logs\\' + dateStr
 
   //创建日志文件夹, 如文件夹已存在则指定resolve
   await fs.promises.mkdir(dirLog, { recursive: true }).catch((err) => {

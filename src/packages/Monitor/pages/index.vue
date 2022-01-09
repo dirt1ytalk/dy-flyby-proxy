@@ -198,6 +198,7 @@ import { defaultOptions } from '../options'
 
 const LOCAL_NAME = 'monitor_options'
 const ipc = window.ipcRenderer
+const fs = window.fs
 
 let domMonitor = ref(null)
 let options = ref(deepCopy(defaultOptions))
@@ -232,11 +233,26 @@ onMounted(async () => {
     options.value = localData
   }
 
+  options.value = formatObj(options.value, defaultOptions)
+
+  //如果logDir为空则调用electron.app.getPath获取文档文件夹路径
   if (!options.value.logDir) {
     options.value.logDir = await ipc.invoke('get-doc-path')
   }
 
-  options.value = formatObj(options.value, defaultOptions)
+  //构建日志文件夹路径
+  let parentDir = options.value.logDir
+  let date = new Date()
+  let dateStr = String(date.getMonth() + 1) + '-' + String(date.getDate())
+  let dirLog = parentDir + '\\520-Log\\' + dateStr
+
+  //创建日志文件夹, 如文件夹已存在则指定resolve
+  await fs.promises.mkdir(dirLog, { recursive: true }).catch((err) => {
+    if (err.message.includes('EEXIST')) return Promise.resolve()
+  })
+
+  //将完整路径替换options中存储的文档文件夹路径
+  options.value.logDir = dirLog
 
   let data = await getRoomGiftData(rid)
   let giftData = await getGiftData()
@@ -393,7 +409,7 @@ function getGiftData() {
       method: 'GET',
       credentials: 'include',
     })
-    // fetch('giftdata.txt')
+      // fetch('giftdata.txt')
       .then((res) => {
         //console.log(res.text())
         return res.text()

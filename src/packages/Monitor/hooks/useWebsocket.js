@@ -335,8 +335,9 @@ export function useWebsocket(options, allGiftData) {
 
     //记录弹幕信息到本地文件
     const logToLocalFile = async (data) => {
+        let date = new Date()
         //构建消息体
-        let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        let timeStr = date.toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         let userNameStr = data.nn;
         let msgContentStr = data.txt;
         let arrConcat = [timeStr, ' - ', userNameStr, ': ', msgContentStr];
@@ -344,7 +345,8 @@ export function useWebsocket(options, allGiftData) {
 
         //将消息体附加到文件
         let dirLog = options.value.logDir
-        await fs.promises.appendFile(dirLog + '\\log.txt', strToWrite + '\n').catch(err => {
+        let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
+        await fs.promises.appendFile(dirLog + "\\" + dateStr + '_弹幕.txt', strToWrite + '\n').catch(err => {
             console.log(err.message)
             return new Promise.reject()
         })

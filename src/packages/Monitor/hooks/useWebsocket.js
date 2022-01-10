@@ -345,8 +345,7 @@ export function useWebsocket(options, allGiftData) {
 
         //将消息体附加到文件
         let dirLog = options.value.logDir
-        let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
-        await fs.promises.appendFile(dirLog + "\\" + dateStr + '_弹幕.txt', strToWrite + '\n').catch(err => {
+        await fs.promises.appendFile(dirLog , strToWrite + '\n').catch(err => {
             console.log(err.message)
             return new Promise.reject()
         })

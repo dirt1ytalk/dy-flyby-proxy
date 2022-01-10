@@ -6,7 +6,7 @@
           <el-card class="bg">
             <!-- <template #header>
               <div>弹幕</div>
-            </template> -->
+            </template>-->
             <div class="monitor" ref="domMonitor">
               <Danmaku
                 style="height: 260px"
@@ -66,7 +66,13 @@
       </el-row>
     </el-main>
   </el-container>
-  <Popup class="popup" v-model:show="isShowOption" position="bottom" :overlay-style="{ '-webkit-app-region': 'no-drag' }" :style="{ height: '50%' }">
+  <Popup
+    class="popup"
+    v-model:show="isShowOption"
+    position="bottom"
+    :overlay-style="{ '-webkit-app-region': 'no-drag' }"
+    :style="{ height: '50%' }"
+  >
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
         <!-- <Field label="模块">
@@ -83,12 +89,12 @@
           <template #input>
             <Switch v-model="options.animation" size="20" />
           </template>
-        </Field> -->
+        </Field>-->
         <!-- <Field label=面板不透明度>
           <template #input>
             <Slider v-model="options.opacity" :min="0" :max="1" :step="0.05" />
           </template>
-        </Field> -->
+        </Field>-->
         <Field label="面板背景颜色 & 不透明度">
           <template #input>
             <el-color-picker show-alpha v-model="options.bgcolora"></el-color-picker>
@@ -101,7 +107,9 @@
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <div>
-          <span class="text-xs ml-4"> Recomposed by: 星落 | V2.0.3 | Based on github: qianjiachun/douyu-monitor </span>
+          <span
+            class="text-xs ml-4"
+          >Recomposed by: 星落 | V2.0.4 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -117,7 +125,12 @@
             </CheckboxGroup>
           </template>
         </Field>
-        <Field v-model="options.danmaku.ban.level" label="屏蔽等级≤" type="digit" placeholder="请输入屏蔽的等级"></Field>
+        <Field
+          v-model="options.danmaku.ban.level"
+          label="屏蔽等级≤"
+          type="digit"
+          placeholder="请输入屏蔽的等级"
+        ></Field>
         <Field v-model="options.danmaku.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:关键词1 关键词2"></Field>
         <Field v-model="options.danmaku.ban.nicknames" label="屏蔽列表" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
         <Field v-model="options.danmaku.vip" label="特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
@@ -128,8 +141,18 @@
             <Switch v-model="options.gift.showImg" size="20" />
           </template>
         </Field>
-        <Field v-model="options.gift.ban.price" label="过滤阈值<" type="number" placeholder="低于此阈值(鱼翅价值)的礼物不会在上方面板显示"></Field>
-        <Field v-model="options.gift.totalPrice" label="高亮阈值≥" type="number" placeholder="高于此阈值(鱼翅价值)的礼物会在上方面板高亮显示"></Field>
+        <Field
+          v-model="options.gift.ban.price"
+          label="过滤阈值<"
+          type="number"
+          placeholder="低于此阈值(鱼翅价值)的礼物不会在上方面板显示"
+        ></Field>
+        <Field
+          v-model="options.gift.totalPrice"
+          label="高亮阈值≥"
+          type="number"
+          placeholder="高于此阈值(鱼翅价值)的礼物会在上方面板高亮显示"
+        ></Field>
         <Field v-model="options.gift.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:荧光棒 鱼丸"></Field>
       </Tab>
       <!-- <Tab title="进场">
@@ -142,7 +165,7 @@
             </CheckboxGroup>
           </template>
         </Field>
-      </Tab> -->
+      </Tab>-->
       <Tab title="Fail Safe">
         <Field label="布局 - 弹幕">
           <template #input>
@@ -151,7 +174,10 @@
         </Field>
         <Field label="布局 - 特别关注弹幕">
           <template #input>
-            <Slider v-model="options.size.danmakuvip" :disabled="maxOrder === options.order.danmakuvip" />
+            <Slider
+              v-model="options.size.danmakuvip"
+              :disabled="maxOrder === options.order.danmakuvip"
+            />
           </template>
         </Field>
         <Field label="布局 - 礼物">
@@ -161,7 +187,10 @@
         </Field>
         <Field label="布局 - 未过滤礼物">
           <template #input>
-            <Slider v-model="options.size.giftunfiltered" :disabled="maxOrder === options.order.enter" />
+            <Slider
+              v-model="options.size.giftunfiltered"
+              :disabled="maxOrder === options.order.enter"
+            />
           </template>
         </Field>
       </Tab>
@@ -182,12 +211,13 @@ import GiftAll from '../components/GiftUnfiltered/Gift.vue'
 
 import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, Radio, Switch, Dialog, Notify } from 'vant'
 
-import { ElCard, ElRow, ElCol, ElContainer, ElMain } from 'element-plus'
+import { ElCard, ElRow, ElCol, ElContainer, ElMain, ElColorPicker } from 'element-plus'
 import 'element-plus/es/components/card/style/css'
 import 'element-plus/es/components/row/style/css'
 import 'element-plus/es/components/col/style/css'
 import 'element-plus/es/components/container/style/css'
 import 'element-plus/es/components/main/style/css'
+import 'element-plus/es/components/color-picker/style/css'
 
 import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
@@ -240,8 +270,15 @@ onMounted(async () => {
     if (err.message.includes('EEXIST')) return Promise.resolve()
   })
 
+  let fileDir = dirLog + "\\" + dateStr + '_弹幕.txt'
+  await fs.promises.appendFile(fileDir, "[Renderer] Application launched, start logging..." + '\n').catch(err => {
+    console.log(err.message)
+    return new Promise.reject()
+  })
+  
+
   //将完整路径替换options中存储的文档文件夹路径
-  options.value.logDir = dirLog
+  options.value.logDir = fileDir
 
   let data = await getRoomGiftData(rid)
   let giftData = await getGiftData()
@@ -275,7 +312,7 @@ function addToVIP(nn) {
       .then(() => {
         options.value.danmaku.vip = nn
       })
-      .catch(() => {})
+      .catch(() => { })
   } else {
     if (bef.includes(nn)) {
       Dialog.alert({
@@ -284,7 +321,7 @@ function addToVIP(nn) {
         overlayStyle: {
           '-webkit-app-region': 'no-drag',
         },
-      }).then(() => {})
+      }).then(() => { })
     } else
       Dialog.confirm({
         title: '提示',
@@ -297,7 +334,7 @@ function addToVIP(nn) {
           let aft = bef.concat(' ', nn)
           options.value.danmaku.vip = aft
         })
-        .catch(() => {})
+        .catch(() => { })
   }
 }
 
@@ -314,7 +351,7 @@ function addToBan(nn) {
       .then(() => {
         options.value.danmaku.ban.nicknames = nn
       })
-      .catch(() => {})
+      .catch(() => { })
   } else {
     if (bef.includes(nn)) {
       Dialog.alert({
@@ -323,7 +360,7 @@ function addToBan(nn) {
         overlayStyle: {
           '-webkit-app-region': 'no-drag',
         },
-      }).then(() => {})
+      }).then(() => { })
     } else
       Dialog.confirm({
         title: '提示',
@@ -336,7 +373,7 @@ function addToBan(nn) {
           let aft = bef.concat(' ', nn)
           options.value.danmaku.ban.nicknames = aft
         })
-        .catch(() => {})
+        .catch(() => { })
   }
 }
 
@@ -496,7 +533,7 @@ function onClickRestOptions() {
     .then(() => {
       options.value = deepCopy(defaultOptions)
     })
-    .catch(() => {})
+    .catch(() => { })
 }
 
 function onClickShare() {
@@ -518,7 +555,7 @@ function onClickShare() {
         console.error(e)
       }
     })
-    .catch(() => {})
+    .catch(() => { })
 }
 
 watch(
@@ -562,7 +599,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@import '@/global/styles/themes/index.scss';
+@import "@/global/styles/themes/index.scss";
 .monitor {
   //@include backgroundColor('backgroundColor');
   //background-color: v-bind(bgAlphaValue);

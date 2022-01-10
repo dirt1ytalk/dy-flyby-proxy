@@ -1,4 +1,5 @@
 const { app, clipboard, ipcMain, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
+const fs = require("fs")
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
@@ -52,6 +53,14 @@ const contextMenu = Menu.buildFromTemplate(
       label: '检查更新',
       click: () => {
         autoUpdater.checkForUpdates();
+      }
+    },
+    { type: 'separator' },
+    {
+      label: '打开日志文件夹',
+      click: () => {
+        dir = app.getPath('documents') + '\\520-Logs'
+        require('child_process').exec('start "" "' + dir + '"')
       }
     },
     { type: 'separator' },

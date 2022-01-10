@@ -271,11 +271,16 @@ onMounted(async () => {
   })
 
   let fileDir = dirLog + "\\" + dateStr + '_弹幕.txt'
-  await fs.promises.appendFile(fileDir, "[Renderer] Application launched, start logging..." + '\n').catch(err => {
+  let timeStr = date.toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  let initLogMsg = "==================================================\n" +
+    "[Renderer] Application launched, start logging...\n" +
+    "Current time: " + dateStr + " " + timeStr + "\n" +
+    "==================================================\n"
+  await fs.promises.appendFile(fileDir, initLogMsg).catch(err => {
     console.log(err.message)
     return new Promise.reject()
   })
-  
+
 
   //将完整路径替换options中存储的文档文件夹路径
   options.value.logDir = fileDir

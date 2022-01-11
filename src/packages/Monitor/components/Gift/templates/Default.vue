@@ -11,6 +11,10 @@
     <span style="color: black; vertical-align: middle"> {{ data.dt }}</span
     ><span class="item_name_sp">&nbsp;{{ data.nn }}&nbsp;</span> 续费了 {{ nobleData[data.nlv]['name'] }}
   </div>
+  <div v-else-if="'sptypefm' in data" class="item_sp">
+    <span style="color: black; vertical-align: middle"> {{ data.dt }}</span
+    ><span class="item_name_sp">&nbsp;{{ data.nn }}&nbsp;</span> 特殊礼物消息: {{ data.msg }}
+  </div>
   <div v-else :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
     <span style="color: black; vertical-align: middle">{{ data.dt }}</span>
     <div v-if="showImg" class="item__gift">

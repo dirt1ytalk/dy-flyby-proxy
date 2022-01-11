@@ -35,13 +35,13 @@ export function useWebsocket(options, allGiftData) {
         }
         //debug
         // let excludes = [
-        //     "anbc",
-        //     "rnewbc",
+        //     //"anbc",
+        //     //"rnewbc",
         //     "uenter",
         //     "chatmsg",
-        //     "dgb",
-        //     "odfbc",
-        //     "rndfbc",
+        //     //"dgb",
+        //     //"odfbc",
+        //     //"rndfbc",
         //     "spbc",
         //     "synexp",
         //     "dfrank",
@@ -61,7 +61,10 @@ export function useWebsocket(options, allGiftData) {
         //     "tsgs",
         //     "wiru",
         //     "lucky_wheel_star_pool",
-        //     "cthn"
+        //     "cthn",
+        //     "wirt",
+        //     "defAltLogin",
+        //     "dealtarlock"
         // ]
 
         // if (!excludes.includes(msgType)) {
@@ -128,7 +131,7 @@ export function useWebsocket(options, allGiftData) {
             danmakuListVIP.value.push(obj);
         }
 
-        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "fansupgradebroadcast" || msgType === "anbc" || msgType === "rnewbc") && options.value.switch.includes("gift")) {
+        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "fansupgradebroadcast" || msgType === "anbc" || msgType === "rnewbc" || msgType === "professgiftsrc") && options.value.switch.includes("gift")) {
             let data = stt.deserialize(msg);
             let obj = {};
             switch (msgType) {
@@ -309,6 +312,22 @@ export function useWebsocket(options, allGiftData) {
                     }
                     giftList.value.push(obj);
                     break;
+                //btype@=professgiftsrc/blackCate2s@=/avatar@=https:@S@Sapic.douyucdn.cn@Supload@Savatar_v3@S202110@S820640f2a68b47d8b7d1778abf894ce1_big.jpg/blackUids@=/type@=configscreen/rid@=520/userName@=AL丶星落/anchorName@=/blackRids@=/gbtemp@=1060/nrt@=0/txt2@=/txt3@=115963292/userLevelMin@=0/now@=1641916136386/txt1@=/blackCate1s@=/vsrc@=/otherContent@=test/
+                case "professgiftsrc": 
+                    //告白烟花消息
+                    if(data.rid !== "520") return
+                    obj = {
+                        sptypefm: '告白烟花消息',
+                        nn: data.userName,
+                        msg: data.otherContent,
+                        gfid: "0",
+                        gfcnt: "1",
+                        hits: "1",
+                        key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                    }
+                    giftList.value.push(obj)
+                    break
                 default:
                     break;
             }

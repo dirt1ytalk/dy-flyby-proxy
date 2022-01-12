@@ -4,9 +4,6 @@
       <el-row class="mb-1" :gutter="5">
         <el-col :span="14">
           <el-card class="bg">
-            <!-- <template #header>
-              <div>弹幕</div>
-            </template>-->
             <div class="monitor" ref="domMonitor">
               <Danmaku
                 style="height: 260px"
@@ -75,26 +72,6 @@
   >
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
-        <!-- <Field label="模块">
-          <template #input>
-            <CheckboxGroup v-model="options.switch" direction="horizontal" @change="onChangeSwitch">
-              <Checkbox name="giftunfiltered" shape="square">未过滤礼物</Checkbox>
-              <Checkbox name="gift" shape="square">礼物</Checkbox>
-              <Checkbox name="danmaku" shape="square">弹幕</Checkbox>
-              <Checkbox name="danmakuvip" shape="square">特别关注弹幕</Checkbox>
-            </CheckboxGroup>
-          </template>
-        </Field>
-        <Field label="动画">
-          <template #input>
-            <Switch v-model="options.animation" size="20" />
-          </template>
-        </Field>-->
-        <!-- <Field label=面板不透明度>
-          <template #input>
-            <Slider v-model="options.opacity" :min="0" :max="1" :step="0.05" />
-          </template>
-        </Field>-->
         <Field label="面板背景颜色 & 不透明度">
           <template #input>
             <el-color-picker show-alpha v-model="options.bgcolora"></el-color-picker>
@@ -109,7 +86,7 @@
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.0.5 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.0.6 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -155,17 +132,6 @@
         ></Field>
         <Field v-model="options.gift.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:荧光棒 鱼丸"></Field>
       </Tab>
-      <!-- <Tab title="进场">
-        <Field label="显示">
-          <template #input>
-            <CheckboxGroup v-model="options.enter.show" direction="horizontal">
-              <Checkbox name="level" shape="square">等级</Checkbox>
-              <Checkbox name="noble" shape="square">贵族</Checkbox>
-              <Checkbox name="avatar" shape="square">头像</Checkbox>
-            </CheckboxGroup>
-          </template>
-        </Field>
-      </Tab>-->
       <Tab title="Fail Safe">
         <Field label="布局 - 弹幕">
           <template #input>
@@ -287,7 +253,6 @@ onMounted(async () => {
 
   let data = await getRoomGiftData(rid)
   let giftData = await getGiftData()
-  //let supGiftData = await getSupplementGiftData()
   let roomGiftData = { prefix: 'https://gfs-op.douyucdn.cn/dygift' }
   if ('giftList' in data.data) {
     for (let i = 0; i < data.data.giftList.length; i++) {
@@ -300,7 +265,6 @@ onMounted(async () => {
     }
   }
   allGiftData.value = { ...roomGiftData, ...giftData, ...supGiftData }
-  //console.log(allGiftData.value)
   connectWs(rid)
 })
 
@@ -399,60 +363,19 @@ function getRoomGiftData(rid) {
   })
 }
 
-// function getSupplementGiftData() {
-//   return new Promise((resolve, reject) => {
-//     fetch('giftsup.txt')
-//       .then((res) => {
-//         if(res){
-//           return res.text()
-//         } else {
-//           return Promise.reject('no supplement file found!')
-//         }
-//       })
-//       .then((ret) => {
-//         let obj = {}
-//         let single = ret.split('\n')
-//         single.forEach((element) => {
-//           let data = element.split(',')
-//           obj[data[0]] = {
-//             n: data[1],
-//             pic: '',
-//             pc: data[2],
-//           }
-//         })
-//         return obj
-//       })
-//       .then((ret) => {
-//         resolve(ret)
-//         return
-//       })
-//       .catch((err) => {
-//         console.log('读取补充数据失败!', err)
-//         reject(String(err))
-//         return
-//       })
-//   })
-// }
-
 function getGiftData() {
   return new Promise((resolve, reject) => {
     fetch('https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json', {
       method: 'GET',
       credentials: 'include',
     })
-      // fetch('giftdata.txt')
       .then((res) => {
-        //console.log(res.text())
         return res.text()
       })
       .then((ret) => {
         let json = ret.substring(String('DYConfigCallback(').length, ret.length)
-        //console.log('raw: ' + json)
         json = json.substring(0, json.lastIndexOf(')'))
-        //console.log('sub: ' + json)
-        //todo - fix
         json = JSON.parse(json)
-        //console.log('res: ' + JSON.stringify(json))
         let obj = {}
         for (const key in json.data) {
           let item = json.data[key]
@@ -462,8 +385,6 @@ function getGiftData() {
             pc: item.pc,
           }
         }
-        //console.log(obj);
-        //console.log('resFinal: ' + JSON.stringify(obj))
         return obj
       })
       .then((ret) => {
@@ -473,41 +394,6 @@ function getGiftData() {
         console.log('请求失败!', err)
         alert('获取远程数据失败! 请重启程序再试一次')
       })
-    // .then(() => {
-    //   let val = fetch('giftdata.txt')
-    //   return val
-    // })
-    // .then((res) => {
-    //   return res.text()
-    // })
-    // .then((ret) => {
-    //   let json = ret.substring(String('DYConfigCallback(').length, ret.length)
-    //   //console.log('raw: ' + json)
-    //   json = json.substring(0, json.lastIndexOf(')'))
-    //   //console.log('sub: ' + json)
-    //   //todo - fix
-    //   json = JSON.parse(json)
-    //   //console.log('res: ' + JSON.stringify(json))
-    //   let obj = {}
-    //   for (const key in json.data) {
-    //     let item = json.data[key]
-    //     obj[key] = {
-    //       n: item.name,
-    //       pic: item.himg.replace('https://gfs-op.douyucdn.cn/dygift', ''),
-    //       pc: item.pc,
-    //     }
-    //   }
-    //   return obj
-    // })
-    // .then((ret) => {
-    //   resolve(ret)
-    //   return
-    // })
-    // .catch((err) => {
-    //   console.log('读取本地数据失败!', err)
-    //   reject(String(err))
-    //   return
-    // })
   })
 }
 

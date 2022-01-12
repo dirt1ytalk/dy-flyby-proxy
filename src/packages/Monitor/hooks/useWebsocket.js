@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { Ex_WebSocket_UnLogin } from "@/global/utils/websocket.js"
 import { STT } from "@/global/utils/stt.js"
 import { getStrMiddle } from "@/global/utils"
+import { nobleData } from '@/global/utils/dydata/nobleData.js'
 
 const fs = window.fs
 
@@ -13,6 +14,7 @@ export function useWebsocket(options, allGiftData) {
     let enterList = ref([]);
     let giftList = ref([]);
     let giftListAll = ref([]);
+    let targetRid = "520"
 
     const connectWs = (rid) => {
         if (rid === "") {
@@ -131,7 +133,7 @@ export function useWebsocket(options, allGiftData) {
             danmakuListVIP.value.push(obj);
         }
 
-        if ((msgType === "dgb" || msgType === "odfbc" || msgType === "rndfbc" || msgType === "blab" || msgType === "fansupgradebroadcast" || msgType === "anbc" || msgType === "rnewbc" || msgType === "professgiftsrc") && options.value.switch.includes("gift")) {
+        if ((["dgb", "odfbc", "rndfbc", "anbc", "rnewbc", "blab", "fansupgradebroadcast", "professgiftsrc"].includes(msgType)) && options.value.switch.includes("gift")) {
             let data = stt.deserialize(msg);
             let obj = {};
             switch (msgType) {
@@ -139,27 +141,16 @@ export function useWebsocket(options, allGiftData) {
                     // 正常礼物
                     if (!checkGiftValid(data)) {
                         if (checkAllGift(data)) {
-                            if (data.bcnt !== 1) {
-                                obj = {
-                                    nn: data.nn, // 昵称
-                                    lv: data.level, // 等级
-                                    gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-                                    gfcnt: data.gfcnt, // 礼物数量
-                                    hits: data.bcnt, // 连击
-                                    key: new Date().getTime() + Math.random(),
-                                    dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-                                }
-                            } else {
-                                obj = {
-                                    nn: data.nn, // 昵称
-                                    lv: data.level, // 等级
-                                    gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-                                    gfcnt: data.gfcnt, // 礼物数量
-                                    hits: data.hits, // 连击
-                                    key: new Date().getTime() + Math.random(),
-                                    dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-                                }
+                            obj = {
+                                nn: data.nn, // 昵称
+                                lv: data.level, // 等级
+                                gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                                gfcnt: data.gfcnt, // 礼物数量
+                                hits: data.hits, // 连击
+                                key: new Date().getTime() + Math.random(),
+                                dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                             }
+                            if (data.bcnt !== 1) obj.hits = data.bcnt
                             if (giftListAll.value.length + 1 > options.value.threshold) {
                                 giftListAll.value.shift();
                             }
@@ -172,27 +163,17 @@ export function useWebsocket(options, allGiftData) {
                             return;
                         } else return
                     }
-                    if (data.bcnt !== 1) {
-                        obj = {
-                            nn: data.nn, // 昵称
-                            lv: data.level, // 等级
-                            gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-                            gfcnt: data.gfcnt, // 礼物数量
-                            hits: data.bcnt, // 连击
-                            key: new Date().getTime() + Math.random(),
-                            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-                        }
-                    } else {
-                        obj = {
-                            nn: data.nn, // 昵称
-                            lv: data.level, // 等级
-                            gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-                            gfcnt: data.gfcnt, // 礼物数量
-                            hits: data.hits, // 连击
-                            key: new Date().getTime() + Math.random(),
-                            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-                        }
+                    obj = {
+                        type:"礼物",
+                        nn: data.nn, // 昵称
+                        lv: data.level, // 等级
+                        gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                        gfcnt: data.gfcnt, // 礼物数量
+                        hits: data.hits, // 连击
+                        key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
+                    if (data.bcnt !== 1) obj.hits = data.bcnt
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
@@ -206,7 +187,8 @@ export function useWebsocket(options, allGiftData) {
                 case "odfbc":
                     // 开通钻粉
                     obj = {
-                        type: "开通钻粉",
+                        type: "钻粉",
+                        msg: '开通钻石粉丝',
                         nn: data.nick,
                         lv: data.level,
                         gfid: "0",
@@ -223,7 +205,8 @@ export function useWebsocket(options, allGiftData) {
                 case "rndfbc":
                     // 续费钻粉
                     obj = {
-                        type: "续费钻粉",
+                        type: "钻粉",
+                        msg: "续费钻石粉丝",
                         nn: data.nick,
                         lv: data.level,
                         gfid: "0",
@@ -239,11 +222,10 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "anbc":
                     //开通贵族
-                    if (!checkNobelValid(data)) {
-                        return;
-                    }
+                    if (data.drid !== targetRid) return
                     obj = {
-                        sptypen: "开通贵族",
+                        type: "贵族",
+                        msg: "开通了 " + nobleData[data.nl].name,
                         nn: data.unk,
                         nlv: data.nl,
                         gfid: "0",
@@ -259,11 +241,10 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "rnewbc":
                     //续费贵族
-                    if (!checkNobelValid(data)) {
-                        return;
-                    }
+                    if (data.drid !== targetRid) return
                     obj = {
-                        sptypern: "续费贵族",
+                        sptypern: "贵族",
+                        msg: "续费了 " + nobleData[data.nl].name,
                         nn: data.unk,
                         nlv: data.nl,
                         gfid: "0",
@@ -279,9 +260,11 @@ export function useWebsocket(options, allGiftData) {
                     break;
                 case "blab":
                     //粉丝牌升级
+                    if (data.rid !== targetRid) return
                     if (data.bl >= 15) {
                         obj = {
-                            sptype: "粉丝牌升级",
+                            type: "粉丝牌升级",
+                            msg: "粉丝牌升到 " + String(data.bl) + " 级",
                             nn: data.nn,
                             blv: data.bl,
                             gfid: "0",
@@ -297,11 +280,10 @@ export function useWebsocket(options, allGiftData) {
                     //粉丝牌30以上升级
                     //由于斗鱼的在configscreen下播报30级以上粉丝牌升级, 且存在名为"btype@="的子分类
                     //因此getStrMiddle会将子分类解析为msgType, 针对30级以上粉丝牌升级的子分类为"fansupgradebroadcast"
-                    if (data.rid !== "520") {
-                        return;
-                    }
+                    if (data.rid !== targetRid) return
                     obj = {
-                        sptype: "粉丝牌升级",
+                        type: "粉丝牌升级",
+                        msg: "粉丝牌升到" + String(data.otherContent) + "级",
                         nn: data.userName,
                         blv: data.otherContent,
                         gfid: "0",
@@ -313,13 +295,14 @@ export function useWebsocket(options, allGiftData) {
                     giftList.value.push(obj);
                     break;
                 //btype@=professgiftsrc/blackCate2s@=/avatar@=https:@S@Sapic.douyucdn.cn@Supload@Savatar_v3@S202110@S820640f2a68b47d8b7d1778abf894ce1_big.jpg/blackUids@=/type@=configscreen/rid@=520/userName@=AL丶星落/anchorName@=/blackRids@=/gbtemp@=1060/nrt@=0/txt2@=/txt3@=115963292/userLevelMin@=0/now@=1641916136386/txt1@=/blackCate1s@=/vsrc@=/otherContent@=test/
-                case "professgiftsrc": 
+                case "professgiftsrc":
                     //告白烟花消息
-                    if(data.rid !== "520") return
+                    if (data.rid !== targetRid) return
                     obj = {
-                        sptypefm: '告白烟花消息',
+                        type: "特殊礼物消息",
+                        msg: "特殊礼物消息: " + data,otherContent,
                         nn: data.userName,
-                        msg: data.otherContent,
+                        rawmsg: data.otherContent,
                         gfid: "0",
                         gfcnt: "1",
                         hits: "1",
@@ -364,7 +347,7 @@ export function useWebsocket(options, allGiftData) {
 
         //将消息体附加到文件
         let dirLog = options.value.logDir
-        await fs.promises.appendFile(dirLog , strToWrite + '\n').catch(err => {
+        await fs.promises.appendFile(dirLog, strToWrite + '\n').catch(err => {
             console.log(err.message)
             return new Promise.reject()
         })
@@ -387,22 +370,6 @@ export function useWebsocket(options, allGiftData) {
             }
         }
         // 判断关键昵称
-        let nicknames = options.value.danmaku.ban.nicknames ? options.value.danmaku.ban.nicknames.trim() : "";
-        if (nicknames !== "") {
-            let arr = nicknames.split(" ");
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] !== "" && data.nn.indexOf(arr[i]) !== -1) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    const checkEnterValid = (data) => {
-        if (Number(data.level) <= Number(options.value.danmaku.ban.level)) {
-            return false;
-        }
         let nicknames = options.value.danmaku.ban.nicknames ? options.value.danmaku.ban.nicknames.trim() : "";
         if (nicknames !== "") {
             let arr = nicknames.split(" ");
@@ -472,13 +439,6 @@ export function useWebsocket(options, allGiftData) {
             }
         }
         return true;
-    }
-
-    const checkNobelValid = (data) => {
-        if (data.drid !== "520") {
-            return false
-        }
-        return true
     }
 
     return { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListAll }

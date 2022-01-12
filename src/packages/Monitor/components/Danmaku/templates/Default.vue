@@ -1,6 +1,6 @@
 <template>
   <div :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
-    <span style="color:black; vertical-align:middle;">{{data.dt}}</span>
+    <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
     <span
       v-if="showLevel"
@@ -8,7 +8,10 @@
     ></span>
     <!-- 贵族 -->
     <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
-      <img :src="`${data.noble in nobleData ? nobleData.prefix + nobleData[data.noble].pic : ''}`" loading="lazy" />
+      <img
+        :src="`${data.noble in nobleData ? nobleData.prefix + nobleData[data.noble].pic : ''}`"
+        loading="lazy"
+      />
     </span>
     <!-- 粉丝牌 -->
     <div
@@ -24,14 +27,22 @@
       <img
         class="FansMedalBox-diamondsIcon"
         src="https://sta-op.douyucdn.cn/douyu/2021/08/05/02304a1c04587e43ac626ce5ce07d935.png"
-        alt=""
+        alt
         loading="lazy"
       />
     </span>
-    <span v-if="showAvatar" class="item__avatar"
-      ><img class="avatar" :src="`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`" loading="lazy"
-    /></span>
-    <span class="item__name" @click.left.prevent="addToVIPHandler(data.nn)" @click.right.prevent="addToBanListHandler(data.nn)">{{ data.nn }}：</span>
+    <span v-if="showAvatar" class="item__avatar">
+      <img
+        class="avatar"
+        :src="`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`"
+        loading="lazy"
+      />
+    </span>
+    <span
+      class="item__name"
+      @click.left.prevent="addToVIPHandler(data.nn)"
+      @click.right.prevent="addToBanListHandler(data.nn)"
+    >{{ data.nn }}：</span>
     <span :style="`color:${danmakuColor[data.color]};`" class="item__txt">{{ data.txt }}</span>
   </div>
 </template>
@@ -69,7 +80,12 @@ function getItemClass(data) {
 </script>
 
 <style lang="scss" scoped>
-@import '@/global/styles/themes/index.scss';
+@import "@/global/styles/themes/index.scss";
+
+.time_stamp {
+  color: black;
+  vertical-align: middle;
+}
 .item {
   vertical-align: middle;
   width: 100%;
@@ -99,11 +115,11 @@ function getItemClass(data) {
   }
   .item__name {
     vertical-align: middle;
-    @include fontColor('nicknameColor');
+    @include fontColor("nicknameColor");
   }
   .item__txt {
     vertical-align: middle;
-    @include fontColor('txtColor');
+    @include fontColor("txtColor");
   }
 }
 .noble-day {

@@ -1,6 +1,6 @@
 <template>
   <div :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass()}`">
-    <div class="time_stamp">{{ data.dt }}</div>
+    <span class="time_stamp">{{ data.dt }}</span>
     <div v-if="showImg" class="item__gift">
       <img class="avatar" :src="avatarSrc" loading="lazy" />
     </div>

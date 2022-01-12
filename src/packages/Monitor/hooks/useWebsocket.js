@@ -243,7 +243,7 @@ export function useWebsocket(options, allGiftData) {
                     //续费贵族
                     if (data.drid !== targetRid) return
                     obj = {
-                        sptypern: "贵族",
+                        type: "贵族",
                         msg: "续费了 " + nobleData[data.nl].name,
                         nn: data.unk,
                         nlv: data.nl,

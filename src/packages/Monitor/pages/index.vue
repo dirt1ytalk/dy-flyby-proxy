@@ -3,10 +3,10 @@
     <el-main>
       <el-row class="mb-1" :gutter="5">
         <el-col :span="14">
-          <el-card class="bg" :body-style="{ padding: '10px' }">
+          <el-card class="bg" >
             <div class="monitor" ref="domMonitor">
               <Danmaku
-                style="height: 280px"
+                style="height: 260px"
                 v-if="options.switch.includes('danmaku')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -18,10 +18,10 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card class="bg" :body-style="{ padding: '10px' }" >
+          <el-card class="bg"  >
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Gift
-                style="height: 280px"
+                style="height: 260px"
                 v-if="options.switch.includes('gift')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -34,10 +34,10 @@
       </el-row>
       <el-row :gutter="5">
         <el-col :span="14">
-          <el-card class="bg" style="-webkit-app-region: no-drag" :body-style="{ padding: '10px' }">
+          <el-card class="bg" style="-webkit-app-region: no-drag" >
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
-                style="height: 220px"
+                style="height: 200px"
                 v-if="options.switch.includes('danmakuvip')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -47,10 +47,10 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card class="bg" style="-webkit-app-region: no-drag" :body-style="{ padding: '10px' }">
+          <el-card class="bg" style="-webkit-app-region: no-drag">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <GiftAll
-                style="height: 220px"
+                style="height: 200px"
                 v-if="options.switch.includes('giftunfiltered')"
                 :maxOrder="maxOrder"
                 :options="options"

@@ -300,7 +300,7 @@ export function useWebsocket(options, allGiftData) {
                     if (data.rid !== targetRid) return
                     obj = {
                         type: "特殊礼物消息",
-                        msg: "特殊礼物消息: " + data,otherContent,
+                        msg: "特殊礼物消息: " + data.otherContent,
                         nn: data.userName,
                         rawmsg: data.otherContent,
                         gfid: "0",

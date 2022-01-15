@@ -231,25 +231,17 @@ onMounted(async () => {
   let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
   let dirLog = parentDir + '\\520-Logs\\' + dateStr
 
+  //将完整路径替换options中存储的文档文件夹路径
+  options.value.logDir = dirLog
+
   //创建日志文件夹, 如文件夹已存在则指定resolve
   await fs.promises.mkdir(dirLog, { recursive: true }).catch((err) => {
     if (err.message.includes('EEXIST')) return Promise.resolve()
   })
 
-  let fileDir = dirLog + "\\" + dateStr + '_弹幕.txt'
-  let timeStr = date.toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-  let initLogMsg = "==================================================\n" +
-    "[Renderer] Application launched, start logging...\n" +
-    "Current time: " + dateStr + " " + timeStr + "\n" +
-    "==================================================\n"
-  await fs.promises.appendFile(fileDir, initLogMsg).catch(err => {
-    console.log(err.message)
-    return new Promise.reject()
-  })
+  await logInit(dirLog, dateStr, "弹幕")
+  await logInit(dirLog, dateStr, "礼物")
 
-
-  //将完整路径替换options中存储的文档文件夹路径
-  options.value.logDir = fileDir
 
   let data = await getRoomGiftData(rid)
   let giftData = await getGiftData()
@@ -267,6 +259,19 @@ onMounted(async () => {
   allGiftData.value = { ...roomGiftData, ...giftData, ...supGiftData }
   connectWs(rid)
 })
+
+async function logInit(dir, date, name) {
+  let fileDir = dir + "\\" + date + '_' + name + '.txt'
+  let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  let initLogMsg = "==================================================\n" +
+    "[Renderer] Application launched, start logging...\n" +
+    "Current time: " + date + " " + timeStr + "\n" +
+    "==================================================\n"
+  await fs.promises.appendFile(fileDir, initLogMsg).catch(err => {
+    console.log(err.message)
+    return new Promise.reject()
+  })
+}
 
 function addToVIP(nn) {
   let bef = options.value.danmaku.vip

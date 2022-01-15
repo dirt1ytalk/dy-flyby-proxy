@@ -37,13 +37,13 @@ export function useWebsocket(options, allGiftData) {
         }
         //debug
         // let excludes = [
-        //     //"anbc",
-        //     //"rnewbc",
+        //     "anbc",
+        //     "rnewbc",
         //     "uenter",
         //     "chatmsg",
-        //     //"dgb",
-        //     //"odfbc",
-        //     //"rndfbc",
+        //     "dgb",
+        //     "odfbc",
+        //     "rndfbc",
         //     "spbc",
         //     "synexp",
         //     "dfrank",
@@ -79,6 +79,7 @@ export function useWebsocket(options, allGiftData) {
 
         if (msgType === "chatmsg" && options.value.switch.includes("danmaku")) {
             let data = stt.deserialize(msg);
+            logToLocalFile(data, "弹幕")
             if (!checkDanmakuValid(data)) {
                 return;
             }
@@ -151,20 +152,20 @@ export function useWebsocket(options, allGiftData) {
                                 dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                             }
                             if (data.bcnt !== 1) obj.hits = data.bcnt
-                            if (giftListAll.value.length + 1 > options.value.threshold) {
-                                giftListAll.value.shift();
-                            }
-                            giftListAll.value.forEach((item, i, arr) => {
+                            giftList.value.forEach((item, i, arr) => {
                                 if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
                                     arr.splice(i, 1);
                                 }
                             })
+                            if (giftListAll.value.length + 1 > options.value.threshold) {
+                                giftListAll.value.shift();
+                            }
                             giftListAll.value.push(obj);
                             return;
                         } else return
                     }
                     obj = {
-                        type:"礼物",
+                        type: "礼物",
                         nn: data.nn, // 昵称
                         lv: data.level, // 等级
                         gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
@@ -174,14 +175,14 @@ export function useWebsocket(options, allGiftData) {
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
                     if (data.bcnt !== 1) obj.hits = data.bcnt
-                    if (giftList.value.length + 1 > options.value.threshold) {
-                        giftList.value.shift();
-                    }
                     giftList.value.forEach((item, i, arr) => {
                         if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
                             arr.splice(i, 1);
                         }
                     })
+                    if (giftList.value.length + 1 > options.value.threshold) {
+                        giftList.value.shift();
+                    }
                     giftList.value.push(obj);
                     break;
                 case "odfbc":
@@ -336,26 +337,71 @@ export function useWebsocket(options, allGiftData) {
     }
 
     //记录弹幕信息到本地文件
-    const logToLocalFile = async (data) => {
-        let date = new Date()
-        //构建消息体
-        let timeStr = date.toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        let userNameStr = data.nn;
-        let msgContentStr = data.txt;
-        let arrConcat = [timeStr, ' - ', userNameStr, ': ', msgContentStr];
-        let strToWrite = "".concat(...arrConcat);
-
-        //将消息体附加到文件
-        let dirLog = options.value.logDir
-        await fs.promises.appendFile(dirLog, strToWrite + '\n').catch(err => {
+    const logToLocalFile = async (data, index) => {
+        let fileDir = getFileDir(index)
+        let strToWrite = getMsgStruc(data, index)
+        await fs.promises.appendFile(fileDir, strToWrite + '\n').catch(err => {
             console.log(err.message)
             return new Promise.reject()
         })
     }
 
+    //根据日期以及父目录生成路径与文件名
+    const getFileDir = (index) => {
+        let date = new Date()
+        let dir = options.value.logDir
+        let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
+        return dir + "\\" + dateStr + '_' + index + '.txt'
+    }
+
+    //生成日志消息本体
+    const getMsgStruc = (data, index) => {
+        let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        let userNameStr = null
+        let msgContentStr = null
+        let giftIdStr = null
+        let giftNameStr = null
+        let giftCountStr = null
+        let giftHits = null
+        let arrConcat = null
+        let strToWrite = null
+        switch (index) {
+            case "弹幕":
+                userNameStr = data.nn;
+                msgContentStr = data.txt;
+                arrConcat = [timeStr, ' - ', userNameStr, ': ', msgContentStr];
+                strToWrite = "".concat(...arrConcat);
+                return strToWrite
+            //break not required
+            case "礼物":
+                let giftData = allGiftData.value[data.gfid]
+                userNameStr = data.nn;
+                giftIdStr = data.gfid;
+                giftCountStr = data.gfcnt
+                giftHits = data.hits
+                if (data.bcnt !== 1) giftHits = data.bcnt
+                if (giftData) giftNameStr = giftData.n
+                else giftNameStr = '未知礼物'
+
+                arrConcat = [
+                    timeStr, '-',
+                    '用户名: ', userNameStr, ' | ',
+                    '礼物ID: ', giftIdStr, ' | ',
+                    '礼物名: ', giftNameStr, ' | ',
+                    '礼物数量: ', giftCountStr, ' | ',
+                    '礼物连击数: ', giftHits
+                ]
+
+                strToWrite = "".concat(...arrConcat);
+                return strToWrite
+            default:
+                break
+        }
+
+    }
+
     const checkDanmakuValid = (data) => {
         // 判断屏蔽等级
-        logToLocalFile(data)
         if (Number(data.level) <= Number(options.value.danmaku.ban.level)) {
             return false;
         }
@@ -415,7 +461,7 @@ export function useWebsocket(options, allGiftData) {
         let giftData = allGiftData.value[data.gfid];
         //判断该礼物是否存在于接口数据中,如不存在则将id记录到控制台并抛弃
         if (!giftData) {
-            console.log("未知礼物: ", String(data.gfid));
+            logToLocalFile(data, "礼物")
             return false;
         }
         // 屏蔽单价

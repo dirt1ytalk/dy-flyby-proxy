@@ -3,7 +3,7 @@
     <el-main>
       <el-row class="mb-1" :gutter="5">
         <el-col :span="14">
-          <el-card class="bg" >
+          <el-card class="bg">
             <div class="monitor" ref="domMonitor">
               <Danmaku
                 style="height: 260px"
@@ -18,7 +18,7 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card class="bg"  >
+          <el-card class="bg">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Gift
                 style="height: 260px"
@@ -34,7 +34,7 @@
       </el-row>
       <el-row :gutter="5">
         <el-col :span="14">
-          <el-card class="bg" style="-webkit-app-region: no-drag" >
+          <el-card class="bg" style="-webkit-app-region: no-drag">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
                 style="height: 200px"
@@ -49,14 +49,14 @@
         <el-col :span="10">
           <el-card class="bg" style="-webkit-app-region: no-drag">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
-              <GiftAll
+              <GiftUnfiltered
                 style="height: 200px"
                 v-if="options.switch.includes('giftunfiltered')"
                 :maxOrder="maxOrder"
                 :options="options"
-                :giftListAll="giftListAll"
+                :giftListUnfiltered="giftListUnfiltered"
                 :allGiftData="allGiftData"
-              ></GiftAll>
+              ></GiftUnfiltered>
             </div>
           </el-card>
         </el-col>
@@ -173,7 +173,7 @@ import Danmaku from '../components/Danmaku/Danmaku.vue'
 import Danmakuvip from '../components/DanmakuVIP/Danmaku.vue'
 import Gift from '../components/Gift/Gift.vue'
 //import Enter from '../components/Enter/Enter.vue'
-import GiftAll from '../components/GiftUnfiltered/Gift.vue'
+import GiftUnfiltered from '../components/GiftUnfiltered/Gift.vue'
 
 import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, Radio, Switch, Dialog, Notify } from 'vant'
 
@@ -202,7 +202,7 @@ let allGiftData = ref({})
 let isShowOption = ref(false)
 let activeTab = ref(0)
 let { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgColorValue } = useNormalStyle(options)
-let { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListAll } = useWebsocket(options, allGiftData)
+let { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListUnfiltered } = useWebsocket(options, allGiftData)
 let { toClipboard } = useClipboard()
 
 let maxOrder = computed(() => {
@@ -241,6 +241,7 @@ onMounted(async () => {
 
   await logInit(dirLog, dateStr, "弹幕")
   await logInit(dirLog, dateStr, "礼物")
+  await logInit(dirLog, dateStr, "特殊事件")
 
 
   let data = await getRoomGiftData(rid)

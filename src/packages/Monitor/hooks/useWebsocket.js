@@ -13,7 +13,7 @@ export function useWebsocket(options, allGiftData) {
     let danmakuListVIP = ref([]);
     let enterList = ref([]);
     let giftList = ref([]);
-    let giftListAll = ref([]);
+    let giftListUnfiltered = ref([]);
     let targetRid = "520"
 
     const connectWs = (rid) => {
@@ -140,8 +140,8 @@ export function useWebsocket(options, allGiftData) {
             switch (msgType) {
                 case "dgb":
                     // 正常礼物
-                    if (!checkGiftValid(data)) {
-                        if (checkAllGift(data)) {
+                    if (!checkGiftValid(data, Number(options.value.gift.ban.price))) {
+                        if (checkGiftValid(data, 6)) {
                             obj = {
                                 nn: data.nn, // 昵称
                                 lv: data.level, // 等级
@@ -152,15 +152,16 @@ export function useWebsocket(options, allGiftData) {
                                 dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                             }
                             if (data.bcnt !== 1) obj.hits = data.bcnt
-                            giftList.value.forEach((item, i, arr) => {
+                            logToLocalFile(obj, "礼物")
+                            giftListUnfiltered.value.forEach((item, i, arr) => {
                                 if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
                                     arr.splice(i, 1);
                                 }
                             })
-                            if (giftListAll.value.length + 1 > options.value.threshold) {
-                                giftListAll.value.shift();
+                            if (giftListUnfiltered.value.length + 1 > options.value.threshold) {
+                                giftListUnfiltered.value.shift();
                             }
-                            giftListAll.value.push(obj);
+                            giftListUnfiltered.value.push(obj);
                             return;
                         } else return
                     }
@@ -175,6 +176,7 @@ export function useWebsocket(options, allGiftData) {
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
                     if (data.bcnt !== 1) obj.hits = data.bcnt
+                    logToLocalFile(obj, "礼物")
                     giftList.value.forEach((item, i, arr) => {
                         if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
                             arr.splice(i, 1);
@@ -198,6 +200,7 @@ export function useWebsocket(options, allGiftData) {
                         key: new Date().getTime() + Math.random(),
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
+                    logToLocalFile(obj, "特殊事件")
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
@@ -216,6 +219,7 @@ export function useWebsocket(options, allGiftData) {
                         key: new Date().getTime() + Math.random(),
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
+                    logToLocalFile(obj, "特殊事件")
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
@@ -235,6 +239,7 @@ export function useWebsocket(options, allGiftData) {
                         key: new Date().getTime() + Math.random(),
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
+                    logToLocalFile(obj, "特殊事件")
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
@@ -254,6 +259,7 @@ export function useWebsocket(options, allGiftData) {
                         key: new Date().getTime() + Math.random(),
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
+                    logToLocalFile(obj, "特殊事件")
                     if (giftList.value.length + 1 > options.value.threshold) {
                         giftList.value.shift();
                     }
@@ -274,6 +280,7 @@ export function useWebsocket(options, allGiftData) {
                             key: new Date().getTime() + Math.random(),
                             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                         }
+                        logToLocalFile(obj, "特殊事件")
                         giftList.value.push(obj);
                     }
                     break;
@@ -293,6 +300,7 @@ export function useWebsocket(options, allGiftData) {
                         key: new Date().getTime() + Math.random(),
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
+                    logToLocalFile(obj, "特殊事件")
                     giftList.value.push(obj);
                     break;
                 //btype@=professgiftsrc/blackCate2s@=/avatar@=https:@S@Sapic.douyucdn.cn@Supload@Savatar_v3@S202110@S820640f2a68b47d8b7d1778abf894ce1_big.jpg/blackUids@=/type@=configscreen/rid@=520/userName@=AL丶星落/anchorName@=/blackRids@=/gbtemp@=1060/nrt@=0/txt2@=/txt3@=115963292/userLevelMin@=0/now@=1641916136386/txt1@=/blackCate1s@=/vsrc@=/otherContent@=test/
@@ -310,6 +318,7 @@ export function useWebsocket(options, allGiftData) {
                         key: new Date().getTime() + Math.random(),
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
+                    logToLocalFile(obj, "特殊事件")
                     giftList.value.push(obj)
                     break
                 default:
@@ -356,42 +365,58 @@ export function useWebsocket(options, allGiftData) {
 
     //生成日志消息本体
     const getMsgStruc = (data, index) => {
-        let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        let timeStr = null
         let userNameStr = null
         let msgContentStr = null
         let giftIdStr = null
         let giftNameStr = null
         let giftCountStr = null
         let giftHits = null
+        let msgContent = null
         let arrConcat = null
         let strToWrite = null
         switch (index) {
             case "弹幕":
+                timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 userNameStr = data.nn;
                 msgContentStr = data.txt;
-                arrConcat = [timeStr, ' - ', userNameStr, ': ', msgContentStr];
+                arrConcat = [
+                    timeStr, ' - ',
+                    userNameStr, ': ',
+                    msgContentStr
+                ]
                 strToWrite = "".concat(...arrConcat);
                 return strToWrite
             //break not required
             case "礼物":
                 let giftData = allGiftData.value[data.gfid]
+                timeStr = data.dt
                 userNameStr = data.nn;
                 giftIdStr = data.gfid;
                 giftCountStr = data.gfcnt
                 giftHits = data.hits
-                if (data.bcnt !== 1) giftHits = data.bcnt
                 if (giftData) giftNameStr = giftData.n
                 else giftNameStr = '未知礼物'
 
                 arrConcat = [
-                    timeStr, '-',
+                    timeStr, ' - ',
                     '用户名: ', userNameStr, ' | ',
                     '礼物ID: ', giftIdStr, ' | ',
                     '礼物名: ', giftNameStr, ' | ',
                     '礼物数量: ', giftCountStr, ' | ',
                     '礼物连击数: ', giftHits
                 ]
-
+                strToWrite = "".concat(...arrConcat);
+                return strToWrite
+            case "特殊事件":
+                timeStr = data.dt
+                userNameStr = data.nn
+                msgContent = data.msg
+                arrConcat = [
+                    timeStr, ' - ',
+                    userNameStr, ' - ',
+                    msgContent
+                ]
                 strToWrite = "".concat(...arrConcat);
                 return strToWrite
             default:
@@ -442,30 +467,17 @@ export function useWebsocket(options, allGiftData) {
         return false;
     }
 
-    const checkAllGift = (data) => {
+    const checkGiftValid = (data, threshold) => {
         let giftData = allGiftData.value[data.gfid];
-        let keywords = options.value.gift.ban.keywords ? options.value.gift.ban.keywords.trim() : "";
-        if (keywords !== "") {
-            let giftName = giftData.n;
-            let arr = keywords.split(" ");
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] !== "" && giftName.indexOf(arr[i]) !== -1) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    const checkGiftValid = (data) => {
-        let giftData = allGiftData.value[data.gfid];
-        //判断该礼物是否存在于接口数据中,如不存在则将id记录到控制台并抛弃
+        //判断该礼物是否存在于接口数据中,如不存在则将记录到日志并抛弃
         if (!giftData) {
             logToLocalFile(data, "礼物")
             return false;
         }
+        // 屏蔽荧光棒
+        if (giftData.n.includes("荧光棒")) return false
         // 屏蔽单价
-        let expThreshold = Number(options.value.gift.ban.price) * 100
+        let expThreshold = threshold * 100
         if (Number(giftData.pc) < expThreshold) {
             //判断连击或捆绑是否总值小于阈值, 如是, 则抛弃该礼物
             if (Number(giftData.pc) * Number(data.hits) < expThreshold && Number(giftData.pc) * Number(data.gfcnt) < expThreshold) {
@@ -487,5 +499,5 @@ export function useWebsocket(options, allGiftData) {
         return true;
     }
 
-    return { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListAll }
+    return { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListUnfiltered }
 }

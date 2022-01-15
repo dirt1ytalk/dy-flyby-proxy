@@ -113,9 +113,17 @@
         <Field v-model="options.danmaku.vip" label="特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
       </Tab>
       <Tab title="礼物">
-        <Field label="显示图片">
+        <Field label="显示">
           <template #input>
-            <Switch v-model="options.gift.showImg" size="20" />
+            <CheckboxGroup v-model="options.gift.show" direction="horizontal">
+              <Checkbox name="giftImg" shape="square">礼物图片</Checkbox>
+              <Checkbox name="level" shape="square">等级</Checkbox>
+              <Checkbox name="noble" shape="square">贵族</Checkbox>
+              <Checkbox name="fans" shape="square">粉丝牌</Checkbox>
+              <Checkbox name="avatar" shape="square">头像</Checkbox>
+              <Checkbox name="roomAdmin" shape="square">房管</Checkbox>
+              <Checkbox name="diamond" shape="square">钻粉</Checkbox>
+            </CheckboxGroup>
           </template>
         </Field>
         <Field

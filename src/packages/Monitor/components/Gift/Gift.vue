@@ -8,7 +8,13 @@
             :mode="options.mode"
             :showAnimation="options.animation"
             :totalPrice="options.gift.totalPrice"
-            :showImg="options.gift.showImg"
+            :showImg="options.gift.show.includes('giftImg')"
+            :showLevel="options.gift.show.includes('level')"
+            :showNoble="options.gift.show.includes('noble')"
+            :showFans="options.gift.show.includes('fans')"
+            :showDiamond="options.gift.show.includes('diamond')"
+            :showRoomAdmin="options.gift.show.includes('roomAdmin')"
+            :showAvatar="options.gift.show.includes('avatar')"
         ></Deafult>
         <div v-show="isLock" class="gobottom" @click.stop="goToScrollBottom(dom_gift)">回到底部</div>
     </div>

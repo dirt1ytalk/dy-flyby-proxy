@@ -39,9 +39,9 @@ export function useWebsocket(options, allGiftData) {
         // let excludes = [
         //     "anbc",
         //     "rnewbc",
-        //     "uenter",
-        //     "chatmsg",
-        //     "dgb",
+        //     //"uenter",
+        //     //"chatmsg",
+        //     //"dgb",
         //     "odfbc",
         //     "rndfbc",
         //     "spbc",
@@ -172,6 +172,12 @@ export function useWebsocket(options, allGiftData) {
                         gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
                         gfcnt: data.gfcnt, // 礼物数量
                         hits: data.hits, // 连击
+                        avatar: data.ic,
+                        fansName: data.bnn, // 粉丝牌名字
+                        fansLv: data.bl, // 粉丝牌等级
+                        diamond: data.diaf, // 是否是钻粉
+                        noble: data.nl, // 贵族等级
+                        roomAdmin: data.rg, // 房管，data.rg为4则是房管
                         key: new Date().getTime() + Math.random(),
                         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                     }
@@ -467,12 +473,60 @@ export function useWebsocket(options, allGiftData) {
         return false;
     }
 
+    //处理异常礼物(数据不存在)
+    const handleMissingGift = async (data, threshold) => {
+        let supData = await getSingleSupplementGiftData(data.gfid)
+        if (supData && supData !== "404") {
+            allGiftData.value[data.gfid] = supData
+            if (checkGiftValid(data, threshold)) {
+                if (threshold >= Number(options.value.gift.ban.price)) {
+                    let obj = {
+                        type: "礼物",
+                        nn: data.nn, // 昵称
+                        lv: data.level, // 等级
+                        gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                        gfcnt: data.gfcnt, // 礼物数量
+                        hits: data.hits, // 连击
+                        avatar: data.ic,
+                        fansName: data.bnn, // 粉丝牌名字
+                        fansLv: data.bl, // 粉丝牌等级
+                        diamond: data.diaf, // 是否是钻粉
+                        noble: data.nl, // 贵族等级
+                        roomAdmin: data.rg, // 房管，data.rg为4则是房管
+                        key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                    }
+                    logToLocalFile(obj, "礼物")
+                    if (giftList.value.length + 1 > options.value.threshold) {
+                        giftList.value.shift();
+                    }
+                    giftList.value.push(obj);
+                } else if (threshold === 6){
+                    obj = {
+                        nn: data.nn, // 昵称
+                        lv: data.level, // 等级
+                        gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+                        gfcnt: data.gfcnt, // 礼物数量
+                        hits: data.hits, // 连击
+                        key: new Date().getTime() + Math.random(),
+                        dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                    }
+                    logToLocalFile(obj, "礼物")
+                    if (giftListUnfiltered.value.length + 1 > options.value.threshold) {
+                        giftListUnfiltered.value.shift();
+                    }
+                    giftListUnfiltered.value.push(obj);
+                }
+            }
+        } else console.log('cannot handle missing gift')
+    }
+
     const checkGiftValid = (data, threshold) => {
         let giftData = allGiftData.value[data.gfid];
         //判断该礼物是否存在于接口数据中,如不存在则将记录到日志并抛弃
         if (!giftData) {
             logToLocalFile(data, "礼物")
-            return false;
+            handleMissingGift(data, threshold)
         }
         // 屏蔽荧光棒
         if (giftData.n.includes("荧光棒")) return false
@@ -497,6 +551,34 @@ export function useWebsocket(options, allGiftData) {
             }
         }
         return true;
+    }
+
+    const getSingleSupplementGiftData = (gfid) => {
+        return new Promise((resolve) => {
+            fetch('https://gift.douyucdn.cn/api/gift/v2/web/single?gid=' + gfid, {
+                method: 'GET',
+            })
+                .then((res) => {
+                    return res.json()
+                })
+                .then((ret) => {
+                    let supGiftData = {}
+                    if ('giftList' in ret.data) {
+                        let item = ret.data.giftList[0]
+                        supGiftData = {
+                            n: item.name,
+                            pic: item.basicInfo.focusPic,
+                            pc: item.priceInfo.price,
+                        }
+                        resolve(supGiftData)
+                    } else {
+                        res('404')
+                    }
+                })
+                .catch((err) => {
+                    console.log('请求失败!', err)
+                })
+        })
     }
 
     return { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListUnfiltered }

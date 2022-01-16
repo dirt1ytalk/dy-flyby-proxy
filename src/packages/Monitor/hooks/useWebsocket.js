@@ -528,6 +528,15 @@ export function useWebsocket(options, allGiftData) {
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }
           if (data.bcnt !== 1) obj.hits = data.bcnt
+          //去除可能出现的重复显示
+          let isDuplicateFlag = 0
+          giftList.value.forEach((item) => {
+            if (item.gfid === data.gfid) {
+              isDuplicateFlag = 1
+              return
+            }
+          })
+          if (isDuplicateFlag === 1) return
           logToLocalFile(obj, "礼物")
           giftListUnfiltered.value.forEach((item, i, arr) => {
             if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {

@@ -52,7 +52,7 @@ onMounted(() => {
         onScroll(dom_danmaku.value);
     })
     window.addEventListener('resize', () => {
-        onScroll(dom_gift.value);
+        onScroll(dom_danmaku.value);
     })
 })
 

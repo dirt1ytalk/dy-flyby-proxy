@@ -86,7 +86,7 @@
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.0.6 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.1.0 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">

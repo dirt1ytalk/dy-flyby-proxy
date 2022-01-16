@@ -68,7 +68,7 @@ let avatarSrc = computed(() => {
       ret += DIAMOND_URL;
       break;
     case "贵族":
-      ret += nobleData.prefix + nobleData[props.data.nl].pic;
+      ret += nobleData.prefix + nobleData[props.data.nlv].pic;
       break;
     case "粉丝牌升级":
       ret += FANS_LEVEL_UP;

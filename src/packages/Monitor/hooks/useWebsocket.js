@@ -206,7 +206,7 @@ export function useWebsocket(options, allGiftData) {
             avatar: data.icon, //头像
             fansName: data.bn, // 粉丝牌名字
             fansLv: data.fl, // 粉丝牌等级
-            noble: data.nl, // 贵族等级
+            noble: data.nl != "0" ? data.nl : undefined, // 贵族等级
             key: new Date().getTime() + Math.random(),
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }
@@ -229,7 +229,7 @@ export function useWebsocket(options, allGiftData) {
             avatar: data.icon, //头像
             fansName: data.bn, // 粉丝牌名字
             fansLv: data.fl, // 粉丝牌等级
-            noble: data.nl, // 贵族等级
+            noble: data.nl != "0" ? data.nl : undefined, // 贵族等级
             key: new Date().getTime() + Math.random(),
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }
@@ -518,7 +518,7 @@ export function useWebsocket(options, allGiftData) {
           }
           giftList.value.push(obj);
         } else if (threshold === 6) {
-          obj = {
+          let obj = {
             nn: data.nn, // 昵称
             lv: data.level, // 等级
             gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
@@ -540,16 +540,23 @@ export function useWebsocket(options, allGiftData) {
           giftListUnfiltered.value.push(obj);
         }
       }
-    } else console.log('cannot handle missing gift')
+    } else {
+      console.log('cannot handle missing gift, logging to file...')
+      logToLocalFile(data, "礼物")
+    }
   }
 
   const checkGiftValid = (data, threshold) => {
     let giftData = allGiftData.value[data.gfid];
-    //判断该礼物是否存在于接口数据中,如不存在则将记录到日志并抛弃
+    //判断该礼物是否存在于接口数据中,如不存在则进行处理
     if (!giftData) {
-      logToLocalFile(data, "礼物")
-      //handleMissingGift(data, threshold)
-      return false
+      if (options.value.expFeature) {
+        handleMissingGift(data, threshold)
+        return false
+      } else {
+        logToLocalFile(data, "礼物")
+        return false
+      }
     }
     // 屏蔽荧光棒
     if (giftData.n.includes("荧光棒")) return false

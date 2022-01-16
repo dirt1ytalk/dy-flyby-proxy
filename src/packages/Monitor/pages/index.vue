@@ -83,10 +83,15 @@
           </template>
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
+        <Field label="实验性功能">
+          <template #input>
+            <Switch v-model="options.expFeature" size="24px"/>
+          </template>
+        </Field>
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.1.0 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.1.1 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -183,7 +188,7 @@ import Gift from '../components/Gift/Gift.vue'
 //import Enter from '../components/Enter/Enter.vue'
 import GiftUnfiltered from '../components/GiftUnfiltered/Gift.vue'
 
-import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, RadioGroup, Radio, Switch, Dialog, Notify } from 'vant'
+import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, Switch, Dialog } from 'vant'
 
 import { ElCard, ElRow, ElCol, ElContainer, ElMain, ElColorPicker } from 'element-plus'
 import 'element-plus/es/components/card/style/css'
@@ -195,10 +200,8 @@ import 'element-plus/es/components/color-picker/style/css'
 
 import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
-import { useScroll } from '../hooks/useScroll.js'
 
-import { supGiftData } from '@/global/utils/dydata/supGiftData.js'
-import { saveLocalData, getLocalData, deepCopy, getClassStyle, getStrMiddle, formatObj } from '@/global/utils'
+import { saveLocalData, getLocalData, deepCopy, getClassStyle, formatObj } from '@/global/utils'
 import { defaultOptions } from '../options'
 
 const LOCAL_NAME = 'monitor_options'
@@ -283,7 +286,7 @@ onMounted(async () => {
       }
     }
   }
-  allGiftData.value = { ...roomGiftData, ...giftData, ...supGiftData }
+  allGiftData.value = { ...roomGiftData, ...giftData }
   connectWs(rid)
 })
 

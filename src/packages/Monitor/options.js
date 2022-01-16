@@ -7,10 +7,13 @@ export const defaultOptions = {
     direction: "column",
     // 左对齐left 右对齐right
     align: "left",
+    //上下模块默认高度
     moduleSize: {
         upper: 260,
         lower: 200
     },
+    //实验性功能
+    expFeature: false,
     // 每个模块的占比%
     size: {
         giftunfiltered: 25,

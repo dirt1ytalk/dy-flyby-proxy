@@ -55,6 +55,9 @@ onMounted(() => {
     dom_gift.value.addEventListener("touchmove", () => {
         onScroll(dom_gift.value);
     })
+    window.addEventListener('resize', () => {
+        onScroll(dom_gift.value);
+    })
 })
 
 </script>

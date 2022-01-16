@@ -3,7 +3,7 @@
     <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
     <span
-      v-if="showLevel"
+      v-if="!!data.lv && showLevel"
       :class="`item__level UserLevel ${mode === 'night' && Number(data.lv < 70) ? 'fansLevelNight' : ''} UserLevel--${data.lv}`"
     ></span>
     <!-- 贵族 -->
@@ -20,7 +20,7 @@
     >
       <span class="FansMedal-name">{{ data.fansName }}</span>
     </div>
-    <span v-if="data.roomAdmin == '4' && showRoomAdmin" class="item__roomAdmin">
+    <span v-if="data.roomAdmin === '4' && showRoomAdmin" class="item__roomAdmin">
       <span class="Barrage-icon Barrage-icon--roomAdmin"></span>
     </span>
     <span v-if="!!data.diamond && showDiamond">
@@ -31,7 +31,7 @@
         loading="lazy"
       />
     </span>
-    <span v-if="showAvatar" class="item__avatar">
+    <span v-if="!!data.avatar && showAvatar" class="item__avatar">
       <img
         class="avatar"
         :src="`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`"

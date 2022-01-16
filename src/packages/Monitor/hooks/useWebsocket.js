@@ -203,6 +203,10 @@ export function useWebsocket(options, allGiftData) {
             gfid: "0",
             gfcnt: "1",
             hits: "1",
+            avatar: data.icon, //头像
+            fansName: data.bn, // 粉丝牌名字
+            fansLv: data.fl, // 粉丝牌等级
+            noble: data.nl, // 贵族等级
             key: new Date().getTime() + Math.random(),
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }
@@ -222,6 +226,10 @@ export function useWebsocket(options, allGiftData) {
             gfid: "0",
             gfcnt: "1",
             hits: "1",
+            avatar: data.icon, //头像
+            fansName: data.bn, // 粉丝牌名字
+            fansLv: data.fl, // 粉丝牌等级
+            noble: data.nl, // 贵族等级
             key: new Date().getTime() + Math.random(),
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }
@@ -242,6 +250,7 @@ export function useWebsocket(options, allGiftData) {
             gfid: "0",
             gfcnt: "1",
             hits: "1",
+            avatar: data.uic, //头像 
             key: new Date().getTime() + Math.random(),
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }
@@ -539,7 +548,7 @@ export function useWebsocket(options, allGiftData) {
     //判断该礼物是否存在于接口数据中,如不存在则将记录到日志并抛弃
     if (!giftData) {
       logToLocalFile(data, "礼物")
-      handleMissingGift(data, threshold)
+      //handleMissingGift(data, threshold)
       return false
     }
     // 屏蔽荧光棒

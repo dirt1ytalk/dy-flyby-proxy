@@ -52,6 +52,9 @@ onMounted(() => {
     dom_danmaku.value.addEventListener("touchmove", () => {
         onScroll(dom_danmaku.value);
     })
+    window.addEventListener('resize', () => {
+        onScroll(dom_gift.value);
+    })
 })
 
 const emit = defineEmits(["addToVIP", "addToBan"])

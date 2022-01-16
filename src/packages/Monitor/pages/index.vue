@@ -6,7 +6,7 @@
           <el-card class="bg">
             <div class="monitor" ref="domMonitor">
               <Danmaku
-                style="height: 260px"
+                :style="{ height: heightUpper + 'px' }"
                 v-if="options.switch.includes('danmaku')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -21,7 +21,7 @@
           <el-card class="bg">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Gift
-                style="height: 260px"
+                :style="{ height: heightUpper + 'px' }"
                 v-if="options.switch.includes('gift')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -37,7 +37,7 @@
           <el-card class="bg" style="-webkit-app-region: no-drag">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <Danmakuvip
-                style="height: 200px"
+                :style="{ height: heightLower + 'px' }"
                 v-if="options.switch.includes('danmakuvip')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -50,7 +50,7 @@
           <el-card class="bg" style="-webkit-app-region: no-drag">
             <div class="monitor" @click.right.prevent="onClickMonitor" ref="domMonitor">
               <GiftUnfiltered
-                style="height: 200px"
+                :style="{ height: heightLower + 'px' }"
                 v-if="options.switch.includes('giftunfiltered')"
                 :maxOrder="maxOrder"
                 :options="options"
@@ -195,6 +195,7 @@ import 'element-plus/es/components/color-picker/style/css'
 
 import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
+import { useScroll } from '../hooks/useScroll.js'
 
 import { supGiftData } from '@/global/utils/dydata/supGiftData.js'
 import { saveLocalData, getLocalData, deepCopy, getClassStyle, getStrMiddle, formatObj } from '@/global/utils'
@@ -213,6 +214,10 @@ let { directionStyle, fontSizeStyle, avatarImgSizeStyle, bgColorValue } = useNor
 let { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListUnfiltered } = useWebsocket(options, allGiftData)
 let { toClipboard } = useClipboard()
 
+let heightDiff = ref(0)
+let heightUpper = ref(0)
+let heightLower = ref(0)
+
 let maxOrder = computed(() => {
   let ret = 0
   for (const key in options.value.order) {
@@ -223,6 +228,14 @@ let maxOrder = computed(() => {
   return ret
 })
 
+function setNewHeight() {
+  heightDiff.value = document.documentElement.clientHeight - 590
+  heightUpper.value = 260 + heightDiff.value / 2
+  heightLower.value = 200 + heightDiff.value / 2
+  options.value.moduleSize.upper = heightUpper.value
+  options.value.moduleSize.lower = heightLower.value
+}
+
 onMounted(async () => {
   let rid = 520
   let localData = JSON.parse(getLocalData(LOCAL_NAME))
@@ -232,6 +245,11 @@ onMounted(async () => {
   options.value = localData
 
   options.value = formatObj(options.value, defaultOptions)
+
+  //窗口大小重新定位
+  heightUpper.value = options.value.moduleSize.upper
+  heightLower.value = options.value.moduleSize.lower
+  window.addEventListener('resize', setNewHeight)
 
   //构建日志文件夹路径
   let parentDir = await ipc.invoke('get-doc-path')

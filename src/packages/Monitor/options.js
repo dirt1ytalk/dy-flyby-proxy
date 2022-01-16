@@ -7,6 +7,10 @@ export const defaultOptions = {
     direction: "column",
     // 左对齐left 右对齐right
     align: "left",
+    moduleSize: {
+        upper: 260,
+        lower: 200
+    },
     // 每个模块的占比%
     size: {
         giftunfiltered: 25,

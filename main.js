@@ -1,23 +1,25 @@
 const { app, clipboard, ipcMain, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
-const fs = require("fs")
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
+const settings = require('electron-settings')
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
+let win = null
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 1000,
-    height: 590,
-    resizable: false,
+  win = new BrowserWindow({
+    minWidth: 1000,
+    minHeight: 590,
+    resizable: true,
     autoHideMenuBar: true,
     opacity: 1,
     frame: false,
     transparent: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      enableRemoteModule: true
     },
   });
   win.loadFile("entry/index.html");
@@ -73,22 +75,54 @@ const contextMenu = Menu.buildFromTemplate(
   ]
 );
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   tray = new Tray(icon);
   tray.setToolTip("520弹幕助手");
   tray.setContextMenu(contextMenu);
 
   createWindow();
+  registerSettingEvents()
+
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       tray = new Tray(icon);
       tray.setToolTip("520弹幕助手");
       tray.setContextMenu(contextMenu);
+
       createWindow();
+      registerSettingEvents()
     }
   }
   );
 })
+
+async function registerSettingEvents() {
+  if (await settings.has('size')) {
+    let res = await settings.get('size')
+    win.setSize(res.width, res.height)
+  }
+
+  if (await settings.has('position')) {
+    let res = await settings.get('position')
+    win.setPosition(res.x, res.y)
+  }
+
+  win.on('resized', () => {
+    let size = win.getSize()
+    settings.set('size', {
+      width: size[0],
+      height: size[1]
+    })
+  })
+
+  win.on('moved', () => {
+    let position = win.getPosition()
+    settings.set('position', {
+      x: position[0],
+      y: position[1]
+    })
+  })
+}
 
 ipcMain.handle('get-doc-path', () => {
   return app.getPath("documents")

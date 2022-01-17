@@ -39,9 +39,9 @@ export function useWebsocket(options, allGiftData) {
     // let excludes = [
     //     "anbc",
     //     "rnewbc",
-    //     //"uenter",
-    //     //"chatmsg",
-    //     //"dgb",
+    //     "uenter",
+    //     "chatmsg",
+    //     "dgb",
     //     "odfbc",
     //     "rndfbc",
     //     "spbc",
@@ -66,7 +66,8 @@ export function useWebsocket(options, allGiftData) {
     //     "cthn",
     //     "wirt",
     //     "defAltLogin",
-    //     "dealtarlock"
+    //     "dealtarlock",
+    //     "yinpinshejiao"
     // ]
 
     // if (!excludes.includes(msgType)) {
@@ -140,58 +141,7 @@ export function useWebsocket(options, allGiftData) {
       switch (msgType) {
         case "dgb":
           // 正常礼物
-          if (!checkGiftValid(data, Number(options.value.gift.ban.price))) {
-            if (checkGiftValid(data, 6)) {
-              obj = {
-                nn: data.nn, // 昵称
-                lv: data.level, // 等级
-                gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-                gfcnt: data.gfcnt, // 礼物数量
-                hits: data.hits, // 连击
-                key: new Date().getTime() + Math.random(),
-                dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-              }
-              if (data.bcnt !== 1) obj.hits = data.bcnt
-              logToLocalFile(obj, "礼物")
-              giftListUnfiltered.value.forEach((item, i, arr) => {
-                if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
-                  arr.splice(i, 1);
-                }
-              })
-              if (giftListUnfiltered.value.length + 1 > options.value.threshold) {
-                giftListUnfiltered.value.shift();
-              }
-              giftListUnfiltered.value.push(obj);
-              return;
-            } else return
-          }
-          obj = {
-            type: "礼物",
-            nn: data.nn, // 昵称
-            lv: data.level, // 等级
-            gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-            gfcnt: data.gfcnt, // 礼物数量
-            hits: data.hits, // 连击
-            avatar: data.ic,
-            fansName: data.bnn, // 粉丝牌名字
-            fansLv: data.bl, // 粉丝牌等级
-            diamond: data.diaf, // 是否是钻粉
-            noble: data.nl, // 贵族等级
-            roomAdmin: data.rg, // 房管，data.rg为4则是房管
-            key: new Date().getTime() + Math.random(),
-            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-          }
-          if (data.bcnt !== 1) obj.hits = data.bcnt
-          logToLocalFile(obj, "礼物")
-          giftList.value.forEach((item, i, arr) => {
-            if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
-              arr.splice(i, 1);
-            }
-          })
-          if (giftList.value.length + 1 > options.value.threshold) {
-            giftList.value.shift();
-          }
-          giftList.value.push(obj);
+          handleNormalGifts(data)
           break;
         case "odfbc":
           // 开通钻粉
@@ -324,9 +274,9 @@ export function useWebsocket(options, allGiftData) {
           if (data.rid !== targetRid) return
           obj = {
             type: "特殊礼物消息",
-            msg: "特殊礼物消息: " + data.otherContent,
+            msg: "特殊礼物消息: " + (data.txt1 ? data.otherContent + data.txt1 : data.otherContent),
             nn: data.userName,
-            rawmsg: data.otherContent,
+            rawmsg: data.txt1 ? data.otherContent + data.txt1 : data.otherContent,
             gfid: "0",
             gfcnt: "1",
             hits: "1",
@@ -484,73 +434,23 @@ export function useWebsocket(options, allGiftData) {
   }
 
   //处理异常礼物(数据不存在)
-  const handleMissingGift = async (data, threshold) => {
+  let lastHandledGfId = null
+  const handleMissingGift = async (data) => {
+    //避免重复处理
+    if (lastHandledGfId === data.gfid) {
+      console.log('exp. feature - gfid already handled, exiting... -', data.gfid)
+      return
+    }
+    console.log('exp. feature - handling unknown gift:', data.gfid)
+    lastHandledGfId = data.gfid
+    //获取数据以及处理
     let supData = await getSingleSupplementGiftData(data.gfid)
-    if (supData && supData !== "404") {
+    if (supData !== "404" && supData !== "500") {
       allGiftData.value[data.gfid] = supData
-      if (checkGiftValid(data, threshold)) {
-        if (threshold === Number(options.value.gift.ban.price)) {
-          let obj = {
-            type: "礼物",
-            nn: data.nn, // 昵称
-            lv: data.level, // 等级
-            gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-            gfcnt: data.gfcnt, // 礼物数量
-            hits: data.hits, // 连击
-            avatar: data.ic,
-            fansName: data.bnn, // 粉丝牌名字
-            fansLv: data.bl, // 粉丝牌等级
-            diamond: data.diaf, // 是否是钻粉
-            noble: data.nl, // 贵族等级
-            roomAdmin: data.rg, // 房管，data.rg为4则是房管
-            key: new Date().getTime() + Math.random(),
-            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-          }
-          if (data.bcnt !== 1) obj.hits = data.bcnt
-          logToLocalFile(obj, "礼物")
-          giftList.value.forEach((item, i, arr) => {
-            if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
-              arr.splice(i, 1);
-            }
-          })
-          if (giftList.value.length + 1 > options.value.threshold) {
-            giftList.value.shift();
-          }
-          giftList.value.push(obj);
-        } else if (threshold === 6) {
-          let obj = {
-            nn: data.nn, // 昵称
-            lv: data.level, // 等级
-            gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
-            gfcnt: data.gfcnt, // 礼物数量
-            hits: data.hits, // 连击
-            key: new Date().getTime() + Math.random(),
-            dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-          }
-          if (data.bcnt !== 1) obj.hits = data.bcnt
-          //去除可能出现的重复显示
-          let isDuplicateFlag = 0
-          giftList.value.forEach((item) => {
-            if (item.gfid === data.gfid) {
-              isDuplicateFlag = 1
-              return
-            }
-          })
-          if (isDuplicateFlag === 1) return
-          logToLocalFile(obj, "礼物")
-          giftListUnfiltered.value.forEach((item, i, arr) => {
-            if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
-              arr.splice(i, 1);
-            }
-          })
-          if (giftListUnfiltered.value.length + 1 > options.value.threshold) {
-            giftListUnfiltered.value.shift();
-          }
-          giftListUnfiltered.value.push(obj);
-        }
-      }
+      handleNormalGifts(data)
     } else {
-      console.log('cannot handle missing gift, logging to file...')
+      console.log('status: ', supData)
+      console.log('exp. feature - cannot handle unknown gift, logging to file...')
       logToLocalFile(data, "礼物")
     }
   }
@@ -560,7 +460,7 @@ export function useWebsocket(options, allGiftData) {
     //判断该礼物是否存在于接口数据中,如不存在则进行处理
     if (!giftData) {
       if (options.value.expFeature) {
-        handleMissingGift(data, threshold)
+        handleMissingGift(data)
         return false
       } else {
         logToLocalFile(data, "礼物")
@@ -615,9 +515,65 @@ export function useWebsocket(options, allGiftData) {
           }
         })
         .catch((err) => {
-          console.log('请求失败!', err)
+          console.log(err)
+          resolve('500')
         })
     })
+  }
+
+  const handleNormalGifts = (data) => {
+    if (!checkGiftValid(data, Number(options.value.gift.ban.price))) {
+      if (checkGiftValid(data, 6)) {
+        let obj = {
+          nn: data.nn, // 昵称
+          lv: data.level, // 等级
+          gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+          gfcnt: data.gfcnt, // 礼物数量
+          hits: data.hits, // 连击
+          key: new Date().getTime() + Math.random(),
+          dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+        }
+        if (data.bcnt !== 1) obj.hits = data.bcnt
+        logToLocalFile(obj, "礼物")
+        giftListUnfiltered.value.forEach((item, i, arr) => {
+          if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
+            arr.splice(i, 1);
+          }
+        })
+        if (giftListUnfiltered.value.length + 1 > options.value.threshold) {
+          giftListUnfiltered.value.shift();
+        }
+        giftListUnfiltered.value.push(obj);
+        return;
+      } else return
+    }
+    let obj = {
+      type: "礼物",
+      nn: data.nn, // 昵称
+      lv: data.level, // 等级
+      gfid: data.gfid, // 礼物id 获取名字：allGiftData[item.gfid].n
+      gfcnt: data.gfcnt, // 礼物数量
+      hits: data.hits, // 连击
+      avatar: data.ic,
+      fansName: data.bnn, // 粉丝牌名字
+      fansLv: data.bl, // 粉丝牌等级
+      diamond: data.diaf, // 是否是钻粉
+      noble: data.nl, // 贵族等级
+      roomAdmin: data.rg, // 房管，data.rg为4则是房管
+      key: new Date().getTime() + Math.random(),
+      dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    }
+    if (data.bcnt !== 1) obj.hits = data.bcnt
+    logToLocalFile(obj, "礼物")
+    giftList.value.forEach((item, i, arr) => {
+      if (item.nn === obj.nn && item.gfid === obj.gfid && item.gfcnt === obj.gfcnt && item.hits !== obj.hits) {
+        arr.splice(i, 1);
+      }
+    })
+    if (giftList.value.length + 1 > options.value.threshold) {
+      giftList.value.shift();
+    }
+    giftList.value.push(obj);
   }
 
   return { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListUnfiltered }

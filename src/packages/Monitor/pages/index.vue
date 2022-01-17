@@ -91,7 +91,7 @@
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.1.2 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.1.3 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -394,6 +394,7 @@ function getRoomGiftData(rid) {
       })
       .catch((err) => {
         console.log('请求失败!', err)
+        alert('获取房间礼物数据失败! 请重启程序再试一次')
       })
   })
 }
@@ -427,7 +428,7 @@ function getGiftData() {
       })
       .catch((err) => {
         console.log('请求失败!', err)
-        alert('获取远程数据失败! 请重启程序再试一次')
+        alert('获取背包礼物数据失败! 请重启程序再试一次')
       })
   })
 }

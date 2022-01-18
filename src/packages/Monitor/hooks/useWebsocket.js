@@ -11,7 +11,6 @@ export function useWebsocket(options, allGiftData) {
   let stt = new STT();
   let danmakuList = ref([]);
   let danmakuListVIP = ref([]);
-  let enterList = ref([]);
   let giftList = ref([]);
   let giftListUnfiltered = ref([]);
   let targetRid = "520"
@@ -78,7 +77,7 @@ export function useWebsocket(options, allGiftData) {
     // }
 
 
-    if (msgType === "chatmsg" && options.value.switch.includes("danmaku")) {
+    if (msgType === "chatmsg") {
       let data = stt.deserialize(msg);
       logToLocalFile(data, "弹幕")
       if (!checkDanmakuValid(data)) {
@@ -107,7 +106,7 @@ export function useWebsocket(options, allGiftData) {
       danmakuList.value.push(obj);
     }
 
-    if (msgType === "chatmsg" && options.value.switch.includes("danmakuvip")) {
+    if (msgType === "chatmsg") {
       let data = stt.deserialize(msg);
       if (!checkDanmakuIsVIP(data)) {
         return;
@@ -135,7 +134,7 @@ export function useWebsocket(options, allGiftData) {
       danmakuListVIP.value.push(obj);
     }
 
-    if ((["dgb", "odfbc", "rndfbc", "anbc", "rnewbc", "blab", "fansupgradebroadcast", "professgiftsrc"].includes(msgType)) && options.value.switch.includes("gift")) {
+    if ((["dgb", "odfbc", "rndfbc", "anbc", "rnewbc", "blab", "fansupgradebroadcast", "professgiftsrc"].includes(msgType))) {
       let data = stt.deserialize(msg);
       let obj = {};
       switch (msgType) {
@@ -290,7 +289,7 @@ export function useWebsocket(options, allGiftData) {
           break;
       }
     }
-    if (msgType === "uenter" && options.value.switch.includes("danmakuvip")) {
+    if (msgType === "uenter") {
       let data = stt.deserialize(msg);
       if (!checkDanmakuIsVIP(data)) {
         return;
@@ -579,5 +578,5 @@ export function useWebsocket(options, allGiftData) {
     giftList.value.push(obj);
   }
 
-  return { connectWs, danmakuList, danmakuListVIP, enterList, giftList, giftListUnfiltered }
+  return { connectWs, danmakuList, danmakuListVIP, giftList, giftListUnfiltered }
 }

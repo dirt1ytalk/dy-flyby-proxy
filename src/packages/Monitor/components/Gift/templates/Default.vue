@@ -1,10 +1,10 @@
 <template>
-  <div :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
+  <div :class="`item ${getItemClass(data)}`">
     <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
     <span
       v-if="!!data.lv && showLevel"
-      :class="`item__level UserLevel ${mode === 'night' && Number(data.lv < 70) ? 'fansLevelNight' : ''} UserLevel--${data.lv}`"
+      :class="`item__level UserLevel UserLevel--${data.lv}`"
     ></span>
     <!-- 贵族 -->
     <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
@@ -16,7 +16,7 @@
     <!-- 粉丝牌 -->
     <div
       v-if="!!data.fansName && showFans"
-      :class="`item__fans ${!!data.diamond && showDiamond ? '' : ''} FansMedal fansLevel-${data.fansLv}`"
+      :class="`item__fans FansMedal fansLevel-${data.fansLv}`"
     >
       <span class="FansMedal-name">{{ data.fansName }}</span>
     </div>
@@ -56,7 +56,7 @@ const DIAMOND_URL = 'https://shark2.douyucdn.cn/front-publish/live-player-aside-
 const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
 const FANS_LEVEL_UP = "https://shark2.douyucdn.cn/front-publish/live-anchor-title-master/assets/images/exp_ca09807.webp"
 
-let props = defineProps(['data', 'giftData', 'mode', 'showAnimation', 'totalPrice', 'showImg', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
+let props = defineProps(['data', 'giftData', 'totalPrice', 'showImg', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
 
 let avatarSrc = computed(() => {
   let ret = "";
@@ -109,35 +109,19 @@ function getItemClass(item) {
     case "礼物":
       if (Number(props.giftData.pc) * Number(item.gfcnt) >= Number(props.totalPrice) * 100 ||
         Number(props.giftData.pc) * Number(item.hits) >= Number(props.totalPrice) * 100) {
-        if (props.mode === "night") {
-          ret = "highlight-night";
-        } else {
-          ret = "highlight-day";
-        }
+        ret = "highlight";
       }
       break;
     case "钻粉":
-      if (props.mode === "night") {
-        ret = "highlight-night";
-      } else {
-        ret = "highlight-day";
-      }
+      ret = "highlight";
       break;
     case "贵族":
-      if (props.mode === "night") {
-        ret = "highlight-night";
-      } else {
-        ret = "highlight-day";
-      }
+      ret = "highlight";
       break;
     case "粉丝牌升级":
       // 当粉丝牌升级大于25级则高亮
       if (item.blv >= 26) {
-        if (props.mode === "night") {
-          ret = "highlight-night";
-        } else {
-          ret = "highlight-day";
-        }
+        ret = "highlight";
       }
       break;
     default:
@@ -198,15 +182,9 @@ function getItemClass(item) {
   }
 }
 
-.highlight-day {
+.highlight {
   background-color: rgba(255, 172, 88, 0.3);
   border-top: 1px solid #ffe4b8;
   border-bottom: 1px solid #ffe4b8;
-}
-
-.highlight-night {
-  background-color: rgb(55, 55, 55);
-  border-top: 1px solid rgb(90, 90, 90);
-  border-bottom: 1px solid rgb(90, 90, 90);
 }
 </style>

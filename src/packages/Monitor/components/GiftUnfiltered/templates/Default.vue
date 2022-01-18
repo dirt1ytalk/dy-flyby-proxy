@@ -1,5 +1,5 @@
 <template>
-  <div :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass()}`">
+  <div class="item">
     <span class="time_stamp">{{ data.dt }}</span>
     <div v-if="showImg" class="item__gift">
       <img class="avatar" :src="avatarSrc" loading="lazy" />
@@ -15,7 +15,7 @@ import { computed } from 'vue'
 
 const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
 
-let props = defineProps(['data', 'giftData', 'mode', 'showAnimation', 'totalPrice', 'showImg'])
+let props = defineProps(['data', 'giftData','totalPrice', 'showImg'])
 
 let avatarSrc = computed(() => {
   let ret = "";
@@ -28,11 +28,6 @@ let giftMsg = computed(() => {
   ret = `${props.giftData.n}*${props.data.gfcnt}`;
   return ret;
 });
-
-function getItemClass() {
-  let ret = "";
-  return ret;
-}
 </script>
 
 <style lang="scss" scoped>

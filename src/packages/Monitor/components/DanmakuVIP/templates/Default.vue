@@ -1,10 +1,10 @@
 <template>
-  <div :class="`item ${showAnimation ? 'fadeInLeft' : ''} ${getItemClass(data)}`">
+  <div class="item">
     <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
     <span
       v-if="showLevel"
-      :class="`item__level UserLevel ${mode === 'night' && Number(data.lv < 70) ? 'fansLevelNight' : ''} UserLevel--${data.lv}`"
+      :class="`item__level UserLevel UserLevel--${data.lv}`"
     ></span>
     <!-- 贵族 -->
     <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
@@ -16,7 +16,7 @@
     <!-- 粉丝牌 -->
     <div
       v-if="!!data.fansName && showFans"
-      :class="`item__fans ${!!data.diamond && showDiamond ? '' : ''} FansMedal fansLevel-${data.fansLv}`"
+      :class="`item__fans FansMedal fansLevel-${data.fansLv}`"
     >
       <span class="FansMedal-name">{{ data.fansName }}</span>
     </div>
@@ -46,20 +46,7 @@
 <script setup>
 import { nobleData } from '@/global/utils/dydata/nobleData.js'
 import { danmakuColor } from '@/global/utils/dydata/danmakuColor.js'
-let props = defineProps(['data', 'mode', 'showAnimation', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
-
-// 控制日夜模式背景颜色
-function getItemClass(data) {
-  let ret = ''
-  if (data.nobleC) {
-    if (props.mode === 'night') {
-      ret = 'noble-night'
-    } else {
-      ret = 'noble-day'
-    }
-  }
-  return ret
-}
+let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
 </script>
 
 <style lang="scss" scoped>

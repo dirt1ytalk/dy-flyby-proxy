@@ -4,8 +4,6 @@
             v-for="item in danmakuList"
             :key="item.key"
             :data="item"
-            :mode="options.mode"
-            :showAnimation="options.animation"
             :showLevel="options.danmaku.show.includes('level')"
             :showNoble="options.danmaku.show.includes('noble')"
             :showFans="options.danmaku.show.includes('fans')"
@@ -21,8 +19,6 @@
 import {ref, onUpdated, onMounted } from 'vue'
 import Deafult from "./templates/Default.vue"
 
-import { useFlexStyle } from "../../hooks/useFlexStyle.js"
-import { useBorderStyle } from "../../hooks/useBorderStyle.js"
 import { useScroll } from '../../hooks/useScroll.js'
 let props = defineProps({
     maxOrder: {
@@ -36,8 +32,6 @@ let props = defineProps({
     }
 });
 let dom_danmaku = ref(null);
-let { flexStyle, orderStyle, justifyContentStyle, textAlignStyle } = useFlexStyle(props, "danmaku");
-let { borderBottomStyle, borderRightStyle } = useBorderStyle(props, "danmaku");
 let { isLock, onScroll, onScrollUpdate, goToScrollBottom } = useScroll();
 
 
@@ -63,18 +57,14 @@ onMounted(() => {
 .danmaku {
     height: 100%;
     width: 100;
-    order: v-bind(orderStyle);
-    flex: v-bind(flexStyle);
-    //border-bottom: v-bind(borderBottomStyle);
-    //border-right: v-bind(borderRightStyle);
     padding: 0 5px;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: auto;
     content-visibility: auto;
     .item {
-        justify-content: v-bind(justifyContentStyle);
-        text-align: v-bind(textAlignStyle);
+        justify-content: flex-start;
+        text-align: left;
     }
 }
 </style>

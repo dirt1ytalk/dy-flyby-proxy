@@ -5,8 +5,6 @@
             :data="item"
             :key="item.key"
             :giftData="allGiftData[item.gfid]"
-            :mode="options.mode"
-            :showAnimation="options.animation"
             :totalPrice="options.gift.totalPrice"
             :showImg="options.gift.show.includes('giftImg')"
             :showLevel="options.gift.show.includes('level')"
@@ -23,8 +21,6 @@
 <script setup>
 import {ref, onUpdated, onMounted } from 'vue'
 import Deafult from "./templates/Default.vue"
-import {useFlexStyle} from "../../hooks/useFlexStyle.js"
-import {useBorderStyle} from "../../hooks/useBorderStyle.js"
 import { useScroll } from '../../hooks/useScroll.js'
 let props = defineProps({
     maxOrder: {
@@ -40,8 +36,6 @@ let props = defineProps({
         type: Object,
     }
 });
-let { flexStyle, orderStyle, justifyContentStyle, textAlignStyle } = useFlexStyle(props, "gift");
-let { borderBottomStyle, borderRightStyle } = useBorderStyle(props, "gift");
 let { isLock, onScroll, onScrollUpdate, goToScrollBottom } = useScroll();
 let dom_gift = ref(null);
 
@@ -65,18 +59,14 @@ onMounted(() => {
 <style lang="scss" scoped>
 .gift {
     height: 100%;
-    order: v-bind(orderStyle);
-    flex: v-bind(flexStyle);
-    //border-bottom: v-bind(borderBottomStyle);
-    //border-right: v-bind(borderRightStyle);
     padding: 0 5px;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: auto;
     content-visibility: auto;
     .item {
-        justify-content: v-bind(justifyContentStyle);
-        text-align: v-bind(textAlignStyle);
+        justify-content: flex-start;
+        text-align: left;
     }
 }
 </style>

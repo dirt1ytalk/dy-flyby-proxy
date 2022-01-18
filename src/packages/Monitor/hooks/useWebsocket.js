@@ -436,20 +436,23 @@ export function useWebsocket(options, allGiftData) {
   //处理异常礼物(数据不存在)
   let lastHandledGfId = null
   const handleMissingGift = async (data) => {
+    console.log('exp. feature - unknown gift id', data.gfid, 'detected, starting handler...')
     //避免重复处理
     if (lastHandledGfId === data.gfid) {
-      console.log('exp. feature - gfid already handled, exiting... -', data.gfid)
+      console.log('exp. feature - gift id', data.gfid, 'already handled, exiting...')
       return
     }
-    console.log('exp. feature - handling unknown gift:', data.gfid)
     lastHandledGfId = data.gfid
     //获取数据以及处理
+    console.log('exp. feature - fetching data from douyu.com public api...')
     let supData = await getSingleSupplementGiftData(data.gfid)
     if (supData !== "404" && supData !== "500") {
+      console.log('exp. feature - fetched gift data:', supData)
       allGiftData.value[data.gfid] = supData
+      console.log('exp. feature - fetched data injected to allGiftData, proceed to reinitiate normal handling...')
       handleNormalGifts(data)
     } else {
-      console.log('status: ', supData)
+      console.log('exp. feature - err status code:', supData)
       console.log('exp. feature - cannot handle unknown gift, logging to file...')
       logToLocalFile(data, "礼物")
     }

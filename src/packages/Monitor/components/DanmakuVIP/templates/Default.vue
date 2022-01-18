@@ -39,13 +39,12 @@
       />
     </span>
     <span class="item__name">{{ data.nn }}：</span>
-    <span :style="`color:${danmakuColor[data.color]};`" class="item__txt">{{ data.txt }}</span>
+    <span class="item__txt">{{ data.txt }}</span>
   </div>
 </template>
 
 <script setup>
 import { nobleData } from '@/global/utils/dydata/nobleData.js'
-import { danmakuColor } from '@/global/utils/dydata/danmakuColor.js'
 let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
 </script>
 

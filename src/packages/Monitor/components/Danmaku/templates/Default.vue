@@ -43,13 +43,12 @@
       @click.left.prevent="addToVIPHandler(data.nn)"
       @click.right.prevent="addToBanListHandler(data.nn)"
     >{{ data.nn }}：</span>
-    <span :style="`color:${danmakuColor[data.color]};`" class="item__txt">{{ data.txt }}</span>
+    <span class="item__txt">{{ data.txt }}</span>
   </div>
 </template>
 
 <script setup>
 import { nobleData } from '@/global/utils/dydata/nobleData.js'
-import { danmakuColor } from '@/global/utils/dydata/danmakuColor.js'
 //import { toRefs } from 'vue'
 let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
 

@@ -255,7 +255,7 @@ export function useWebsocket(options, allGiftData) {
           if (data.rid !== targetRid) return
           obj = {
             type: "粉丝牌升级",
-            msg: "粉丝牌升到" + String(data.otherContent) + "级",
+            msg: "粉丝牌升到 " + String(data.otherContent) + " 级",
             nn: data.userName,
             blv: data.otherContent,
             gfid: "0",
@@ -435,12 +435,12 @@ export function useWebsocket(options, allGiftData) {
   //处理异常礼物(数据不存在)
   let lastHandledGfId = null
   const handleMissingGift = async (data) => {
-    console.log('exp. feature - unknown gift id', data.gfid, 'detected, starting handler...')
     //避免重复处理
     if (lastHandledGfId === data.gfid) {
       console.log('exp. feature - gift id', data.gfid, 'already handled, exiting...')
       return
     }
+    console.log('exp. feature - unknown gift id', data.gfid, 'detected, starting handler...')
     lastHandledGfId = data.gfid
     //获取数据以及处理
     console.log('exp. feature - fetching data from douyu.com public api...')

@@ -209,8 +209,9 @@ onMounted(async () => {
   let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
   let dirLog = parentDir + '\\520-Logs\\' + dateStr
 
-  //将完整路径替换options中存储的文档文件夹路径
-  options.value.logDir = dirLog
+  //存储路径以及启动时日期
+  options.value.log.dir = dirLog
+  options.value.log.date = dateStr
 
   //创建日志文件夹, 如文件夹已存在则指定resolve
   await fs.promises.mkdir(dirLog, { recursive: true }).catch((err) => {
@@ -247,8 +248,7 @@ async function logInit(dir, date, name) {
     "Current time: " + date + " " + timeStr + "\n" +
     "==================================================\n"
   await fs.promises.appendFile(fileDir, initLogMsg).catch(err => {
-    console.log(err.message)
-    return new Promise.reject()
+    return new Promise.reject(err.message)
   })
 }
 

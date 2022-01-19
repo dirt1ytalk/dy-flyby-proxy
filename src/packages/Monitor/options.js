@@ -35,8 +35,11 @@ export const defaultOptions = {
             // 价格低于
             price: 50,
             // 礼物名称
-            keywords: "",
+            keywords: ""
         }
     },
-    logDir: ""
+    log: {
+        dir: "",
+        date: ""
+    }
 }

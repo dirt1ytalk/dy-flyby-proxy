@@ -314,16 +314,14 @@ export function useWebsocket(options, allGiftData) {
     let fileDir = getFileDir(index)
     let strToWrite = getMsgStruc(data, index)
     await fs.promises.appendFile(fileDir, strToWrite + '\n').catch(err => {
-      console.log(err.message)
-      return new Promise.reject()
+      return new Promise.reject(err.message)
     })
   }
 
   //根据日期以及父目录生成路径与文件名
   const getFileDir = (index) => {
-    let date = new Date()
-    let dir = options.value.logDir
-    let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
+    let dir = options.value.log.dir
+    let dateStr = options.value.log.date
     return dir + "\\" + dateStr + '_' + index + '.txt'
   }
 

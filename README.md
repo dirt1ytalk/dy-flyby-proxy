@@ -18,12 +18,6 @@ https://www.douyu.com/520
   yarn
   ```
 
-- 进行 `production build`
-
-  ```bash
-  yarn run build
-  ```
-
 - 使用 `electron-builder` 打包为electron应用
 
   - 仅应用
@@ -40,9 +34,10 @@ https://www.douyu.com/520
     yarn run dist
     ```
 
+
 ### 修改房间号
 
-房间号默认定义为 `520` ，如需要修改请定位至 `index.vue` 下的 `onMounted` 方法
+房间号默认定义为 `520` ，如需要修改请定位至 `src/packages/Monitor/pages/index.vue` 下的 `onMounted` 方法
 
 ```javascript
 let rid = 520 //change here
@@ -50,7 +45,15 @@ let rid = 520 //change here
 
 将 `rid` 修改为目标房间号
 
-随后重新进行 `production build` 并打包即可
+同时定位至`src/packages/Monitor/hooks/useWebsocket.js`
+
+```javascript
+let targetRid = "520" //change here, must be string duee to strict equality check
+```
+
+修改 `targetRid` 为目标房间号
+
+随后重新打包即可
 
 ## 所做修改
 

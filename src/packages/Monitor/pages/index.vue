@@ -142,9 +142,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
-
-import useClipboard from 'vue-clipboard3'
+import { ref, onMounted, watch } from 'vue'
 
 import Danmaku from '../components/Danmaku/Danmaku.vue'
 import Danmakuvip from '../components/DanmakuVIP/Danmaku.vue'
@@ -164,7 +162,7 @@ import 'element-plus/es/components/color-picker/style/css'
 import { useNormalStyle } from '../hooks/useNormalStyle.js'
 import { useWebsocket } from '../hooks/useWebsocket.js'
 
-import { saveLocalData, getLocalData, deepCopy, getClassStyle, formatObj } from '@/global/utils'
+import { saveLocalData, getLocalData, deepCopy, formatObj } from '@/global/utils'
 import { defaultOptions } from '../options'
 
 const LOCAL_NAME = 'monitor_options'

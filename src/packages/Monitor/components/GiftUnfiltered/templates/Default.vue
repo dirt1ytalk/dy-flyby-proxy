@@ -15,7 +15,7 @@ import { computed } from 'vue'
 
 const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
 
-let props = defineProps(['data', 'giftData','totalPrice', 'showImg'])
+let props = defineProps(['data', 'giftData', 'totalPrice', 'showImg'])
 
 let avatarSrc = computed(() => {
   let ret = "";
@@ -43,8 +43,8 @@ let giftMsg = computed(() => {
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 5px;
-  justify-content: v-bind(justifyContentStyle);
-  text-align: v-bind(textAlignStyle);
+  justify-content: flex-start;
+  text-align: left;
 
   &:first-child {
     margin-top: 5px;

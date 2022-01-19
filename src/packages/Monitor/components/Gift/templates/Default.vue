@@ -2,10 +2,7 @@
   <div :class="`item ${getItemClass(data)}`">
     <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
-    <span
-      v-if="!!data.lv && showLevel"
-      :class="`item__level UserLevel UserLevel--${data.lv}`"
-    ></span>
+    <span v-if="!!data.lv && showLevel" :class="`item__level UserLevel UserLevel--${data.lv}`"></span>
     <!-- 贵族 -->
     <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
       <img
@@ -144,8 +141,8 @@ function getItemClass(item) {
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 5px;
-  justify-content: v-bind(justifyContentStyle);
-  text-align: v-bind(textAlignStyle);
+  justify-content: flex-start;
+  text-align: left;
 
   &:first-child {
     margin-top: 5px;

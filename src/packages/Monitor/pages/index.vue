@@ -7,7 +7,6 @@
             <div class="monitor">
               <Danmaku
                 :style="{ height: heightUpper + 'px' }"
-                :maxOrder="maxOrder"
                 :options="options"
                 :danmakuList="danmakuList"
                 @addToVIP="addToVIP"
@@ -21,7 +20,6 @@
             <div class="monitor" @click.right.prevent="onClickMonitor">
               <Gift
                 :style="{ height: heightUpper + 'px' }"
-                :maxOrder="maxOrder"
                 :options="options"
                 :giftList="giftList"
                 :allGiftData="allGiftData"
@@ -36,7 +34,6 @@
             <div class="monitor" @click.right.prevent="onClickMonitor">
               <Danmakuvip
                 :style="{ height: heightLower + 'px' }"
-                :maxOrder="maxOrder"
                 :options="options"
                 :danmakuList="danmakuListVIP"
               ></Danmakuvip>
@@ -48,7 +45,6 @@
             <div class="monitor" @click.right.prevent="onClickMonitor">
               <GiftUnfiltered
                 :style="{ height: heightLower + 'px' }"
-                :maxOrder="maxOrder"
                 :options="options"
                 :giftListUnfiltered="giftListUnfiltered"
                 :allGiftData="allGiftData"
@@ -185,16 +181,6 @@ let { connectWs, danmakuList, danmakuListVIP, giftList, giftListUnfiltered } = u
 let heightDiff = ref(0)
 let heightUpper = ref(0)
 let heightLower = ref(0)
-
-let maxOrder = computed(() => {
-  let ret = 0
-  for (const key in options.value.order) {
-    if (options.value.order[key] > ret) {
-      ret = options.value.order[key]
-    }
-  }
-  return ret
-})
 
 function setNewHeight() {
   heightDiff.value = document.documentElement.clientHeight - 590

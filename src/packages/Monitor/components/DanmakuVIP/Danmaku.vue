@@ -21,9 +21,6 @@ import Deafult from "./templates/Default.vue"
 
 import { useScroll } from '../../hooks/useScroll.js'
 let props = defineProps({
-    maxOrder: {
-        type: Number,
-    },
     options: {
         type: Object,
     },

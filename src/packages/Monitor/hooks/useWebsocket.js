@@ -155,7 +155,7 @@ export function useWebsocket(options, allGiftData) {
             avatar: data.icon, //头像
             fansName: data.bn, // 粉丝牌名字
             fansLv: data.fl, // 粉丝牌等级
-            noble: data.nl != "0" ? data.nl : undefined, // 贵族等级
+            noble: data.nl !== "0" ? data.nl : undefined, // 贵族等级
             key: new Date().getTime() + Math.random(),
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }
@@ -178,7 +178,7 @@ export function useWebsocket(options, allGiftData) {
             avatar: data.icon, //头像
             fansName: data.bn, // 粉丝牌名字
             fansLv: data.fl, // 粉丝牌等级
-            noble: data.nl != "0" ? data.nl : undefined, // 贵族等级
+            noble: data.nl !== "0" ? data.nl : undefined, // 贵族等级
             key: new Date().getTime() + Math.random(),
             dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
           }

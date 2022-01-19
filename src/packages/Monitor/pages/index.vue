@@ -60,7 +60,7 @@
     v-model:show="isShowOption"
     position="bottom"
     :overlay-style="{ '-webkit-app-region': 'no-drag' }"
-    :style="{ height: '50%' }"
+    :style="{ height: '50%', userSelect: 'none' }"
   >
     <Tabs v-model:active="activeTab">
       <Tab title="通用">

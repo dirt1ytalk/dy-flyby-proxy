@@ -45,10 +45,10 @@ let rid = 520 //change here
 
 将 `rid` 修改为目标房间号
 
-同时定位至`src/packages/Monitor/hooks/useWebsocket.js`
+同时定位至 `src/packages/Monitor/hooks/useWebsocket.js`
 
 ```javascript
-let targetRid = "520" //change here, must be string duee to strict equality check
+let targetRid = "520" //change here, must be string due to strict equality check
 ```
 
 修改 `targetRid` 为目标房间号

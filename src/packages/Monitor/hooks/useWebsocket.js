@@ -408,7 +408,7 @@ export function useWebsocket(options, allGiftData) {
     if (nicknames !== "") {
       let arr = nicknames.split(" ");
       for (let i = 0; i < arr.length; i++) {
-        if (arr[i] !== "" && data.nn.indexOf(arr[i]) !== -1) {
+        if (arr[i] !== "" && data.nn === arr[i]) {
           return false;
         }
       }
@@ -422,7 +422,7 @@ export function useWebsocket(options, allGiftData) {
     if (nicknames !== "") {
       let arr = nicknames.split(" ");
       for (let i = 0; i < arr.length; i++) {
-        if (arr[i] !== "" && data.nn.indexOf(arr[i]) !== -1) {
+        if (arr[i] !== "" && data.nn === arr[i]) {
           return true;
         }
       }

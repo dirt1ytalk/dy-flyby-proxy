@@ -314,7 +314,7 @@ export function useWebsocket(options, allGiftData) {
     let fileDir = getFileDir(index)
     let strToWrite = getMsgStruc(data, index)
     await fs.promises.appendFile(fileDir, strToWrite + '\n').catch(err => {
-      return new Promise.reject(err.message)
+      return Promise.reject(err.message)
     })
   }
 
@@ -459,13 +459,8 @@ export function useWebsocket(options, allGiftData) {
     let giftData = allGiftData.value[data.gfid];
     //判断该礼物是否存在于接口数据中,如不存在则进行处理
     if (!giftData) {
-      if (options.value.expFeature) {
-        handleMissingGift(data)
-        return false
-      } else {
-        logToLocalFile(data, "礼物")
-        return false
-      }
+      handleMissingGift(data)
+      return false
     }
     // 屏蔽荧光棒
     if (giftData.n.includes("荧光棒")) return false

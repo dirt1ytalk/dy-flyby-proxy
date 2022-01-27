@@ -6,8 +6,6 @@ export const defaultOptions = {
         upper: 260,
         lower: 200
     },
-    //实验性功能
-    expFeature: false,
     // 数据阈值
     threshold: 1000,
     // 字号

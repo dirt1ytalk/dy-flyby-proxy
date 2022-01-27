@@ -49,5 +49,11 @@ export function formatObj(obj, objTemplate) {
 			ret[key] = objTemplate[key];
 		}
 	}
+	//去除多余属性
+	for (const key in ret) {
+		if (!key in objTemplate) {
+			delete ret[key]
+		}
+	}
 	return ret;
 }

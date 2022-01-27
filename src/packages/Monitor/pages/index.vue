@@ -64,7 +64,7 @@
   >
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
-        <Field label="面板背景颜色 & 不透明度">
+        <Field label="面板背景颜色 & 不透明度" center>
           <template #input>
             <el-color-picker show-alpha v-model="options.bgcolora"></el-color-picker>
           </template>
@@ -75,15 +75,18 @@
           </template>
         </Field>
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
-        <Field label="实验性功能">
+        <Field label="设置迁移" center>
           <template #input>
-            <Switch v-model="options.expFeature" size="24px"/>
+            <Button plain round type="primary" size="small" @click="saveOptionsToLogDir">导出设置</Button>
+            <Uploader accept=".txt" :after-read="readOptionsFromUpload" result-type="text">
+              <Button plain round type="primary" size="small" class="ml-4">导入设置</Button>
+            </Uploader>
           </template>
         </Field>
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.1.6 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.2.0 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -149,7 +152,7 @@ import Danmakuvip from '../components/DanmakuVIP/Danmaku.vue'
 import Gift from '../components/Gift/Gift.vue'
 import GiftUnfiltered from '../components/GiftUnfiltered/Gift.vue'
 
-import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, Switch, Dialog } from 'vant'
+import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, Dialog, Button, Uploader, Notify } from 'vant'
 
 import { ElCard, ElRow, ElCol, ElContainer, ElMain, ElColorPicker } from 'element-plus'
 import 'element-plus/es/components/card/style/css'
@@ -248,8 +251,50 @@ async function logInit(dir, date, name) {
     "Current time: " + date + " " + timeStr + "\n" +
     "==================================================\n"
   await fs.promises.appendFile(fileDir, initLogMsg).catch(err => {
-    return new Promise.reject(err.message)
+    return Promise.reject(err.message)
   })
+}
+
+async function saveOptionsToLogDir() {
+  let logDir = options.value.log.dir
+  let optionsStr = JSON.stringify(options.value)
+  await fs.promises.appendFile(logDir + '\\' + 'settings.txt', optionsStr + '\n').catch(err => {
+    isShowOption.value = false
+    Notify({
+      type: 'warning',
+      message: '导出设置失败! 错误信息: ' + err.message
+    })
+    return Promise.resolve()
+  })
+  isShowOption.value = false
+  Notify({
+    type: 'success',
+    message: '导出设置成功! 存储于当日日志文件夹下 <settings.txt> 文件'
+  })
+}
+
+async function readOptionsFromUpload(file) {
+  let resStr = file.content
+  let resArr = resStr.split('\n')
+  if (resArr.length === 2 || resArr.length === 1) resStr = resArr[0]
+  else resStr = resArr[resArr.length - 2]
+  try {
+    let resObj = JSON.parse(resStr)
+    resObj = formatObj(resObj, options.value)
+    if (JSON.stringify(resObj) === JSON.stringify(options.value)) throw new Error('导入文件结构不正确或无设置项更改')
+    options.value = resObj
+    isShowOption.value = false
+    Notify({
+      type: 'success',
+      message: '从本地文件导入设置成功!'
+    })
+  } catch (err) {
+    isShowOption.value = false
+    Notify({
+      type: 'warning',
+      message: '导入设置失败! 错误信息: ' + err.message
+    })
+  }
 }
 
 function addToVIP(nn) {
@@ -386,10 +431,6 @@ function onClickMonitor() {
   isShowOption.value = true
 }
 
-
-
-
-
 watch(
   options,
   (n) => {
@@ -412,34 +453,6 @@ watch(
 
 .bg {
   background-color: v-bind(bgColorValue);
-}
-
-.popup {
-  .popup-top {
-    user-select: none;
-    height: 32px;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    padding: 0 10px;
-    box-sizing: border-box;
-    text-align: right;
-    border-bottom: 1px solid rgb(227, 227, 227);
-    > div {
-      width: 24px;
-      height: 24px;
-      margin-left: 10px;
-      cursor: pointer;
-    }
-    .douyuex {
-      position: absolute;
-      left: 0;
-    }
-    .github {
-      position: absolute;
-      left: 34px;
-    }
-  }
 }
 </style>
 

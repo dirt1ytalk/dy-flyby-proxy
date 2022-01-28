@@ -77,7 +77,7 @@
         <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
         <Field label="设置迁移" center>
           <template #input>
-            <Button plain round type="primary" size="small" @click="saveOptionsToLogDir">导出设置</Button>
+            <Button plain round type="primary" size="small" @click="saveOptionsWithDialog">导出设置</Button>
             <Uploader accept=".txt" :after-read="readOptionsFromUpload" result-type="text">
               <Button plain round type="primary" size="small" class="ml-4">导入设置</Button>
             </Uploader>
@@ -255,10 +255,14 @@ async function logInit(dir, date, name) {
   })
 }
 
-async function saveOptionsToLogDir() {
-  let logDir = options.value.log.dir
+async function saveOptionsWithDialog() {
+  const winPath = await ipc.invoke('get-settings-save-path')
+  if (winPath.canceled) return
   let optionsStr = JSON.stringify(options.value)
-  await fs.promises.appendFile(logDir + '\\' + 'settings.txt', optionsStr + '\n').catch(err => {
+  await fs.promises.truncate(winPath.filePath).catch(err => {
+    if (err.message.includes('ENOENT')) return Promise.resolve()
+  })
+  await fs.promises.appendFile(winPath.filePath, optionsStr).catch(err => {
     isShowOption.value = false
     Notify({
       type: 'warning',
@@ -269,15 +273,12 @@ async function saveOptionsToLogDir() {
   isShowOption.value = false
   Notify({
     type: 'success',
-    message: '导出设置成功! 存储于当日日志文件夹下 <settings.txt> 文件'
+    message: '导出设置成功! 存储路径: ' + winPath.filePath
   })
 }
 
 async function readOptionsFromUpload(file) {
   let resStr = file.content
-  let resArr = resStr.split('\n')
-  if (resArr.length === 2 || resArr.length === 1) resStr = resArr[0]
-  else resStr = resArr[resArr.length - 2]
   try {
     let resObj = JSON.parse(resStr)
     resObj = formatObj(resObj, options.value)

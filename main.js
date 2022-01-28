@@ -1,4 +1,4 @@
-const { app, clipboard, ipcMain, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
+const { app, clipboard, ipcMain, dialog, BrowserWindow, Menu, MenuItem, Notification, Tray, nativeImage } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
@@ -128,8 +128,21 @@ ipcMain.handle('get-doc-path', () => {
   return app.getPath("documents")
 })
 
+ipcMain.handle('get-settings-save-path', async () => {
+  const filePath = await dialog.showSaveDialog(win, {
+    title: '选择设置文件保存路径',
+    defaultPath: 'settings.txt',
+    filters: [
+      {
+        name: '文本文档',
+        extensions: ['txt']
+      }
+    ]
+  })
+  return filePath
+})
+
 autoUpdater.on('update-not-available', info => {
-  //win.webContents.send("no-update", "0")
   new Notification({
     title: "更新检查",
     body: "当前版本 V" + info.version + " 已是最新版本",

@@ -274,7 +274,10 @@ async function saveOptionsWithDialog() {
   if (winPath.canceled) return
   let optionsStr = JSON.stringify(options.value)
   try {
-    await fs.promises.truncate(winPath.filePath)
+    await fs.promises.truncate(winPath.filePath).catch(err => {
+      if (err.message.includes('ENOENT')) return
+      else throw err
+    })
     await fs.promises.appendFile(winPath.filePath, optionsStr)
     isShowOption.value = false
     Notify({

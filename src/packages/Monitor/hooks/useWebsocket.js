@@ -313,9 +313,7 @@ export function useWebsocket(options, allGiftData) {
   const logToLocalFile = async (data, index) => {
     let fileDir = getFileDir(index)
     let strToWrite = getMsgStruc(data, index)
-    await fs.promises.appendFile(fileDir, strToWrite + '\n').catch(err => {
-      return Promise.reject(err.message)
-    })
+    await fs.promises.appendFile(fileDir, strToWrite + '\n')
   }
 
   //根据日期以及父目录生成路径与文件名

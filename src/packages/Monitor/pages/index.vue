@@ -183,14 +183,6 @@ let heightDiff = ref(0)
 let heightUpper = ref(0)
 let heightLower = ref(0)
 
-function setNewHeight() {
-  heightDiff.value = document.documentElement.clientHeight - 590
-  heightUpper.value = 260 + heightDiff.value / 2
-  heightLower.value = 200 + heightDiff.value / 2
-  options.value.moduleSize.upper = heightUpper.value
-  options.value.moduleSize.lower = heightLower.value
-}
-
 onMounted(async () => {
   let rid = 520
   let localData = JSON.parse(getLocalData(LOCAL_NAME))
@@ -216,10 +208,17 @@ onMounted(async () => {
   options.value.log.dir = dirLog
   options.value.log.date = dateStr
 
-  //创建日志文件夹, 如文件夹已存在则指定resolve
-  await fs.promises.mkdir(dirLog, { recursive: true }).catch((err) => {
-    if (err.message.includes('EEXIST')) return Promise.resolve()
-  })
+  //创建日志文件夹
+  try {
+    await fs.promises.mkdir(dirLog, { recursive: true })
+  } catch (err) {
+    console.log(err.message)
+    if (isShowOption.value = true) isShowOption.value = false
+    Notify({
+      type: 'warning',
+      message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'
+    })
+  }
 
   await logInit(dirLog, dateStr, "弹幕")
   await logInit(dirLog, dateStr, "礼物")
@@ -243,6 +242,14 @@ onMounted(async () => {
   connectWs(rid)
 })
 
+function setNewHeight() {
+  heightDiff.value = document.documentElement.clientHeight - 590
+  heightUpper.value = 260 + heightDiff.value / 2
+  heightLower.value = 200 + heightDiff.value / 2
+  options.value.moduleSize.upper = heightUpper.value
+  options.value.moduleSize.lower = heightLower.value
+}
+
 async function logInit(dir, date, name) {
   let fileDir = dir + "\\" + date + '_' + name + '.txt'
   let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
@@ -250,31 +257,37 @@ async function logInit(dir, date, name) {
     "[Renderer] Application launched, start logging...\n" +
     "Current time: " + date + " " + timeStr + "\n" +
     "==================================================\n"
-  await fs.promises.appendFile(fileDir, initLogMsg).catch(err => {
-    return Promise.reject(err.message)
-  })
+  try {
+    await fs.promises.appendFile(fileDir, initLogMsg)
+  } catch (err) {
+    console.log(err.message)
+    if (isShowOption.value = true) isShowOption.value = false
+    Notify({
+      type: 'warning',
+      message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'
+    })
+  }
 }
 
 async function saveOptionsWithDialog() {
   const winPath = await ipc.invoke('get-settings-save-path')
   if (winPath.canceled) return
   let optionsStr = JSON.stringify(options.value)
-  await fs.promises.truncate(winPath.filePath).catch(err => {
-    if (err.message.includes('ENOENT')) return Promise.resolve()
-  })
-  await fs.promises.appendFile(winPath.filePath, optionsStr).catch(err => {
+  try {
+    await fs.promises.truncate(winPath.filePath)
+    await fs.promises.appendFile(winPath.filePath, optionsStr)
+    isShowOption.value = false
+    Notify({
+      type: 'success',
+      message: '导出设置成功! 存储路径: ' + winPath.filePath
+    })
+  } catch (err) {
     isShowOption.value = false
     Notify({
       type: 'warning',
       message: '导出设置失败! 错误信息: ' + err.message
     })
-    return Promise.resolve()
-  })
-  isShowOption.value = false
-  Notify({
-    type: 'success',
-    message: '导出设置成功! 存储路径: ' + winPath.filePath
-  })
+  }
 }
 
 async function readOptionsFromUpload(file) {
@@ -388,8 +401,7 @@ function getRoomGiftData(rid) {
         resolve(ret)
       })
       .catch((err) => {
-        console.log('请求失败!', err)
-        alert('获取房间礼物数据失败! 请重启程序再试一次')
+        ipc.invoke('err-quit', err.message)
       })
   })
 }
@@ -422,8 +434,7 @@ function getGiftData() {
         resolve(ret)
       })
       .catch((err) => {
-        console.log('请求失败!', err)
-        alert('获取背包礼物数据失败! 请重启程序再试一次')
+        ipc.invoke('err-quit', err.message)
       })
   })
 }

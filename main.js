@@ -37,7 +37,7 @@ menu.append(new MenuItem({
     {
       label: 'DevTools',
       accelerator: 'Ctrl+Shift+I',
-      click: function (item, focusedWindow) {
+      click: function (_item, focusedWindow) {
         if (focusedWindow)
           focusedWindow.toggleDevTools();
       }
@@ -140,6 +140,15 @@ ipcMain.handle('get-settings-save-path', async () => {
     ]
   })
   return filePath
+})
+
+ipcMain.handle('err-quit', (_events, msg) => {
+  dialog.showMessageBoxSync(win,{
+    title: '无法获取礼物数据',
+    type: 'error',
+    message: '错误信息:\n' + msg + '\n请重启应用再试一次'
+  })
+  app.quit()
 })
 
 autoUpdater.on('update-not-available', info => {

@@ -31,6 +31,7 @@
         loading="lazy"
       />
     </span>
+    <span v-if="data.vip && showVip" class="Barrage-roomVipIcon"></span>
     <span v-if="showAvatar" class="item__avatar">
       <img
         class="avatar"
@@ -45,7 +46,7 @@
 
 <script setup>
 import { nobleData } from '@/global/utils/dydata/nobleData.js'
-let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
+let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar', 'showVip'])
 </script>
 
 <style lang="scss" scoped>

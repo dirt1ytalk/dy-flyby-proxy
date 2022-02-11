@@ -28,6 +28,7 @@
         loading="lazy"
       />
     </span>
+    <span v-if="data.vip && showVip" class="Barrage-roomVipIcon"></span>
     <span v-if="!!data.avatar && showAvatar" class="item__avatar">
       <img
         class="avatar"
@@ -53,7 +54,7 @@ const DIAMOND_URL = 'https://shark2.douyucdn.cn/front-publish/live-player-aside-
 const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
 const FANS_LEVEL_UP = "https://shark2.douyucdn.cn/front-publish/live-anchor-title-master/assets/images/exp_ca09807.webp"
 
-let props = defineProps(['data', 'giftData', 'totalPrice', 'showImg', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
+let props = defineProps(['data', 'giftData', 'totalPrice', 'showImg', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar', 'showVip'])
 
 let avatarSrc = computed(() => {
   let ret = "";

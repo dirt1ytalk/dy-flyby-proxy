@@ -2,10 +2,7 @@
   <div class="item">
     <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
-    <span
-      v-if="showLevel"
-      :class="`item__level UserLevel UserLevel--${data.lv}`"
-    ></span>
+    <span v-if="showLevel" :class="`item__level UserLevel UserLevel--${data.lv}`"></span>
     <!-- 贵族 -->
     <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
       <img
@@ -31,6 +28,7 @@
         loading="lazy"
       />
     </span>
+    <span v-if="data.vip && showVip" class="Barrage-roomVipIcon"></span>
     <span v-if="showAvatar" class="item__avatar">
       <img
         class="avatar"
@@ -50,7 +48,7 @@
 <script setup>
 import { nobleData } from '@/global/utils/dydata/nobleData.js'
 //import { toRefs } from 'vue'
-let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar'])
+let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar', 'showVip'])
 
 const emit = defineEmits(['passToIndexForVIP', 'passToIndexForBan'])
 

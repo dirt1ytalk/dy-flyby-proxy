@@ -13,6 +13,7 @@
             :showDiamond="options.gift.show.includes('diamond')"
             :showRoomAdmin="options.gift.show.includes('roomAdmin')"
             :showAvatar="options.gift.show.includes('avatar')"
+            :showVip="options.gift.show.includes('vip')"
         ></Deafult>
         <div v-show="isLock" class="gobottom" @click.stop="goToScrollBottom(dom_gift)">回到底部</div>
     </div>

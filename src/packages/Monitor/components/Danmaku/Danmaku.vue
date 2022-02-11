@@ -10,6 +10,7 @@
             :showDiamond="options.danmaku.show.includes('diamond')"
             :showRoomAdmin="options.danmaku.show.includes('roomAdmin')"
             :showAvatar="options.danmaku.show.includes('avatar')"
+            :showVip="options.danmaku.show.includes('vip')"
             @passToIndexForVIP="passToIndexForVIP"
             @passToIndexForBan="passToIndexForBan"
         ></Deafult>

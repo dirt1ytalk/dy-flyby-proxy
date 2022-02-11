@@ -10,6 +10,7 @@
             :showDiamond="options.danmaku.show.includes('diamond')"
             :showRoomAdmin="options.danmaku.show.includes('roomAdmin')"
             :showAvatar="options.danmaku.show.includes('avatar')"
+            :showVip="options.danmaku.show.includes('vip')"
         ></Deafult>
         <div v-show="isLock" class="gobottom" @click.stop="goToScrollBottom(dom_danmaku)">回到底部</div>
     </div>

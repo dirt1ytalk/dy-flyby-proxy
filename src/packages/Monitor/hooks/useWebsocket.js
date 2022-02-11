@@ -35,46 +35,46 @@ export function useWebsocket(options, allGiftData) {
       return;
     }
     //debug
-    // let excludes = [
-    //     "anbc",
-    //     "rnewbc",
-    //     "uenter",
-    //     "chatmsg",
-    //     "dgb",
-    //     "odfbc",
-    //     "rndfbc",
-    //     "spbc",
-    //     "synexp",
-    //     "dfrank",
-    //     "noble_num_info",
-    //     "qausrespond",
-    //     "ranklist",
-    //     "fswrank",
-    //     "srres",
-    //     "rtss_update",
-    //     "framl",
-    //     "rri",
-    //     "tsboxb",
-    //     "rankup",
-    //     "upgrade",
-    //     "frank",
-    //     "blab",
-    //     "tsgs",
-    //     "wiru",
-    //     "lucky_wheel_star_pool",
-    //     "cthn",
-    //     "wirt",
-    //     "defAltLogin",
-    //     "dealtarlock",
-    //     "yinpinshejiao"
-    // ]
+    let excludes = [
+        "anbc",
+        "rnewbc",
+        "uenter",
+        "chatmsg",
+        //"dgb",
+        "odfbc",
+        "rndfbc",
+        "spbc",
+        "synexp",
+        "dfrank",
+        "noble_num_info",
+        "qausrespond",
+        "ranklist",
+        "fswrank",
+        "srres",
+        "rtss_update",
+        "framl",
+        "rri",
+        "tsboxb",
+        "rankup",
+        "upgrade",
+        "frank",
+        "blab",
+        "tsgs",
+        "wiru",
+        "lucky_wheel_star_pool",
+        "cthn",
+        "wirt",
+        "defAltLogin",
+        "dealtarlock",
+        "yinpinshejiao"
+    ]
 
-    // if (!excludes.includes(msgType)) {
-    //     console.log(msgType)
-    //     console.log(msg)
-    //     let dataObj = stt.deserialize(msg);
-    //     console.log(dataObj)
-    // }
+    if (!excludes.includes(msgType)) {
+        console.log(msgType)
+        console.log(msg)
+        let dataObj = stt.deserialize(msg);
+        console.log(dataObj)
+    }
 
 
     if (msgType === "chatmsg") {
@@ -96,7 +96,7 @@ export function useWebsocket(options, allGiftData) {
         //nobleC: data.nc, // 贵族弹幕是否开启，1开
         roomAdmin: data.rg, // 房管，data.rg为4则是房管
         //super: data.pg, // 超管，data.pg为5则为超管
-        //vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
+        vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
         key: data.cid, // 时间戳
         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
       };
@@ -124,7 +124,7 @@ export function useWebsocket(options, allGiftData) {
         //nobleC: data.nc, // 贵族弹幕是否开启，1开
         roomAdmin: data.rg, // 房管，data.rg为4则是房管
         //super: data.pg, // 超管，data.pg为5则为超管
-        //vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
+        vip: data.ail == "453/" || data.ail == "454/", // vip，如果是 453/则为vip  454/则为超级vip
         key: data.cid, // 时间戳
         dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
       };
@@ -553,6 +553,7 @@ export function useWebsocket(options, allGiftData) {
       diamond: data.diaf, // 是否是钻粉
       noble: data.nl, // 贵族等级
       roomAdmin: data.rg, // 房管，data.rg为4则是房管
+      vip: data.ail == "453/" || data.ail == "454/",
       key: new Date().getTime() + Math.random(),
       dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
     }

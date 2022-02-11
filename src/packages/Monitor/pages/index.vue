@@ -86,7 +86,7 @@
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.2.0 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.2.1 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -99,6 +99,7 @@
               <Checkbox name="avatar" shape="square">头像</Checkbox>
               <Checkbox name="roomAdmin" shape="square">房管</Checkbox>
               <Checkbox name="diamond" shape="square">钻粉</Checkbox>
+              <Checkbox name="vip" shape="square">房间VIP</Checkbox>
             </CheckboxGroup>
           </template>
         </Field>
@@ -123,6 +124,7 @@
               <Checkbox name="avatar" shape="square">头像</Checkbox>
               <Checkbox name="roomAdmin" shape="square">房管</Checkbox>
               <Checkbox name="diamond" shape="square">钻粉</Checkbox>
+              <Checkbox name="vip" shape="square">房间VIP</Checkbox>
             </CheckboxGroup>
           </template>
         </Field>
@@ -213,7 +215,7 @@ onMounted(async () => {
     await fs.promises.mkdir(dirLog, { recursive: true })
   } catch (err) {
     console.log(err.message)
-    if (isShowOption.value = true) isShowOption.value = false
+    if (isShowOption.value === true) isShowOption.value = false
     Notify({
       type: 'warning',
       message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'
@@ -261,7 +263,7 @@ async function logInit(dir, date, name) {
     await fs.promises.appendFile(fileDir, initLogMsg)
   } catch (err) {
     console.log(err.message)
-    if (isShowOption.value = true) isShowOption.value = false
+    if (isShowOption.value === true) isShowOption.value = false
     Notify({
       type: 'warning',
       message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'

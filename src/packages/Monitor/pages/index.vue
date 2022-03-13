@@ -86,7 +86,7 @@
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.2.3 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.2.5 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -205,23 +205,18 @@ onMounted(async () => {
     notifyFsError()
   })
 
-  //构建日志文件夹路径
-  let parentDir = await ipc.invoke('get-doc-path')
+  //创建日志文件夹
+  await resetLogPath()
+  let dirLog = options.value.log.dir
   let date = new Date()
   let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
-  let dirLog = parentDir + '\\520-Logs'
-
-  //存储路径
-  options.value.log.dir = dirLog
-
-  //创建日志文件夹
   dirLog = dirLog + '\\' + dateStr
   try {
     await fs.promises.mkdir(dirLog, { recursive: true })
   } catch (err) {
     console.log(err.message)
     notifyFsError()
- }
+  }
 
   await logInit(dirLog, dateStr, "弹幕")
   await logInit(dirLog, dateStr, "礼物")
@@ -244,6 +239,14 @@ onMounted(async () => {
   allGiftData.value = { ...roomGiftData, ...giftData }
   connectWs(rid)
 })
+
+async function resetLogPath() {
+  //构建日志文件夹路径
+  let parentDir = await ipc.invoke('get-doc-path')
+  let dirLog = parentDir + '\\520-Logs'
+  //存储路径
+  options.value.log.dir = dirLog
+}
 
 function notifyFsError() {
   if (isShowOption.value === true) isShowOption.value = false
@@ -307,6 +310,7 @@ async function readOptionsFromUpload(file) {
     resObj = formatObj(resObj, options.value)
     if (JSON.stringify(resObj) === JSON.stringify(options.value)) throw new Error('导入文件结构不正确或无设置项更改')
     options.value = resObj
+    await resetLogPath()
     isShowOption.value = false
     Notify({
       type: 'success',

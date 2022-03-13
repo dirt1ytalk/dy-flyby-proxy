@@ -37,7 +37,6 @@ export const defaultOptions = {
         }
     },
     log: {
-        dir: "",
-        date: ""
+        dir: ""
     }
 }

@@ -35,46 +35,46 @@ export function useWebsocket(options, allGiftData) {
       return;
     }
     //debug
-    let excludes = [
-        "anbc",
-        "rnewbc",
-        "uenter",
-        "chatmsg",
-        //"dgb",
-        "odfbc",
-        "rndfbc",
-        "spbc",
-        "synexp",
-        "dfrank",
-        "noble_num_info",
-        "qausrespond",
-        "ranklist",
-        "fswrank",
-        "srres",
-        "rtss_update",
-        "framl",
-        "rri",
-        "tsboxb",
-        "rankup",
-        "upgrade",
-        "frank",
-        "blab",
-        "tsgs",
-        "wiru",
-        "lucky_wheel_star_pool",
-        "cthn",
-        "wirt",
-        "defAltLogin",
-        "dealtarlock",
-        "yinpinshejiao"
-    ]
+    // let excludes = [
+    //     "anbc",
+    //     "rnewbc",
+    //     "uenter",
+    //     "chatmsg",
+    //     "dgb",
+    //     "odfbc",
+    //     "rndfbc",
+    //     "spbc",
+    //     "synexp",
+    //     "dfrank",
+    //     "noble_num_info",
+    //     "qausrespond",
+    //     "ranklist",
+    //     "fswrank",
+    //     "srres",
+    //     "rtss_update",
+    //     "framl",
+    //     "rri",
+    //     "tsboxb",
+    //     "rankup",
+    //     "upgrade",
+    //     "frank",
+    //     "blab",
+    //     "tsgs",
+    //     "wiru",
+    //     "lucky_wheel_star_pool",
+    //     "cthn",
+    //     "wirt",
+    //     "defAltLogin",
+    //     "dealtarlock",
+    //     "yinpinshejiao"
+    // ]
 
-    if (!excludes.includes(msgType)) {
-        console.log(msgType)
-        console.log(msg)
-        let dataObj = stt.deserialize(msg);
-        console.log(dataObj)
-    }
+    // if (!excludes.includes(msgType)) {
+    //     console.log(msgType)
+    //     console.log(msg)
+    //     let dataObj = stt.deserialize(msg);
+    //     console.log(dataObj)
+    // }
 
 
     if (msgType === "chatmsg") {
@@ -311,16 +311,35 @@ export function useWebsocket(options, allGiftData) {
 
   //记录弹幕信息到本地文件
   const logToLocalFile = async (data, index) => {
-    let fileDir = getFileDir(index)
+    let fileDir = getFileDir(index, true)
     let strToWrite = getMsgStruc(data, index)
-    await fs.promises.appendFile(fileDir, strToWrite + '\n')
+    await fs.promises.appendFile(fileDir, strToWrite + '\n').catch(async err => {
+      if (err.message.includes("ENOENT")) {
+        await createFileDir(getFileDir())
+        logToLocalFile(data, index)
+      } else {
+        console.log(err)
+        window.dispatchEvent(new Event('fserror'))
+      }
+    })
   }
 
   //根据日期以及父目录生成路径与文件名
-  const getFileDir = (index) => {
+  const getFileDir = (index = undefined, isFullPath = false) => {
     let dir = options.value.log.dir
-    let dateStr = options.value.log.date
-    return dir + "\\" + dateStr + '_' + index + '.txt'
+    let date = new Date()
+    let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
+    dir = dir + '\\' + dateStr
+    if (isFullPath === true && !!index) return dir + "\\" + dateStr + '_' + index + '.txt'
+    else return dir
+  }
+
+  //创建文件夹(如不存在)
+  const createFileDir = async (fileDir) => {
+    await fs.promises.mkdir(fileDir, { recursive: true }).catch(err => {
+      console.log(err)
+      window.dispatchEvent(new Event('fserror'))
+    })
   }
 
   //生成日志消息本体

@@ -86,7 +86,7 @@
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.2.1 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.2.3 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -200,27 +200,28 @@ onMounted(async () => {
   heightLower.value = options.value.moduleSize.lower
   window.addEventListener('resize', setNewHeight)
 
+  //监听fs错误
+  window.addEventListener('fserror', () => {
+    notifyFsError()
+  })
+
   //构建日志文件夹路径
   let parentDir = await ipc.invoke('get-doc-path')
   let date = new Date()
   let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
-  let dirLog = parentDir + '\\520-Logs\\' + dateStr
+  let dirLog = parentDir + '\\520-Logs'
 
-  //存储路径以及启动时日期
+  //存储路径
   options.value.log.dir = dirLog
-  options.value.log.date = dateStr
 
   //创建日志文件夹
+  dirLog = dirLog + '\\' + dateStr
   try {
     await fs.promises.mkdir(dirLog, { recursive: true })
   } catch (err) {
     console.log(err.message)
-    if (isShowOption.value === true) isShowOption.value = false
-    Notify({
-      type: 'warning',
-      message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'
-    })
-  }
+    notifyFsError()
+ }
 
   await logInit(dirLog, dateStr, "弹幕")
   await logInit(dirLog, dateStr, "礼物")
@@ -244,6 +245,14 @@ onMounted(async () => {
   connectWs(rid)
 })
 
+function notifyFsError() {
+  if (isShowOption.value === true) isShowOption.value = false
+  Notify({
+    type: 'warning',
+    message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'
+  })
+}
+
 function setNewHeight() {
   heightDiff.value = document.documentElement.clientHeight - 590
   heightUpper.value = 260 + heightDiff.value / 2
@@ -263,11 +272,7 @@ async function logInit(dir, date, name) {
     await fs.promises.appendFile(fileDir, initLogMsg)
   } catch (err) {
     console.log(err.message)
-    if (isShowOption.value === true) isShowOption.value = false
-    Notify({
-      type: 'warning',
-      message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'
-    })
+    notifyFsError()
   }
 }
 

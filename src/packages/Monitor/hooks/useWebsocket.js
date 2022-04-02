@@ -79,6 +79,20 @@ export function useWebsocket(options, allGiftData) {
 
     if (msgType === "chatmsg") {
       let data = stt.deserialize(msg);
+      if (data.pg == '5') {
+        window.dispatchEvent(new CustomEvent('pg-message', {
+          detail: {
+            nn: data.nn,
+            txt: data.txt
+          }
+        }))
+        logToLocalFile({
+          nn: data.nn,
+          msg: '超管信息: ' + data.txt,
+          dt: new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+        }, '特殊事件')
+        return
+      }
       logToLocalFile(data, "弹幕")
       if (!checkDanmakuValid(data)) {
         return;
@@ -452,23 +466,22 @@ export function useWebsocket(options, allGiftData) {
   const handleMissingGift = async (data) => {
     //避免重复处理
     if (lastHandledGfId === data.gfid) {
-      console.log('exp. feature - gift id', data.gfid, 'already handled, exiting...')
       return
     }
-    console.log('exp. feature - unknown gift id', data.gfid, 'detected, starting handler...')
     lastHandledGfId = data.gfid
     //获取数据以及处理
-    console.log('exp. feature - fetching data from douyu.com public api...')
     let supData = await getSingleSupplementGiftData(data.gfid)
     if (supData !== "404" && supData !== "500") {
-      console.log('exp. feature - fetched gift data:', supData)
       allGiftData.value[data.gfid] = supData
-      console.log('exp. feature - fetched data injected to allGiftData, proceed to reinitiate normal handling...')
       handleNormalGifts(data)
     } else {
-      console.log('exp. feature - err status code:', supData)
-      console.log('exp. feature - cannot handle unknown gift, logging to file...')
+      data.dt = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       logToLocalFile(data, "礼物")
+      window.dispatchEvent(new CustomEvent('unknown-gift', {
+        detail: {
+          id: data.gfid
+        }
+      }))
     }
   }
 

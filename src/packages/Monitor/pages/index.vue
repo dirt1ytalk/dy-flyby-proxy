@@ -86,7 +86,7 @@
         <div>
           <span
             class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.2.5 | Based on github: qianjiachun/douyu-monitor</span>
+          >Recomposed by: 星落 | V2.2.7 | Based on github: qianjiachun/douyu-monitor</span>
         </div>
       </Tab>
       <Tab title="弹幕">
@@ -205,6 +205,16 @@ onMounted(async () => {
     notifyFsError()
   })
 
+  //监听超管信息
+  window.addEventListener('pg-message', (e) => {
+    notifyPgMessage(e.detail.nn, e.detail.txt)
+  })
+
+  //监听处理失败未知礼物信息
+  window.addEventListener('unknown-gift', (e) => {
+    notifyUnknownGift(e.detail.id)
+  })
+
   //创建日志文件夹
   await resetLogPath()
   let dirLog = options.value.log.dir
@@ -252,7 +262,24 @@ function notifyFsError() {
   if (isShowOption.value === true) isShowOption.value = false
   Notify({
     type: 'warning',
-    message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看'
+    message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看',
+  })
+}
+
+function notifyPgMessage(uname, txt) {
+  if (isShowOption.value === true) isShowOption.value = false
+  Notify({
+    type: 'danger',
+    message: '超管信息 - ' + uname + ': ' + txt,
+    duration: 10000
+  })
+}
+
+function notifyUnknownGift(giftId) {
+  if (isShowOption.value === true) isShowOption.value = false
+  Notify({
+    type: 'warning',
+    message: '未知礼物 - ' + giftId + ' 获取数据失败, 已记录至日志文件',
   })
 }
 

@@ -360,6 +360,7 @@ export function useWebsocket(options, allGiftData) {
   const getMsgStruc = (data, index) => {
     let timeStr = null
     let userNameStr = null
+    let fansDisplayStr = null
     let msgContentStr = null
     let giftIdStr = null
     let giftNameStr = null
@@ -373,8 +374,10 @@ export function useWebsocket(options, allGiftData) {
         timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         userNameStr = data.nn;
         msgContentStr = data.txt;
+        fansDisplayStr = data.bnn ? '['+ data.bnn + '/' + data.bl + ']' : '';
         arrConcat = [
           timeStr, ' - ',
+          fansDisplayStr,
           userNameStr, ': ',
           msgContentStr
         ]
@@ -383,10 +386,8 @@ export function useWebsocket(options, allGiftData) {
       //break not required
       case "礼物":
         let giftData = allGiftData.value[data.gfid]
-        if (data.dt) timeStr = data.dt
-        else timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        if (giftData) giftNameStr = giftData.n
-        else giftNameStr = '未知礼物'
+        timeStr = data.dt
+        giftNameStr = giftData ? giftData.n : '未知礼物'
         userNameStr = data.nn;
         giftIdStr = data.gfid;
         giftCountStr = data.gfcnt

@@ -202,22 +202,23 @@ onMounted(async () => {
 
   //监听fs错误
   window.addEventListener('fserror', () => {
-    notifyFsError()
+    displayNotifyMessage('日志文件写入失败, 请反馈开发者, 具体错误可至控制台查看')
   })
 
   //监听超管信息
   window.addEventListener('pg-message', (e) => {
-    notifyPgMessage(e.detail.nn, e.detail.txt)
+    displayNotifyMessage('超管信息 - ' + e.detail.nn + ': ' + e.detail.txt, 'danger', 10000)
   })
 
   //监听处理失败未知礼物信息
   window.addEventListener('unknown-gift', (e) => {
-    notifyUnknownGift(e.detail.id)
+    displayNotifyMessage('未知礼物 - ' + e.detail.id + ' 获取数据失败, 已记录至日志文件')
+
   })
 
   //Global unhandled error listener
   window.addEventListener('error', () => {
-    notifyGlobalUnhandledError()
+    displayNotifyMessage('程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看')
   })
 
   //创建日志文件夹
@@ -230,7 +231,7 @@ onMounted(async () => {
     await fs.promises.mkdir(dirLog, { recursive: true })
   } catch (err) {
     console.log(err.message)
-    notifyFsError()
+    displayNotifyMessage('无法创建日志文件夹, 请反馈开发者, 具体错误可至控制台查看')
   }
 
   await logInit(dirLog, dateStr, "弹幕")
@@ -263,36 +264,12 @@ async function resetLogPath() {
   options.value.log.dir = dirLog
 }
 
-function notifyFsError() {
+function displayNotifyMessage(message, type = 'warning', duration = 5000) {
   if (isShowOption.value === true) isShowOption.value = false
   Notify({
-    type: 'warning',
-    message: '文件系统操作出现错误, 请反馈开发者, 具体错误可至控制台查看',
-  })
-}
-
-function notifyPgMessage(uname, txt) {
-  if (isShowOption.value === true) isShowOption.value = false
-  Notify({
-    type: 'danger',
-    message: '超管信息 - ' + uname + ': ' + txt,
-    duration: 10000
-  })
-}
-
-function notifyUnknownGift(giftId) {
-  if (isShowOption.value === true) isShowOption.value = false
-  Notify({
-    type: 'warning',
-    message: '未知礼物 - ' + giftId + ' 获取数据失败, 已记录至日志文件',
-  })
-}
-
-function notifyGlobalUnhandledError() {
-  if (isShowOption.value === true) isShowOption.value = false
-  Notify({
-    type: 'warning',
-    message: '程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看',
+    type: type,
+    message: message,
+    duration: duration
   })
 }
 
@@ -315,7 +292,7 @@ async function logInit(dir, date, name) {
     await fs.promises.appendFile(fileDir, initLogMsg)
   } catch (err) {
     console.log(err.message)
-    notifyFsError()
+    displayNotifyMessage('日志文件初始化失败, 请反馈开发者, 具体错误可至控制台查看')
   }
 }
 
@@ -329,17 +306,9 @@ async function saveOptionsWithDialog() {
       else throw err
     })
     await fs.promises.appendFile(winPath.filePath, optionsStr)
-    isShowOption.value = false
-    Notify({
-      type: 'success',
-      message: '导出设置成功! 存储路径: ' + winPath.filePath
-    })
+    displayNotifyMessage('导出设置成功! 存储路径: ' + winPath.filePath, 'success')
   } catch (err) {
-    isShowOption.value = false
-    Notify({
-      type: 'warning',
-      message: '导出设置失败! 错误信息: ' + err.message
-    })
+    displayNotifyMessage('导出设置失败! 错误信息: ' + err.message)
   }
 }
 
@@ -351,17 +320,9 @@ async function readOptionsFromUpload(file) {
     if (JSON.stringify(resObj) === JSON.stringify(options.value)) throw new Error('导入文件结构不正确或无设置项更改')
     options.value = resObj
     await resetLogPath()
-    isShowOption.value = false
-    Notify({
-      type: 'success',
-      message: '从本地文件导入设置成功!'
-    })
+    displayNotifyMessage('从本地文件导入设置成功!', 'success')
   } catch (err) {
-    isShowOption.value = false
-    Notify({
-      type: 'warning',
-      message: '导入设置失败! 错误信息: ' + err.message
-    })
+    displayNotifyMessage('导入设置失败! 错误信息: ' + err.message)
   }
 }
 
@@ -369,7 +330,7 @@ function addToVIP(nn) {
   let bef = options.value.danmaku.vip
   if (!bef) {
     Dialog.confirm({
-      title: '提示',
+      title: '确认操作',
       message: '确认添加 ' + nn + ' 到特别关注？',
       overlayStyle: {
         '-webkit-app-region': 'no-drag',
@@ -390,7 +351,7 @@ function addToVIP(nn) {
       }).then(() => { })
     } else
       Dialog.confirm({
-        title: '提示',
+        title: '确认操作',
         message: '确认添加 ' + nn + ' 到特别关注？',
         overlayStyle: {
           '-webkit-app-region': 'no-drag',
@@ -406,9 +367,10 @@ function addToVIP(nn) {
 
 function addToBan(nn) {
   let bef = options.value.danmaku.ban.nicknames
-  if (!bef) {
+  let vip = options.value.danmaku.vip
+  if (!bef && !vip.includes(nn)) {
     Dialog.confirm({
-      title: '提示',
+      title: '确认操作',
       message: '确认添加 ' + nn + ' 到屏蔽名单？',
       overlayStyle: {
         '-webkit-app-region': 'no-drag',
@@ -427,9 +389,17 @@ function addToBan(nn) {
           '-webkit-app-region': 'no-drag',
         },
       }).then(() => { })
+    } else if (vip.includes(nn)) {
+      Dialog.alert({
+        title: '用户已存在',
+        message: nn + ' 已存在于特别关注中, 请将其先从特别关注中移除',
+        overlayStyle: {
+          '-webkit-app-region': 'no-drag',
+        },
+      }).then(() => { })
     } else
       Dialog.confirm({
-        title: '提示',
+        title: '确认操作',
         message: '确认添加 ' + nn + ' 到屏蔽名单？',
         overlayStyle: {
           '-webkit-app-region': 'no-drag',

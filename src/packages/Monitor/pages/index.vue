@@ -215,6 +215,11 @@ onMounted(async () => {
     notifyUnknownGift(e.detail.id)
   })
 
+  //Global unhandled error listener
+  window.addEventListener('error', () => {
+    notifyGlobalUnhandledError()
+  })
+
   //创建日志文件夹
   await resetLogPath()
   let dirLog = options.value.log.dir
@@ -280,6 +285,14 @@ function notifyUnknownGift(giftId) {
   Notify({
     type: 'warning',
     message: '未知礼物 - ' + giftId + ' 获取数据失败, 已记录至日志文件',
+  })
+}
+
+function notifyGlobalUnhandledError() {
+  if (isShowOption.value === true) isShowOption.value = false
+  Notify({
+    type: 'warning',
+    message: '程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看',
   })
 }
 

@@ -2,11 +2,21 @@
   <div class="item">
     <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
-    <span v-if="showLevel" :class="`item__level UserLevel UserLevel--${data.lv}`"></span>
+    <span
+      v-if="showLevel"
+      :class="`item__level UserLevel UserLevel--${data.lv}`"
+    ></span>
     <!-- 贵族 -->
-    <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
+    <span
+      v-if="!!data.noble && showNoble"
+      class="item__noble Barrage-icon Barrage-noble"
+    >
       <img
-        :src="`${data.noble in nobleData ? nobleData.prefix + nobleData[data.noble].pic : ''}`"
+        :src="`${
+          data.noble in nobleData
+            ? nobleData.prefix + nobleData[data.noble].pic
+            : ''
+        }`"
         loading="lazy"
       />
     </span>
@@ -17,7 +27,10 @@
     >
       <span class="FansMedal-name">{{ data.fansName }}</span>
     </div>
-    <span v-if="data.roomAdmin == '4' && showRoomAdmin" class="item__roomAdmin">
+    <span
+      v-if="data.roomAdmin == '4' && showRoomAdmin"
+      class="item__roomAdmin"
+    >
       <span class="Barrage-icon Barrage-icon--roomAdmin"></span>
     </span>
     <span v-if="!!data.diamond && showDiamond">
@@ -28,8 +41,14 @@
         loading="lazy"
       />
     </span>
-    <span v-if="data.vip && showVip" class="Barrage-roomVipIcon"></span>
-    <span v-if="showAvatar" class="item__avatar">
+    <span
+      v-if="data.vip && showVip"
+      class="Barrage-roomVipIcon"
+    ></span>
+    <span
+      v-if="showAvatar"
+      class="item__avatar"
+    >
       <img
         class="avatar"
         :src="`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`"
@@ -40,32 +59,44 @@
       class="item__name"
       @click.left.prevent="addToVIPHandler(data.nn)"
       @click.right.prevent="addToBanListHandler(data.nn)"
-    >{{ data.nn }}：</span>
+      >{{ data.nn }}：</span
+    >
     <span class="item__txt">{{ data.txt }}</span>
   </div>
 </template>
 
 <script setup>
-import { nobleData } from '@/global/utils/dydata/nobleData.js'
+import { nobleData } from '@/global/utils/dydata/nobleData.js';
 //import { toRefs } from 'vue'
-let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar', 'showVip'])
+let props = defineProps([
+  'data',
+  'showLevel',
+  'showNoble',
+  'showFans',
+  'showDiamond',
+  'showRoomAdmin',
+  'showAvatar',
+  'showVip',
+]);
 
-const emit = defineEmits(['passToIndexForVIP', 'passToIndexForBan'])
+const emit = defineEmits(['passToIndexForVIP', 'passToIndexForBan']);
 
 //左键点击添加至特别关注
 function addToVIPHandler(nn) {
-  emit('passToIndexForVIP', nn)
+  emit('passToIndexForVIP', nn);
 }
 
 //右键点击添加至屏蔽
 function addToBanListHandler(nn) {
-  emit('passToIndexForBan', nn)
+  emit('passToIndexForBan', nn);
 }
-
 </script>
 
-<style lang="scss" scoped>
-@import "@/global/styles/themes/index.scss";
+<style
+  lang="scss"
+  scoped
+>
+@import '@/global/styles/themes/index.scss';
 
 .time_stamp {
   color: black;
@@ -100,11 +131,11 @@ function addToBanListHandler(nn) {
   }
   .item__name {
     vertical-align: middle;
-    @include fontColor("nicknameColor");
+    @include fontColor('nicknameColor');
   }
   .item__txt {
     vertical-align: middle;
-    @include fontColor("txtColor");
+    @include fontColor('txtColor');
   }
 }
 </style>

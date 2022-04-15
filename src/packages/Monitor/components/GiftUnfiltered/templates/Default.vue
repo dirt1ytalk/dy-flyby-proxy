@@ -1,37 +1,52 @@
 <template>
   <div class="item">
     <span class="time_stamp">{{ data.dt }}</span>
-    <div v-if="showImg" class="item__gift">
-      <img class="avatar" :src="avatarSrc" loading="lazy" />
+    <div
+      v-if="showImg"
+      class="item__gift"
+    >
+      <img
+        class="avatar"
+        :src="avatarSrc"
+        loading="lazy"
+      />
     </div>
     <div class="item__name">{{ data.nn }}</div>
     <div class="item__cnt">{{ giftMsg }}</div>
-    <div v-if="Number(data.hits) > 1" class="item__hits">累计x{{ data.hits }}</div>
+    <div
+      v-if="Number(data.hits) > 1"
+      class="item__hits"
+    >
+      累计x{{ data.hits }}
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
-const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
+const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift';
 
-let props = defineProps(['data', 'giftData', 'totalPrice', 'showImg'])
+let props = defineProps(['data', 'giftData', 'totalPrice', 'showImg']);
 
 let avatarSrc = computed(() => {
-  let ret = "";
+  let ret = '';
   ret += GIFT_IMG_PREFIX + props.giftData.pic;
   return ret;
 });
 
 let giftMsg = computed(() => {
-  let ret = "";
+  let ret = '';
   ret = `${props.giftData.n}*${props.data.gfcnt}`;
   return ret;
 });
 </script>
 
-<style lang="scss" scoped>
-@import "@/global/styles/themes/index.scss";
+<style
+  lang="scss"
+  scoped
+>
+@import '@/global/styles/themes/index.scss';
 
 .time_stamp {
   color: black;
@@ -65,13 +80,13 @@ let giftMsg = computed(() => {
     height: 16px;
   }
   .item__name {
-    @include fontColor("nicknameColor");
+    @include fontColor('nicknameColor');
   }
   .item__cnt {
-    @include fontColor("contentColor");
+    @include fontColor('contentColor');
   }
   .item__hits {
-    @include fontColor("contentColor");
+    @include fontColor('contentColor');
   }
 }
 </style>

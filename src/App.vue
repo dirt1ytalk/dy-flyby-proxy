@@ -1,10 +1,9 @@
 <template>
-    <Monitor></Monitor>
+  <Monitor></Monitor>
 </template>
 
 <script setup>
-import Monitor from "./packages/Monitor/pages/index.vue"
+import Monitor from './packages/Monitor/pages/index.vue';
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

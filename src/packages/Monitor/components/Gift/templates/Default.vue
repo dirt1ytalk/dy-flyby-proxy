@@ -2,11 +2,21 @@
   <div :class="`item ${getItemClass(data)}`">
     <span class="time_stamp">{{ data.dt }}</span>
     <!-- 等级 -->
-    <span v-if="!!data.lv && showLevel" :class="`item__level UserLevel UserLevel--${data.lv}`"></span>
+    <span
+      v-if="!!data.lv && showLevel"
+      :class="`item__level UserLevel UserLevel--${data.lv}`"
+    ></span>
     <!-- 贵族 -->
-    <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
+    <span
+      v-if="!!data.noble && showNoble"
+      class="item__noble Barrage-icon Barrage-noble"
+    >
       <img
-        :src="`${data.noble in nobleData ? nobleData.prefix + nobleData[data.noble].pic : ''}`"
+        :src="`${
+          data.noble in nobleData
+            ? nobleData.prefix + nobleData[data.noble].pic
+            : ''
+        }`"
         loading="lazy"
       />
     </span>
@@ -17,7 +27,10 @@
     >
       <span class="FansMedal-name">{{ data.fansName }}</span>
     </div>
-    <span v-if="data.roomAdmin === '4' && showRoomAdmin" class="item__roomAdmin">
+    <span
+      v-if="data.roomAdmin === '4' && showRoomAdmin"
+      class="item__roomAdmin"
+    >
       <span class="Barrage-icon Barrage-icon--roomAdmin"></span>
     </span>
     <span v-if="!!data.diamond && showDiamond">
@@ -28,8 +41,14 @@
         loading="lazy"
       />
     </span>
-    <span v-if="data.vip && showVip" class="Barrage-roomVipIcon"></span>
-    <span v-if="!!data.avatar && showAvatar" class="item__avatar">
+    <span
+      v-if="data.vip && showVip"
+      class="Barrage-roomVipIcon"
+    ></span>
+    <span
+      v-if="!!data.avatar && showAvatar"
+      class="item__avatar"
+    >
       <img
         class="avatar"
         :src="`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`"
@@ -38,37 +57,63 @@
     </span>
     <div class="item__name">{{ data.nn }}</div>
     <div class="item__cnt">{{ giftMsg }}</div>
-    <div v-if="Number(data.hits) > 1" class="item__hits">累计x{{ data.hits }}</div>
-    <div v-if="showImg" class="item__gift">
-      <img class="avatar" :src="avatarSrc" loading="lazy" />
+    <div
+      v-if="Number(data.hits) > 1"
+      class="item__hits"
+    >
+      累计x{{ data.hits }}
+    </div>
+    <div
+      v-if="showImg"
+      class="item__gift"
+    >
+      <img
+        class="avatar"
+        :src="avatarSrc"
+        loading="lazy"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { nobleData } from '@/global/utils/dydata/nobleData.js'
+import { computed } from 'vue';
+import { nobleData } from '@/global/utils/dydata/nobleData.js';
 
 // 钻粉图片
-const DIAMOND_URL = 'https://shark2.douyucdn.cn/front-publish/live-player-aside-master/assets/images/diamonds_banner_logo_c077d7b.gif'
-const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift'
-const FANS_LEVEL_UP = "https://shark2.douyucdn.cn/front-publish/live-anchor-title-master/assets/images/exp_ca09807.webp"
+const DIAMOND_URL =
+  'https://shark2.douyucdn.cn/front-publish/live-player-aside-master/assets/images/diamonds_banner_logo_c077d7b.gif';
+const GIFT_IMG_PREFIX = 'https://gfs-op.douyucdn.cn/dygift';
+const FANS_LEVEL_UP =
+  'https://shark2.douyucdn.cn/front-publish/live-anchor-title-master/assets/images/exp_ca09807.webp';
 
-let props = defineProps(['data', 'giftData', 'totalPrice', 'showImg', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar', 'showVip'])
+let props = defineProps([
+  'data',
+  'giftData',
+  'totalPrice',
+  'showImg',
+  'showLevel',
+  'showNoble',
+  'showFans',
+  'showDiamond',
+  'showRoomAdmin',
+  'showAvatar',
+  'showVip',
+]);
 
 let avatarSrc = computed(() => {
-  let ret = "";
+  let ret = '';
   switch (props.data.type) {
-    case "礼物":
+    case '礼物':
       ret += GIFT_IMG_PREFIX + props.giftData.pic;
       break;
-    case "钻粉":
+    case '钻粉':
       ret += DIAMOND_URL;
       break;
-    case "贵族":
+    case '贵族':
       ret += nobleData.prefix + nobleData[props.data.nlv].pic;
       break;
-    case "粉丝牌升级":
+    case '粉丝牌升级':
       ret += FANS_LEVEL_UP;
       break;
     default:
@@ -78,21 +123,21 @@ let avatarSrc = computed(() => {
 });
 
 let giftMsg = computed(() => {
-  let ret = "";
+  let ret = '';
   switch (props.data.type) {
-    case "礼物":
+    case '礼物':
       ret = `${props.giftData.n}*${props.data.gfcnt}`;
       break;
-    case "钻粉":
+    case '钻粉':
       ret = props.data.msg;
       break;
-    case "贵族":
+    case '贵族':
       ret = props.data.msg;
       break;
-    case "粉丝牌升级":
+    case '粉丝牌升级':
       ret = props.data.msg;
       break;
-    case "特殊礼物消息":
+    case '特殊礼物消息':
       ret = props.data.msg;
       break;
     default:
@@ -102,24 +147,28 @@ let giftMsg = computed(() => {
 });
 
 function getItemClass(item) {
-  let ret = "";
+  let ret = '';
   switch (props.data.type) {
-    case "礼物":
-      if (Number(props.giftData.pc) * Number(item.gfcnt) >= Number(props.totalPrice) * 100 ||
-        Number(props.giftData.pc) * Number(item.hits) >= Number(props.totalPrice) * 100) {
-        ret = "highlight";
+    case '礼物':
+      if (
+        Number(props.giftData.pc) * Number(item.gfcnt) >=
+          Number(props.totalPrice) * 100 ||
+        Number(props.giftData.pc) * Number(item.hits) >=
+          Number(props.totalPrice) * 100
+      ) {
+        ret = 'highlight';
       }
       break;
-    case "钻粉":
-      ret = "highlight";
+    case '钻粉':
+      ret = 'highlight';
       break;
-    case "贵族":
-      ret = "highlight";
+    case '贵族':
+      ret = 'highlight';
       break;
-    case "粉丝牌升级":
+    case '粉丝牌升级':
       // 当粉丝牌升级大于25级则高亮
       if (item.blv >= 26) {
-        ret = "highlight";
+        ret = 'highlight';
       }
       break;
     default:
@@ -129,8 +178,11 @@ function getItemClass(item) {
 }
 </script>
 
-<style lang="scss" scoped>
-@import "@/global/styles/themes/index.scss";
+<style
+  lang="scss"
+  scoped
+>
+@import '@/global/styles/themes/index.scss';
 
 .time_stamp {
   color: black;
@@ -170,13 +222,13 @@ function getItemClass(item) {
     display: inline-block;
   }
   .item__name {
-    @include fontColor("nicknameColor");
+    @include fontColor('nicknameColor');
   }
   .item__cnt {
-    @include fontColor("contentColor");
+    @include fontColor('contentColor');
   }
   .item__hits {
-    @include fontColor("contentColor");
+    @include fontColor('contentColor');
   }
 }
 

@@ -7,9 +7,16 @@
       :class="`item__level UserLevel UserLevel--${data.lv}`"
     ></span>
     <!-- 贵族 -->
-    <span v-if="!!data.noble && showNoble" class="item__noble Barrage-icon Barrage-noble">
+    <span
+      v-if="!!data.noble && showNoble"
+      class="item__noble Barrage-icon Barrage-noble"
+    >
       <img
-        :src="`${data.noble in nobleData ? nobleData.prefix + nobleData[data.noble].pic : ''}`"
+        :src="`${
+          data.noble in nobleData
+            ? nobleData.prefix + nobleData[data.noble].pic
+            : ''
+        }`"
         loading="lazy"
       />
     </span>
@@ -20,7 +27,10 @@
     >
       <span class="FansMedal-name">{{ data.fansName }}</span>
     </div>
-    <span v-if="data.roomAdmin == '4' && showRoomAdmin" class="item__roomAdmin">
+    <span
+      v-if="data.roomAdmin == '4' && showRoomAdmin"
+      class="item__roomAdmin"
+    >
       <span class="Barrage-icon Barrage-icon--roomAdmin"></span>
     </span>
     <span v-if="!!data.diamond && showDiamond">
@@ -31,8 +41,14 @@
         loading="lazy"
       />
     </span>
-    <span v-if="data.vip && showVip" class="Barrage-roomVipIcon"></span>
-    <span v-if="showAvatar" class="item__avatar">
+    <span
+      v-if="data.vip && showVip"
+      class="Barrage-roomVipIcon"
+    ></span>
+    <span
+      v-if="showAvatar"
+      class="item__avatar"
+    >
       <img
         class="avatar"
         :src="`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`"
@@ -45,12 +61,24 @@
 </template>
 
 <script setup>
-import { nobleData } from '@/global/utils/dydata/nobleData.js'
-let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiamond', 'showRoomAdmin', 'showAvatar', 'showVip'])
+import { nobleData } from '@/global/utils/dydata/nobleData.js';
+let props = defineProps([
+  'data',
+  'showLevel',
+  'showNoble',
+  'showFans',
+  'showDiamond',
+  'showRoomAdmin',
+  'showAvatar',
+  'showVip',
+]);
 </script>
 
-<style lang="scss" scoped>
-@import "@/global/styles/themes/index.scss";
+<style
+  lang="scss"
+  scoped
+>
+@import '@/global/styles/themes/index.scss';
 .time_stamp {
   color: black;
   vertical-align: middle;
@@ -84,11 +112,11 @@ let props = defineProps(['data', 'showLevel', 'showNoble', 'showFans', 'showDiam
   }
   .item__name {
     vertical-align: middle;
-    @include fontColor("nicknameColor");
+    @include fontColor('nicknameColor');
   }
   .item__txt {
     vertical-align: middle;
-    @include fontColor("txtColor");
+    @include fontColor('txtColor');
   }
 }
 .noble-day {

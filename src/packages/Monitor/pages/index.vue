@@ -1,7 +1,10 @@
 <template>
   <el-container style="-webkit-app-region: drag">
     <el-main>
-      <el-row class="mb-1" :gutter="5">
+      <el-row
+        class="mb-1"
+        :gutter="5"
+      >
         <el-col :span="14">
           <el-card class="bg">
             <div class="monitor">
@@ -17,7 +20,10 @@
         </el-col>
         <el-col :span="10">
           <el-card class="bg">
-            <div class="monitor" @click.right.prevent="onClickMonitor">
+            <div
+              class="monitor"
+              @click.right.prevent="onClickMonitor"
+            >
               <Gift
                 :style="{ height: heightUpper + 'px' }"
                 :options="options"
@@ -30,8 +36,14 @@
       </el-row>
       <el-row :gutter="5">
         <el-col :span="14">
-          <el-card class="bg" style="-webkit-app-region: no-drag">
-            <div class="monitor" @click.right.prevent="onClickMonitor">
+          <el-card
+            class="bg"
+            style="-webkit-app-region: no-drag"
+          >
+            <div
+              class="monitor"
+              @click.right.prevent="onClickMonitor"
+            >
               <Danmakuvip
                 :style="{ height: heightLower + 'px' }"
                 :options="options"
@@ -41,8 +53,14 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card class="bg" style="-webkit-app-region: no-drag">
-            <div class="monitor" @click.right.prevent="onClickMonitor">
+          <el-card
+            class="bg"
+            style="-webkit-app-region: no-drag"
+          >
+            <div
+              class="monitor"
+              @click.right.prevent="onClickMonitor"
+            >
               <GiftUnfiltered
                 :style="{ height: heightLower + 'px' }"
                 :options="options"
@@ -64,42 +82,110 @@
   >
     <Tabs v-model:active="activeTab">
       <Tab title="通用">
-        <Field label="面板背景颜色 & 不透明度" center>
+        <Field
+          label="面板背景颜色 & 不透明度"
+          center
+        >
           <template #input>
-            <el-color-picker show-alpha v-model="options.bgcolora"></el-color-picker>
+            <el-color-picker
+              show-alpha
+              v-model="options.bgcolora"
+            ></el-color-picker>
           </template>
         </Field>
         <Field label="字号">
           <template #input>
-            <Slider v-model="options.fontSize" :min="12" :max="30" />
+            <Slider
+              v-model="options.fontSize"
+              :min="12"
+              :max="30"
+            />
           </template>
         </Field>
-        <Field v-model="options.threshold" label="数据上限" type="digit" placeholder="当超过上限 最早的旧数据会被抛弃"></Field>
-        <Field label="设置迁移" center>
+        <Field
+          v-model="options.threshold"
+          label="数据上限"
+          type="digit"
+          placeholder="当超过上限 最早的旧数据会被抛弃"
+        ></Field>
+        <Field
+          label="设置迁移"
+          center
+        >
           <template #input>
-            <Button plain round type="primary" size="small" @click="saveOptionsWithDialog">导出设置</Button>
-            <Uploader accept=".txt" :after-read="readOptionsFromUpload" result-type="text">
-              <Button plain round type="primary" size="small" class="ml-4">导入设置</Button>
+            <Button
+              plain
+              round
+              type="primary"
+              size="small"
+              @click="saveOptionsWithDialog"
+              >导出设置</Button
+            >
+            <Uploader
+              accept=".txt"
+              :after-read="readOptionsFromUpload"
+              result-type="text"
+            >
+              <Button
+                plain
+                round
+                type="primary"
+                size="small"
+                class="ml-4"
+                >导入设置</Button
+              >
             </Uploader>
           </template>
         </Field>
         <div>
-          <span
-            class="text-xs ml-4"
-          >Recomposed by: 星落 | V2.2.8 | Based on github: qianjiachun/douyu-monitor</span>
+          <span class="text-xs ml-4"
+            >Recomposed by: 星落 | V2.2.8 | Based on github:
+            qianjiachun/douyu-monitor</span
+          >
         </div>
       </Tab>
       <Tab title="弹幕">
         <Field label="显示">
           <template #input>
-            <CheckboxGroup v-model="options.danmaku.show" direction="horizontal">
-              <Checkbox name="level" shape="square">等级</Checkbox>
-              <Checkbox name="noble" shape="square">贵族</Checkbox>
-              <Checkbox name="fans" shape="square">粉丝牌</Checkbox>
-              <Checkbox name="avatar" shape="square">头像</Checkbox>
-              <Checkbox name="roomAdmin" shape="square">房管</Checkbox>
-              <Checkbox name="diamond" shape="square">钻粉</Checkbox>
-              <Checkbox name="vip" shape="square">房间VIP</Checkbox>
+            <CheckboxGroup
+              v-model="options.danmaku.show"
+              direction="horizontal"
+            >
+              <Checkbox
+                name="level"
+                shape="square"
+                >等级</Checkbox
+              >
+              <Checkbox
+                name="noble"
+                shape="square"
+                >贵族</Checkbox
+              >
+              <Checkbox
+                name="fans"
+                shape="square"
+                >粉丝牌</Checkbox
+              >
+              <Checkbox
+                name="avatar"
+                shape="square"
+                >头像</Checkbox
+              >
+              <Checkbox
+                name="roomAdmin"
+                shape="square"
+                >房管</Checkbox
+              >
+              <Checkbox
+                name="diamond"
+                shape="square"
+                >钻粉</Checkbox
+              >
+              <Checkbox
+                name="vip"
+                shape="square"
+                >房间VIP</Checkbox
+              >
             </CheckboxGroup>
           </template>
         </Field>
@@ -109,22 +195,69 @@
           type="digit"
           placeholder="请输入屏蔽的等级"
         ></Field>
-        <Field v-model="options.danmaku.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:关键词1 关键词2"></Field>
-        <Field v-model="options.danmaku.ban.nicknames" label="屏蔽列表" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
-        <Field v-model="options.danmaku.vip" label="特别关注" placeholder="空格隔开 例如:昵称1 昵称2"></Field>
+        <Field
+          v-model="options.danmaku.ban.keywords"
+          label="屏蔽关键词"
+          placeholder="空格隔开 例如:关键词1 关键词2"
+        ></Field>
+        <Field
+          v-model="options.danmaku.ban.nicknames"
+          label="屏蔽列表"
+          placeholder="空格隔开 例如:昵称1 昵称2"
+        ></Field>
+        <Field
+          v-model="options.danmaku.vip"
+          label="特别关注"
+          placeholder="空格隔开 例如:昵称1 昵称2"
+        ></Field>
       </Tab>
       <Tab title="礼物">
         <Field label="显示">
           <template #input>
-            <CheckboxGroup v-model="options.gift.show" direction="horizontal">
-              <Checkbox name="giftImg" shape="square">礼物图片</Checkbox>
-              <Checkbox name="level" shape="square">等级</Checkbox>
-              <Checkbox name="noble" shape="square">贵族</Checkbox>
-              <Checkbox name="fans" shape="square">粉丝牌</Checkbox>
-              <Checkbox name="avatar" shape="square">头像</Checkbox>
-              <Checkbox name="roomAdmin" shape="square">房管</Checkbox>
-              <Checkbox name="diamond" shape="square">钻粉</Checkbox>
-              <Checkbox name="vip" shape="square">房间VIP</Checkbox>
+            <CheckboxGroup
+              v-model="options.gift.show"
+              direction="horizontal"
+            >
+              <Checkbox
+                name="giftImg"
+                shape="square"
+                >礼物图片</Checkbox
+              >
+              <Checkbox
+                name="level"
+                shape="square"
+                >等级</Checkbox
+              >
+              <Checkbox
+                name="noble"
+                shape="square"
+                >贵族</Checkbox
+              >
+              <Checkbox
+                name="fans"
+                shape="square"
+                >粉丝牌</Checkbox
+              >
+              <Checkbox
+                name="avatar"
+                shape="square"
+                >头像</Checkbox
+              >
+              <Checkbox
+                name="roomAdmin"
+                shape="square"
+                >房管</Checkbox
+              >
+              <Checkbox
+                name="diamond"
+                shape="square"
+                >钻粉</Checkbox
+              >
+              <Checkbox
+                name="vip"
+                shape="square"
+                >房间VIP</Checkbox
+              >
             </CheckboxGroup>
           </template>
         </Field>
@@ -140,194 +273,239 @@
           type="number"
           placeholder="高于此阈值(鱼翅价值)的礼物会在上方面板高亮显示"
         ></Field>
-        <Field v-model="options.gift.ban.keywords" label="屏蔽关键词" placeholder="空格隔开 例如:荧光棒 鱼丸"></Field>
+        <Field
+          v-model="options.gift.ban.keywords"
+          label="屏蔽关键词"
+          placeholder="空格隔开 例如:荧光棒 鱼丸"
+        ></Field>
       </Tab>
     </Tabs>
   </Popup>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue';
 
-import Danmaku from '../components/Danmaku/Danmaku.vue'
-import Danmakuvip from '../components/DanmakuVIP/Danmaku.vue'
-import Gift from '../components/Gift/Gift.vue'
-import GiftUnfiltered from '../components/GiftUnfiltered/Gift.vue'
+import Danmaku from '../components/Danmaku/Danmaku.vue';
+import Danmakuvip from '../components/DanmakuVIP/Danmaku.vue';
+import Gift from '../components/Gift/Gift.vue';
+import GiftUnfiltered from '../components/GiftUnfiltered/Gift.vue';
 
-import { Popup, Tab, Tabs, Field, Slider, Checkbox, CheckboxGroup, Dialog, Button, Uploader, Notify } from 'vant'
+import {
+  Popup,
+  Tab,
+  Tabs,
+  Field,
+  Slider,
+  Checkbox,
+  CheckboxGroup,
+  Dialog,
+  Button,
+  Uploader,
+  Notify,
+} from 'vant';
 
-import { ElCard, ElRow, ElCol, ElContainer, ElMain, ElColorPicker } from 'element-plus'
-import 'element-plus/es/components/card/style/css'
-import 'element-plus/es/components/row/style/css'
-import 'element-plus/es/components/col/style/css'
-import 'element-plus/es/components/container/style/css'
-import 'element-plus/es/components/main/style/css'
-import 'element-plus/es/components/color-picker/style/css'
+import { useNormalStyle } from '../hooks/useNormalStyle.js';
+import { useWebsocket } from '../hooks/useWebsocket.js';
 
-import { useNormalStyle } from '../hooks/useNormalStyle.js'
-import { useWebsocket } from '../hooks/useWebsocket.js'
+import {
+  saveLocalData,
+  getLocalData,
+  deepCopy,
+  formatObj,
+} from '@/global/utils';
+import { defaultOptions } from '../options';
 
-import { saveLocalData, getLocalData, deepCopy, formatObj } from '@/global/utils'
-import { defaultOptions } from '../options'
+const LOCAL_NAME = 'monitor_options';
+const ipc = window.ipcRenderer;
+const fs = window.fs;
 
-const LOCAL_NAME = 'monitor_options'
-const ipc = window.ipcRenderer
-const fs = window.fs
+let options = ref(deepCopy(defaultOptions));
+let allGiftData = ref({});
+let isShowOption = ref(false);
+let activeTab = ref(0);
+let { fontSizeStyle, avatarImgSizeStyle, bgColorValue } =
+  useNormalStyle(options);
+let { connectWs, danmakuList, danmakuListVIP, giftList, giftListUnfiltered } =
+  useWebsocket(options, allGiftData);
 
-let options = ref(deepCopy(defaultOptions))
-let allGiftData = ref({})
-let isShowOption = ref(false)
-let activeTab = ref(0)
-let { fontSizeStyle, avatarImgSizeStyle, bgColorValue } = useNormalStyle(options)
-let { connectWs, danmakuList, danmakuListVIP, giftList, giftListUnfiltered } = useWebsocket(options, allGiftData)
-
-let heightDiff = ref(0)
-let heightUpper = ref(0)
-let heightLower = ref(0)
+let heightDiff = ref(0);
+let heightUpper = ref(0);
+let heightLower = ref(0);
 
 onMounted(async () => {
-  let rid = 520
-  let localData = JSON.parse(getLocalData(LOCAL_NAME))
+  let rid = 520;
+  let localData = JSON.parse(getLocalData(LOCAL_NAME));
   if (Object.prototype.toString.call(localData) !== '[object Object]') {
-    localData = deepCopy(defaultOptions)
+    localData = deepCopy(defaultOptions);
   }
-  options.value = localData
+  options.value = localData;
 
-  options.value = formatObj(options.value, defaultOptions)
+  options.value = formatObj(options.value, defaultOptions);
 
   //窗口大小重新定位
-  heightUpper.value = options.value.moduleSize.upper
-  heightLower.value = options.value.moduleSize.lower
-  window.addEventListener('resize', setNewHeight)
+  heightUpper.value = options.value.moduleSize.upper;
+  heightLower.value = options.value.moduleSize.lower;
+  window.addEventListener('resize', setNewHeight);
 
   //监听fs错误
   window.addEventListener('fserror', () => {
-    displayNotifyMessage('日志文件写入失败, 请反馈开发者, 具体错误可至控制台查看')
-  })
+    displayNotifyMessage(
+      '日志文件写入失败, 请反馈开发者, 具体错误可至控制台查看',
+    );
+  });
 
   //监听超管信息
   window.addEventListener('pg-message', (e) => {
-    displayNotifyMessage('超管信息 - ' + e.detail.nn + ': ' + e.detail.txt, 'danger', 10000)
-  })
+    displayNotifyMessage(
+      '超管信息 - ' + e.detail.nn + ': ' + e.detail.txt,
+      'danger',
+      10000,
+    );
+  });
 
   //监听处理失败未知礼物信息
   window.addEventListener('unknown-gift', (e) => {
-    displayNotifyMessage('未知礼物 - ' + e.detail.id + ' 获取数据失败, 已记录至日志文件')
-
-  })
+    displayNotifyMessage(
+      '未知礼物 - ' + e.detail.id + ' 获取数据失败, 已记录至日志文件',
+    );
+  });
 
   //Global unhandled error listener
   window.addEventListener('error', () => {
-    displayNotifyMessage('程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看')
-  })
+    displayNotifyMessage(
+      '程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看',
+    );
+  });
 
   //创建日志文件夹
-  await resetLogPath()
-  let dirLog = options.value.log.dir
-  let date = new Date()
-  let dateStr = String(date.getFullYear()) + '-' + String(date.getMonth() + 1) + '-' + String(date.getDate())
-  dirLog = dirLog + '\\' + dateStr
+  await resetLogPath();
+  let dirLog = options.value.log.dir;
+  let date = new Date();
+  let dateStr =
+    String(date.getFullYear()) +
+    '-' +
+    String(date.getMonth() + 1) +
+    '-' +
+    String(date.getDate());
+  dirLog = dirLog + '\\' + dateStr;
   try {
-    await fs.promises.mkdir(dirLog, { recursive: true })
+    await fs.promises.mkdir(dirLog, { recursive: true });
   } catch (err) {
-    console.log(err.message)
-    displayNotifyMessage('无法创建日志文件夹, 请反馈开发者, 具体错误可至控制台查看')
+    console.log(err.message);
+    displayNotifyMessage(
+      '无法创建日志文件夹, 请反馈开发者, 具体错误可至控制台查看',
+    );
   }
 
-  await logInit(dirLog, dateStr, "弹幕")
-  await logInit(dirLog, dateStr, "礼物")
-  await logInit(dirLog, dateStr, "特殊事件")
+  await logInit(dirLog, dateStr, '弹幕');
+  await logInit(dirLog, dateStr, '礼物');
+  await logInit(dirLog, dateStr, '特殊事件');
 
-
-  let data = await getRoomGiftData(rid)
-  let giftData = await getGiftData()
-  let roomGiftData = { prefix: 'https://gfs-op.douyucdn.cn/dygift' }
+  let data = await getRoomGiftData(rid);
+  let giftData = await getGiftData();
+  let roomGiftData = { prefix: 'https://gfs-op.douyucdn.cn/dygift' };
   if ('giftList' in data.data) {
     for (let i = 0; i < data.data.giftList.length; i++) {
-      let item = data.data.giftList[i]
+      let item = data.data.giftList[i];
       roomGiftData[item.id] = {
         n: item.name,
         pic: item.basicInfo.focusPic,
         pc: item.priceInfo.price,
-      }
+      };
     }
   }
-  allGiftData.value = { ...roomGiftData, ...giftData }
-  connectWs(rid)
-})
+  allGiftData.value = { ...roomGiftData, ...giftData };
+  connectWs(rid);
+});
 
 async function resetLogPath() {
   //构建日志文件夹路径
-  let parentDir = await ipc.invoke('get-doc-path')
-  let dirLog = parentDir + '\\520-Logs'
+  let parentDir = await ipc.invoke('get-doc-path');
+  let dirLog = parentDir + '\\520-Logs';
   //存储路径
-  options.value.log.dir = dirLog
+  options.value.log.dir = dirLog;
 }
 
 function displayNotifyMessage(message, type = 'warning', duration = 5000) {
-  if (isShowOption.value === true) isShowOption.value = false
+  if (isShowOption.value === true) isShowOption.value = false;
   Notify({
     type: type,
     message: message,
-    duration: duration
-  })
+    duration: duration,
+  });
 }
 
 function setNewHeight() {
-  heightDiff.value = document.documentElement.clientHeight - 590
-  heightUpper.value = 260 + heightDiff.value / 2
-  heightLower.value = 200 + heightDiff.value / 2
-  options.value.moduleSize.upper = heightUpper.value
-  options.value.moduleSize.lower = heightLower.value
+  heightDiff.value = document.documentElement.clientHeight - 590;
+  heightUpper.value = 260 + heightDiff.value / 2;
+  heightLower.value = 200 + heightDiff.value / 2;
+  options.value.moduleSize.upper = heightUpper.value;
+  options.value.moduleSize.lower = heightLower.value;
 }
 
 async function logInit(dir, date, name) {
-  let fileDir = dir + "\\" + date + '_' + name + '.txt'
-  let timeStr = new Date().toLocaleTimeString(['en-GB'], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-  let initLogMsg = "==================================================\n" +
-    "[Renderer] Application launched, start logging...\n" +
-    "Current time: " + date + " " + timeStr + "\n" +
-    "==================================================\n"
+  let fileDir = dir + '\\' + date + '_' + name + '.txt';
+  let timeStr = new Date().toLocaleTimeString(['en-GB'], {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+  let initLogMsg =
+    '==================================================\n' +
+    '[Renderer] Application launched, start logging...\n' +
+    'Current time: ' +
+    date +
+    ' ' +
+    timeStr +
+    '\n' +
+    '==================================================\n';
   try {
-    await fs.promises.appendFile(fileDir, initLogMsg)
+    await fs.promises.appendFile(fileDir, initLogMsg);
   } catch (err) {
-    console.log(err.message)
-    displayNotifyMessage('日志文件初始化失败, 请反馈开发者, 具体错误可至控制台查看')
+    console.log(err.message);
+    displayNotifyMessage(
+      '日志文件初始化失败, 请反馈开发者, 具体错误可至控制台查看',
+    );
   }
 }
 
 async function saveOptionsWithDialog() {
-  const winPath = await ipc.invoke('get-settings-save-path')
-  if (winPath.canceled) return
-  let optionsStr = JSON.stringify(options.value)
+  const winPath = await ipc.invoke('get-settings-save-path');
+  if (winPath.canceled) return;
+  let optionsStr = JSON.stringify(options.value);
   try {
-    await fs.promises.truncate(winPath.filePath).catch(err => {
-      if (err.message.includes('ENOENT')) return
-      else throw err
-    })
-    await fs.promises.appendFile(winPath.filePath, optionsStr)
-    displayNotifyMessage('导出设置成功! 存储路径: ' + winPath.filePath, 'success')
+    await fs.promises.truncate(winPath.filePath).catch((err) => {
+      if (err.message.includes('ENOENT')) return;
+      else throw err;
+    });
+    await fs.promises.appendFile(winPath.filePath, optionsStr);
+    displayNotifyMessage(
+      '导出设置成功! 存储路径: ' + winPath.filePath,
+      'success',
+    );
   } catch (err) {
-    displayNotifyMessage('导出设置失败! 错误信息: ' + err.message)
+    displayNotifyMessage('导出设置失败! 错误信息: ' + err.message);
   }
 }
 
 async function readOptionsFromUpload(file) {
-  let resStr = file.content
+  let resStr = file.content;
   try {
-    let resObj = JSON.parse(resStr)
-    resObj = formatObj(resObj, options.value)
-    if (JSON.stringify(resObj) === JSON.stringify(options.value)) throw new Error('导入文件结构不正确或无设置项更改')
-    options.value = resObj
-    await resetLogPath()
-    displayNotifyMessage('从本地文件导入设置成功!', 'success')
+    let resObj = JSON.parse(resStr);
+    resObj = formatObj(resObj, options.value);
+    if (JSON.stringify(resObj) === JSON.stringify(options.value))
+      throw new Error('导入文件结构不正确或无设置项更改');
+    options.value = resObj;
+    await resetLogPath();
+    displayNotifyMessage('从本地文件导入设置成功!', 'success');
   } catch (err) {
-    displayNotifyMessage('导入设置失败! 错误信息: ' + err.message)
+    displayNotifyMessage('导入设置失败! 错误信息: ' + err.message);
   }
 }
 
 function addToVIP(nn) {
-  let bef = options.value.danmaku.vip
+  let bef = options.value.danmaku.vip;
   if (!bef) {
     Dialog.confirm({
       title: '确认操作',
@@ -337,9 +515,9 @@ function addToVIP(nn) {
       },
     })
       .then(() => {
-        options.value.danmaku.vip = nn
+        options.value.danmaku.vip = nn;
       })
-      .catch(() => { })
+      .catch(() => {});
   } else {
     if (bef.includes(nn)) {
       Dialog.alert({
@@ -348,7 +526,7 @@ function addToVIP(nn) {
         overlayStyle: {
           '-webkit-app-region': 'no-drag',
         },
-      }).then(() => { })
+      }).then(() => {});
     } else
       Dialog.confirm({
         title: '确认操作',
@@ -358,16 +536,16 @@ function addToVIP(nn) {
         },
       })
         .then(() => {
-          let aft = bef.concat(' ', nn)
-          options.value.danmaku.vip = aft
+          let aft = bef.concat(' ', nn);
+          options.value.danmaku.vip = aft;
         })
-        .catch(() => { })
+        .catch(() => {});
   }
 }
 
 function addToBan(nn) {
-  let bef = options.value.danmaku.ban.nicknames
-  let vip = options.value.danmaku.vip
+  let bef = options.value.danmaku.ban.nicknames;
+  let vip = options.value.danmaku.vip;
   if (!bef && !vip.includes(nn)) {
     Dialog.confirm({
       title: '确认操作',
@@ -377,9 +555,9 @@ function addToBan(nn) {
       },
     })
       .then(() => {
-        options.value.danmaku.ban.nicknames = nn
+        options.value.danmaku.ban.nicknames = nn;
       })
-      .catch(() => { })
+      .catch(() => {});
   } else {
     if (bef.includes(nn)) {
       Dialog.alert({
@@ -388,7 +566,7 @@ function addToBan(nn) {
         overlayStyle: {
           '-webkit-app-region': 'no-drag',
         },
-      }).then(() => { })
+      }).then(() => {});
     } else if (vip.includes(nn)) {
       Dialog.alert({
         title: '用户已存在',
@@ -396,7 +574,7 @@ function addToBan(nn) {
         overlayStyle: {
           '-webkit-app-region': 'no-drag',
         },
-      }).then(() => { })
+      }).then(() => {});
     } else
       Dialog.confirm({
         title: '确认操作',
@@ -406,10 +584,10 @@ function addToBan(nn) {
         },
       })
         .then(() => {
-          let aft = bef.concat(' ', nn)
-          options.value.danmaku.ban.nicknames = aft
+          let aft = bef.concat(' ', nn);
+          options.value.danmaku.ban.nicknames = aft;
         })
-        .catch(() => { })
+        .catch(() => {});
   }
 }
 
@@ -419,65 +597,75 @@ function getRoomGiftData(rid) {
       method: 'GET',
     })
       .then((res) => {
-        return res.json()
+        return res.json();
       })
       .then((ret) => {
-        resolve(ret)
+        resolve(ret);
       })
       .catch((err) => {
-        ipc.invoke('err-quit', err.message)
-      })
-  })
+        ipc.invoke('err-quit', err.message);
+      });
+  });
 }
 
 function getGiftData() {
   return new Promise((resolve) => {
-    fetch('https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json', {
-      method: 'GET',
-      credentials: 'include',
-    })
+    fetch(
+      'https://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json',
+      {
+        method: 'GET',
+        credentials: 'include',
+      },
+    )
       .then((res) => {
-        return res.text()
+        return res.text();
       })
       .then((ret) => {
-        let json = ret.substring(String('DYConfigCallback(').length, ret.length)
-        json = json.substring(0, json.lastIndexOf(')'))
-        json = JSON.parse(json)
-        let obj = {}
+        let json = ret.substring(
+          String('DYConfigCallback(').length,
+          ret.length,
+        );
+        json = json.substring(0, json.lastIndexOf(')'));
+        json = JSON.parse(json);
+        let obj = {};
         for (const key in json.data) {
-          let item = json.data[key]
+          let item = json.data[key];
           obj[key] = {
             n: item.name,
             pic: item.himg.replace('https://gfs-op.douyucdn.cn/dygift', ''),
             pc: item.pc,
-          }
+          };
         }
-        return obj
+        return obj;
       })
       .then((ret) => {
-        resolve(ret)
+        resolve(ret);
       })
       .catch((err) => {
-        ipc.invoke('err-quit', err.message)
-      })
-  })
+        ipc.invoke('err-quit', err.message);
+      });
+  });
 }
 
 function onClickMonitor() {
-  isShowOption.value = true
+  isShowOption.value = true;
 }
 
 watch(
   options,
   (n) => {
-    saveLocalData(LOCAL_NAME, JSON.stringify(n))
+    saveLocalData(LOCAL_NAME, JSON.stringify(n));
   },
-  { deep: true }
-)
+  { deep: true },
+);
 </script>
 
-<style lang="scss" scoped>
-@import "@/global/styles/themes/index.scss";
+<style
+  lang="scss"
+  scoped
+>
+@import '@/global/styles/themes/index.scss';
+
 .monitor {
   width: 100%;
   height: 100%;

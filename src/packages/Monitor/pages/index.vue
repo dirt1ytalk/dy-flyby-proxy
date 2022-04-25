@@ -36,10 +36,7 @@
       </el-row>
       <el-row :gutter="5">
         <el-col :span="14">
-          <el-card
-            class="bg"
-            style="-webkit-app-region: no-drag"
-          >
+          <el-card class="bg no-drag">
             <div
               class="monitor"
               @click.right.prevent="onClickMonitor"
@@ -53,10 +50,7 @@
           </el-card>
         </el-col>
         <el-col :span="10">
-          <el-card
-            class="bg"
-            style="-webkit-app-region: no-drag"
-          >
+          <el-card class="bg no-drag">
             <div
               class="monitor"
               @click.right.prevent="onClickMonitor"
@@ -76,9 +70,9 @@
   <el-drawer
     v-model="isShowOption"
     direction="ltr"
-    size="30%"
+    size="33%"
     custom-class="select-none"
-    modal-class="modal"
+    modal-class="no-drag"
     title="设置"
     :show-close="false"
     :with-header="false"
@@ -117,6 +111,7 @@
           </el-form-item>
           <el-form-item label="设置迁移">
             <el-upload
+              class="mr-2"
               action="#"
               accept=".txt"
               :http-request="readOptionsFromUpload"
@@ -130,6 +125,7 @@
                 >
               </template>
             </el-upload>
+            <span>|</span>
             <el-button
               class="ml-2"
               type="primary"
@@ -145,6 +141,56 @@
           <el-icon><chat-dot-round /></el-icon>
           <span>弹幕</span>
         </template>
+        <el-form>
+          <el-form-item label="显示">
+            <el-checkbox-group v-model="options.danmaku.show">
+              <el-checkbox label="level">等级</el-checkbox>
+              <el-checkbox label="noble">贵族</el-checkbox>
+              <el-checkbox label="fans">粉丝牌</el-checkbox>
+              <el-checkbox label="avatar">头像</el-checkbox>
+              <el-checkbox label="roomAdmin">房管</el-checkbox>
+              <el-checkbox label="diamond">钻粉</el-checkbox>
+              <el-checkbox label="vip">VIP</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="屏蔽等级">
+            <el-input-number
+              v-model="options.danmaku.ban.level"
+              :step="1"
+              :min="0"
+              :max="150"
+              controls-position="right"
+              step-strictly="true"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="屏蔽关键词">
+            <el-button
+              type="primary"
+              plain
+              @click="showDialog(0)"
+              :loading="isShowDialog"
+              >管理</el-button
+            >
+          </el-form-item>
+          <el-form-item label="屏蔽用户">
+            <el-button
+              type="primary"
+              plain
+              @click="showDialog(1)"
+              :loading="isShowDialog"
+              >管理</el-button
+            >
+          </el-form-item>
+          <el-form-item label="特别关注">
+            <el-button
+              type="primary"
+              plain
+              @click="showDialog(2)"
+              :loading="isShowDialog"
+              >管理</el-button
+            >
+          </el-form-item>
+        </el-form>
       </el-tab-pane>
       <el-tab-pane>
         <template #label>
@@ -160,6 +206,47 @@
       </div>
     </template>
   </el-drawer>
+  <el-dialog
+    v-model="isShowDialog"
+    top="10vh"
+  >
+    <el-table
+      :data="parseDialogData(dialogIndex)"
+      max-height="330"
+    >
+      <el-table-column prop="name"></el-table-column>
+      <el-table-column
+        fixed="right"
+        label="编辑"
+        width="80"
+      >
+        <template #default="scope">
+          <el-button
+            type="text"
+            size="small"
+            @click="handleDeleteEl(dialogIndex, scope.row.name)"
+          >
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <template #footer>
+      <el-input
+        v-model="strToAdd"
+        class="w-32 mr-3 align-middle"
+        placeholder="新关键词"
+      >
+      </el-input>
+      <el-button
+        class="align-middle"
+        type="primary"
+        plain
+        @click="handleAddStr(dialogIndex)"
+        >添加</el-button
+      >
+    </template>
+  </el-dialog>
   <!-- <Popup
     class="popup"
     v-model:show="isShowOption"
@@ -412,6 +499,10 @@ const fs = window.fs;
 let options = ref(deepCopy(defaultOptions));
 let allGiftData = ref({});
 let isShowOption = ref(false);
+let isShowDialog = ref(false);
+let dialogArrTmp = ref([]);
+let dialogIndex = ref(0);
+let strToAdd = ref('');
 let activeTab = ref(0);
 let { fontSizeStyle, avatarImgSizeStyle, bgColorValue } =
   useNormalStyle(options);
@@ -461,11 +552,11 @@ onMounted(async () => {
   });
 
   //Global unhandled error listener
-  window.addEventListener('error', () => {
-    displayNotifyMessage(
-      '程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看',
-    );
-  });
+  // window.addEventListener('error', () => {
+  //   displayNotifyMessage(
+  //     '程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看',
+  //   );
+  // });
 
   //创建日志文件夹
   await resetLogPath();
@@ -514,6 +605,118 @@ async function resetLogPath() {
   let dirLog = parentDir + '\\520-Logs';
   //存储路径
   options.value.log.dir = dirLog;
+}
+
+function showDialog(index) {
+  dialogIndex.value = index;
+  isShowDialog.value = true;
+}
+
+function handleDeleteEl(index, item) {
+  switch (index) {
+    case 0:
+      options.value.danmaku.ban.keywords = options.value.danmaku.ban.keywords
+        .split(' ')
+        .filter((e) => e !== item)
+        .join(' ');
+      break;
+    case 1:
+      options.value.danmaku.ban.nicknames = options.value.danmaku.ban.nicknames
+        .split(' ')
+        .filter((e) => e !== item)
+        .join(' ');
+      break;
+    case 2:
+      options.value.danmaku.vip = options.value.danmaku.vip
+        .split(' ')
+        .filter((e) => e !== item)
+        .join(' ');
+      break;
+    default:
+  }
+}
+
+function handleAddStr(index) {
+  switch (index) {
+    case 0:
+      if (options.value.danmaku.ban.keywords === '') {
+        options.value.danmaku.ban.keywords += strToAdd.value;
+      } else {
+        options.value.danmaku.ban.keywords =
+          dialogArrTmp.value
+            .map((obj) => {
+              return obj.name;
+            })
+            .join(' ') +
+          ' ' +
+          strToAdd.value;
+      }
+      strToAdd.value = '';
+      break;
+    case 1:
+      if (options.value.danmaku.ban.nicknames === '') {
+        options.value.danmaku.ban.nicknames += strToAdd.value;
+      } else {
+        options.value.danmaku.ban.nicknames =
+          dialogArrTmp.value
+            .map((obj) => {
+              return obj.name;
+            })
+            .join(' ') +
+          ' ' +
+          strToAdd.value;
+      }
+      strToAdd.value = '';
+      break;
+    case 2:
+      if (options.value.danmaku.vip === '') {
+        options.value.danmaku.ban.vip += strToAdd.value;
+      } else {
+        options.value.danmaku.vip =
+          dialogArrTmp.value
+            .map((obj) => {
+              return obj.name;
+            })
+            .join(' ') +
+          ' ' +
+          strToAdd.value;
+      }
+      strToAdd.value = '';
+      break;
+    default:
+  }
+}
+
+function parseDialogData(index) {
+  switch (index) {
+    case 0:
+      let res0 = options.value.danmaku.ban.keywords.split(' ').map((str) => {
+        return {
+          name: str,
+        };
+      });
+      dialogArrTmp.value = res0;
+      if (res0.length === 1 && res0[0].name === '') return undefined;
+      return res0;
+    case 1:
+      let res1 = options.value.danmaku.ban.nicknames.split(' ').map((str) => {
+        return {
+          name: str,
+        };
+      });
+      dialogArrTmp.value = res1;
+      if (res1.length === 1 && res1[0].name === '') return undefined;
+      return res1;
+    case 2:
+      let res2 = options.value.danmaku.vip.split(' ').map((str) => {
+        return {
+          name: str,
+        };
+      });
+      dialogArrTmp.value = res2;
+      if (res2.length === 1 && res2[0].name === '') return undefined;
+      return res2;
+  }
 }
 
 function displayNotifyMessage(message, type = 'warning', duration = 5000) {
@@ -770,7 +973,7 @@ watch(
 </style>
 
 <style lang="scss">
-.modal {
+.no-drag {
   -webkit-app-region: no-drag;
 }
 .avatar {

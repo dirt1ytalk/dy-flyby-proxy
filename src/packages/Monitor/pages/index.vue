@@ -73,7 +73,23 @@
       </el-row>
     </el-main>
   </el-container>
-  <Popup
+  <el-drawer
+    v-model="isShowOption"
+    direction="btt"
+    size="50%"
+    custom-class="select-none"
+    modal-class="modal"
+    title="设置"
+    :show-close="false"
+  >
+    <template #footer>
+      <div class="text-xs flex-auto">
+        Recomposed by: 星落 | V2.2.8 | Based on github:
+        qianjiachun/douyu-monitor
+      </div>
+    </template>
+  </el-drawer>
+  <!-- <Popup
     class="popup"
     v-model:show="isShowOption"
     position="bottom"
@@ -280,7 +296,7 @@
         ></Field>
       </Tab>
     </Tabs>
-  </Popup>
+  </Popup> -->
 </template>
 
 <script setup>
@@ -473,7 +489,7 @@ async function logInit(dir, date, name) {
 async function saveOptionsWithDialog() {
   const winPath = await ipc.invoke('get-settings-save-path');
   if (winPath.canceled) return;
-  let optionsStr = JSON.stringify(options.value);
+  let optionsStr = JSON.stringify(options.value, null, 2);
   try {
     await fs.promises.truncate(winPath.filePath).catch((err) => {
       if (err.message.includes('ENOENT')) return;
@@ -681,6 +697,9 @@ watch(
 </style>
 
 <style lang="scss">
+.modal {
+  -webkit-app-region: no-drag;
+}
 .avatar {
   width: v-bind(avatarImgSizeStyle);
   height: v-bind(avatarImgSizeStyle);

@@ -64,5 +64,6 @@
       "artifactName": "520弹幕助手 Setup ${version}.${ext}",
       "perMachine": false
     }
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }

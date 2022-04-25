@@ -75,17 +75,88 @@
   </el-container>
   <el-drawer
     v-model="isShowOption"
-    direction="btt"
-    size="50%"
+    direction="ltr"
+    size="30%"
     custom-class="select-none"
     modal-class="modal"
     title="设置"
     :show-close="false"
+    :with-header="false"
   >
+    <el-tabs v-model="activeTab">
+      <el-tab-pane>
+        <template #label>
+          <el-icon><operation /></el-icon>
+          <span>通用</span>
+        </template>
+        <el-form>
+          <el-form-item label="面板背景颜色 & 不透明度">
+            <el-color-picker
+              show-alpha
+              v-model="options.bgcolora"
+            ></el-color-picker>
+          </el-form-item>
+          <el-form-item label="字号 (12-30)">
+            <el-input-number
+              v-model="options.fontSize"
+              :min="12"
+              :max="30"
+              controls-position="right"
+              :step-strictly="true"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="面板显示上限">
+            <el-input-number
+              v-model="options.threshold"
+              :step="500"
+              :min="500"
+              controls-position="right"
+              step-strictly="true"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="设置迁移">
+            <el-upload
+              action="#"
+              accept=".txt"
+              :http-request="readOptionsFromUpload"
+              :show-file-list="false"
+            >
+              <template #trigger>
+                <el-button
+                  type="primary"
+                  plain
+                  >导入设置</el-button
+                >
+              </template>
+            </el-upload>
+            <el-button
+              class="ml-2"
+              type="primary"
+              plain
+              @click="saveOptionsWithDialog"
+              >导出设置</el-button
+            >
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane>
+        <template #label>
+          <el-icon><chat-dot-round /></el-icon>
+          <span>弹幕</span>
+        </template>
+      </el-tab-pane>
+      <el-tab-pane>
+        <template #label>
+          <el-icon><present /></el-icon>
+          <span>礼物</span>
+        </template>
+      </el-tab-pane>
+    </el-tabs>
     <template #footer>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.0</div>
       <div class="text-xs flex-auto">
-        Recomposed by: 星落 | V2.2.8 | Based on github:
-        qianjiachun/douyu-monitor
+        Based on github: qianjiachun/douyu-monitor
       </div>
     </template>
   </el-drawer>
@@ -307,6 +378,8 @@ import Danmakuvip from '../components/DanmakuVIP/Danmaku.vue';
 import Gift from '../components/Gift/Gift.vue';
 import GiftUnfiltered from '../components/GiftUnfiltered/Gift.vue';
 
+import { Operation, Present, ChatDotRound } from '@element-plus/icons-vue';
+
 import {
   Popup,
   Tab,
@@ -414,9 +487,9 @@ onMounted(async () => {
     );
   }
 
-  await logInit(dirLog, dateStr, '弹幕');
-  await logInit(dirLog, dateStr, '礼物');
-  await logInit(dirLog, dateStr, '特殊事件');
+  // await logInit(dirLog, dateStr, '弹幕');
+  // await logInit(dirLog, dateStr, '礼物');
+  // await logInit(dirLog, dateStr, '特殊事件');
 
   let data = await getRoomGiftData(rid);
   let giftData = await getGiftData();
@@ -505,8 +578,8 @@ async function saveOptionsWithDialog() {
   }
 }
 
-async function readOptionsFromUpload(file) {
-  let resStr = file.content;
+async function readOptionsFromUpload(res) {
+  let resStr = await res.file.text();
   try {
     let resObj = JSON.parse(resStr);
     resObj = formatObj(resObj, options.value);

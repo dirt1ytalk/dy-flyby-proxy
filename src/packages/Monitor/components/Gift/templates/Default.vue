@@ -155,9 +155,7 @@ function getItemClass(item) {
           Number(props.totalPrice) * 100 ||
         Number(props.giftData.pc) * Number(item.hits) >=
           Number(props.totalPrice) * 100 ||
-        Number(props.data.gfcnt) *
-          Number(props.data.hits) *
-          Number(props.data.pc) >=
+        Number(props.giftData.pc) * Number(item.gfcnt) * Number(item.hits) >=
           Number(props.totalPrice) * 100
       ) {
         ret = 'highlight';

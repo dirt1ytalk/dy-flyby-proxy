@@ -197,6 +197,49 @@
           <el-icon><present /></el-icon>
           <span>礼物</span>
         </template>
+        <el-form>
+          <el-form-item label="显示">
+            <el-checkbox-group v-model="options.gift.show">
+              <el-checkbox label="giftImg">图标</el-checkbox>
+              <el-checkbox label="level">等级</el-checkbox>
+              <el-checkbox label="noble">贵族</el-checkbox>
+              <el-checkbox label="fans">粉丝牌</el-checkbox>
+              <el-checkbox label="avatar">头像</el-checkbox>
+              <el-checkbox label="roomAdmin">房管</el-checkbox>
+              <el-checkbox label="diamond">钻粉</el-checkbox>
+              <el-checkbox label="vip">VIP</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="过滤阈值">
+            <el-input-number
+              v-model="options.gift.ban.price"
+              :min="0"
+              :max="5000"
+              :step="50"
+              controls-position="right"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="高亮阈值">
+            <el-input-number
+              v-model="options.gift.totalPrice"
+              :min="0"
+              :max="5000"
+              :step="50"
+              controls-position="right"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="屏蔽关键词">
+            <el-button
+              type="primary"
+              plain
+              @click="showDialog(3)"
+              :loading="isShowDialog"
+              >管理</el-button
+            >
+          </el-form-item>
+        </el-form>
       </el-tab-pane>
     </el-tabs>
     <template #footer>
@@ -632,6 +675,11 @@ function handleDeleteEl(index, item) {
         .filter((e) => e !== item)
         .join(' ');
       break;
+    case 3:
+      options.value.gift.ban.keywords = options.value.gift.ban.keywords
+        .split(' ')
+        .filter((e) => e !== item)
+        .join(' ');
     default:
   }
 }
@@ -683,6 +731,21 @@ function handleAddStr(index) {
       }
       strToAdd.value = '';
       break;
+    case 3:
+      if (options.value.gift.ban.keywords === '') {
+        options.value.gift.ban.keywords += strToAdd.value;
+      } else {
+        options.value.gift.ban.keywords =
+          dialogArrTmp.value
+            .map((obj) => {
+              return obj.name;
+            })
+            .join(' ') +
+          ' ' +
+          strToAdd.value;
+      }
+      strToAdd.value = '';
+      break;
     default:
   }
 }
@@ -716,6 +779,15 @@ function parseDialogData(index) {
       dialogArrTmp.value = res2;
       if (res2.length === 1 && res2[0].name === '') return undefined;
       return res2;
+    case 3:
+      let res3 = options.value.gift.ban.keywords.split(' ').map((str) => {
+        return {
+          name: str,
+        };
+      });
+      dialogArrTmp.value = res3;
+      if (res3.length === 1 && res3[0].name === '') return undefined;
+      return res3;
   }
 }
 

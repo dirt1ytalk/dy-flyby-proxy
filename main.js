@@ -61,7 +61,7 @@ Menu.setApplicationMenu(menu);
 
 let tray = null;
 const icon = nativeImage.createFromPath(
-  path.join(__dirname, 'public/icon.ico'),
+  path.join(__dirname, '/entry/icon.ico'),
 );
 const contextMenu = Menu.buildFromTemplate([
   {

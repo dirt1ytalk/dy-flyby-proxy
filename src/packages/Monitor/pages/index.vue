@@ -574,15 +574,18 @@ onMounted(async () => {
   //监听fs错误
   window.addEventListener('fserror', () => {
     displayNotifyMessage(
+      '文件系统',
       '日志文件写入失败, 请反馈开发者, 具体错误可至控制台查看',
+      'error',
     );
   });
 
   //监听超管信息
   window.addEventListener('pg-message', (e) => {
     displayNotifyMessage(
-      '超管信息 - ' + e.detail.nn + ': ' + e.detail.txt,
-      'danger',
+      '超管信息',
+      e.detail.nn + ': ' + e.detail.txt,
+      'warning',
       10000,
     );
   });
@@ -590,16 +593,18 @@ onMounted(async () => {
   //监听处理失败未知礼物信息
   window.addEventListener('unknown-gift', (e) => {
     displayNotifyMessage(
-      '未知礼物 - ' + e.detail.id + ' 获取数据失败, 已记录至日志文件',
+      '未知礼物',
+      '礼物ID: ' + e.detail.id + ' 获取数据失败, 已记录至日志文件',
     );
   });
 
   //Global unhandled error listener
-  // window.addEventListener('error', () => {
-  //   displayNotifyMessage(
-  //     '程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看',
-  //   );
-  // });
+  window.addEventListener('error', () => {
+    displayNotifyMessage(
+      '未知错误',
+      '程序运行出现错误, 请反馈开发者, 具体错误可至控制台查看',
+    );
+  });
 
   //创建日志文件夹
   await resetLogPath();
@@ -617,13 +622,15 @@ onMounted(async () => {
   } catch (err) {
     console.log(err.message);
     displayNotifyMessage(
+      '文件系统',
       '无法创建日志文件夹, 请反馈开发者, 具体错误可至控制台查看',
+      'error',
     );
   }
 
-  // await logInit(dirLog, dateStr, '弹幕');
-  // await logInit(dirLog, dateStr, '礼物');
-  // await logInit(dirLog, dateStr, '特殊事件');
+  await logInit(dirLog, dateStr, '弹幕');
+  await logInit(dirLog, dateStr, '礼物');
+  await logInit(dirLog, dateStr, '特殊事件');
 
   let data = await getRoomGiftData(rid);
   let giftData = await getGiftData();
@@ -791,9 +798,16 @@ function parseDialogData(index) {
   }
 }
 
-function displayNotifyMessage(message, type = 'warning', duration = 5000) {
+function displayNotifyMessage(
+  title = '警告',
+  message,
+  type = 'warning',
+  duration = 3000,
+) {
+  if (isShowDialog.value === true) isShowDialog.value = false;
   if (isShowOption.value === true) isShowOption.value = false;
-  Notify({
+  ElNotification({
+    title: title,
     type: type,
     message: message,
     duration: duration,
@@ -829,6 +843,7 @@ async function logInit(dir, date, name) {
   } catch (err) {
     console.log(err.message);
     displayNotifyMessage(
+      '文件系统',
       '日志文件初始化失败, 请反馈开发者, 具体错误可至控制台查看',
     );
   }
@@ -844,12 +859,9 @@ async function saveOptionsWithDialog() {
       else throw err;
     });
     await fs.promises.appendFile(winPath.filePath, optionsStr);
-    displayNotifyMessage(
-      '导出设置成功! 存储路径: ' + winPath.filePath,
-      'success',
-    );
+    displayNotifyMessage('导出设置成功', '设置文件已存储到指定路径', 'success');
   } catch (err) {
-    displayNotifyMessage('导出设置失败! 错误信息: ' + err.message);
+    displayNotifyMessage('导出设置失败', '错误信息: ' + err.message, 'error');
   }
 }
 
@@ -862,9 +874,9 @@ async function readOptionsFromUpload(res) {
       throw new Error('导入文件结构不正确或无设置项更改');
     options.value = resObj;
     await resetLogPath();
-    displayNotifyMessage('从本地文件导入设置成功!', 'success');
+    displayNotifyMessage('导入设置成功', '设置已生效', 'success');
   } catch (err) {
-    displayNotifyMessage('导入设置失败! 错误信息: ' + err.message);
+    displayNotifyMessage('导入设置失败', err.message, 'error');
   }
 }
 

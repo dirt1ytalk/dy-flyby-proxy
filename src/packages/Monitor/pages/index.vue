@@ -871,12 +871,9 @@ async function readOptionsFromUpload(res) {
 function addToVIP(nn) {
   let bef = options.value.danmaku.vip;
   if (!bef) {
-    Dialog.confirm({
-      title: '确认操作',
-      message: '确认添加 ' + nn + ' 到特别关注？',
-      overlayStyle: {
-        '-webkit-app-region': 'no-drag',
-      },
+    ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
+      confimButtonText: '确定',
+      cancelButtonText: '取消',
     })
       .then(() => {
         options.value.danmaku.vip = nn;
@@ -884,20 +881,13 @@ function addToVIP(nn) {
       .catch(() => {});
   } else {
     if (bef.includes(nn)) {
-      Dialog.alert({
-        title: '用户已存在',
-        message: nn + ' 已存在于特别关注中',
-        overlayStyle: {
-          '-webkit-app-region': 'no-drag',
-        },
+      ElMessageBox.alert(nn + ' 已存在于特别关注中', '用户已存在', {
+        closeOnClickModal: true,
       }).then(() => {});
     } else
-      Dialog.confirm({
-        title: '确认操作',
-        message: '确认添加 ' + nn + ' 到特别关注？',
-        overlayStyle: {
-          '-webkit-app-region': 'no-drag',
-        },
+      ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
+        confimButtonText: '确定',
+        cancelButtonText: '取消',
       })
         .then(() => {
           let aft = bef.concat(' ', nn);
@@ -911,12 +901,9 @@ function addToBan(nn) {
   let bef = options.value.danmaku.ban.nicknames;
   let vip = options.value.danmaku.vip;
   if (!bef && !vip.includes(nn)) {
-    Dialog.confirm({
-      title: '确认操作',
-      message: '确认添加 ' + nn + ' 到屏蔽名单？',
-      overlayStyle: {
-        '-webkit-app-region': 'no-drag',
-      },
+    ElMessageBox.confirm('确认添加 ' + nn + ' 到屏蔽名单？', '确认操作', {
+      confimButtonText: '确定',
+      cancelButtonText: '取消',
     })
       .then(() => {
         options.value.danmaku.ban.nicknames = nn;
@@ -924,28 +911,21 @@ function addToBan(nn) {
       .catch(() => {});
   } else {
     if (bef.includes(nn)) {
-      Dialog.alert({
-        title: '用户已存在',
-        message: nn + ' 已存在于屏蔽名单中',
-        overlayStyle: {
-          '-webkit-app-region': 'no-drag',
-        },
+      ElMessageBox.alert(nn + ' 已存在于屏蔽名单中', '用户已存在', {
+        closeOnClickModal: true,
       }).then(() => {});
     } else if (vip.includes(nn)) {
-      Dialog.alert({
-        title: '用户已存在',
-        message: nn + ' 已存在于特别关注中, 请将其先从特别关注中移除',
-        overlayStyle: {
-          '-webkit-app-region': 'no-drag',
+      ElMessageBox.alert(
+        nn + ' 已存在于特别关注中, 请将其先从特别关注中移除',
+        '用户已存在',
+        {
+          closeOnClickModal: true,
         },
-      }).then(() => {});
+      ).then(() => {});
     } else
-      Dialog.confirm({
-        title: '确认操作',
-        message: '确认添加 ' + nn + ' 到屏蔽名单？',
-        overlayStyle: {
-          '-webkit-app-region': 'no-drag',
-        },
+      ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
+        confimButtonText: '确定',
+        cancelButtonText: '取消',
       })
         .then(() => {
           let aft = bef.concat(' ', nn);

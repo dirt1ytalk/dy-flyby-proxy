@@ -269,7 +269,7 @@
             size="small"
             @click="handleDeleteEl(dialogIndex, scope.row.name)"
           >
-            删除
+            移除
           </el-button>
         </template>
       </el-table-column>
@@ -652,10 +652,12 @@ async function readOptionsFromUpload(res) {
 
 function addToVIP(nn) {
   let bef = options.value.danmaku.vip;
-  if (!bef) {
+  let ban = options.value.danmaku.ban.nicknames;
+  if (!bef && !ban.includes(nn)) {
     ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
       confimButtonText: '确定',
       cancelButtonText: '取消',
+      confirmButtonClass: 'is-plain',
     })
       .then(() => {
         options.value.danmaku.vip = nn;
@@ -665,11 +667,26 @@ function addToVIP(nn) {
     if (bef.includes(nn)) {
       ElMessageBox.alert(nn + ' 已存在于特别关注中', '用户已存在', {
         closeOnClickModal: true,
-      }).then(() => {});
+        confirmButtonClass: 'is-plain',
+      })
+        .then(() => {})
+        .catch(() => {});
+    } else if (ban.includes(nn)) {
+      ElMessageBox.alert(
+        nn + ' 已存在于屏蔽名单注中, 请将其先从屏蔽名单中移除',
+        '用户已存在',
+        {
+          closeOnClickModal: true,
+          confirmButtonClass: 'is-plain',
+        },
+      )
+        .then(() => {})
+        .catch(() => {});
     } else
       ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
         confimButtonText: '确定',
         cancelButtonText: '取消',
+        confirmButtonClass: 'is-plain',
       })
         .then(() => {
           let aft = bef.concat(' ', nn);
@@ -686,6 +703,7 @@ function addToBan(nn) {
     ElMessageBox.confirm('确认添加 ' + nn + ' 到屏蔽名单？', '确认操作', {
       confimButtonText: '确定',
       cancelButtonText: '取消',
+      confirmButtonClass: 'is-plain',
     })
       .then(() => {
         options.value.danmaku.ban.nicknames = nn;
@@ -695,19 +713,26 @@ function addToBan(nn) {
     if (bef.includes(nn)) {
       ElMessageBox.alert(nn + ' 已存在于屏蔽名单中', '用户已存在', {
         closeOnClickModal: true,
-      }).then(() => {});
+        confirmButtonClass: 'is-plain',
+      })
+        .then(() => {})
+        .catch(() => {});
     } else if (vip.includes(nn)) {
       ElMessageBox.alert(
         nn + ' 已存在于特别关注中, 请将其先从特别关注中移除',
         '用户已存在',
         {
           closeOnClickModal: true,
+          confirmButtonClass: 'is-plain',
         },
-      ).then(() => {});
+      )
+        .then(() => {})
+        .catch(() => {});
     } else
       ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
         confimButtonText: '确定',
         cancelButtonText: '取消',
+        confirmButtonClass: 'is-plain',
       })
         .then(() => {
           let aft = bef.concat(' ', nn);

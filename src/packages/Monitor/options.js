@@ -20,7 +20,6 @@ export const defaultOptions = {
       level: 0, // 等级
       keywords: '', // 关键词
       nicknames: '', // 关键昵称
-      userIds: '', // 用户ID
     },
     vip: '',
   },

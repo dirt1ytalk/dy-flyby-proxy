@@ -243,7 +243,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.0</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.1</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -655,7 +655,7 @@ function addToVIP(nn) {
   let ban = options.value.danmaku.ban.nicknames;
   if (!bef && !ban.includes(nn)) {
     ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
-      confimButtonText: '确定',
+      confirmButtonText: '确定',
       cancelButtonText: '取消',
       confirmButtonClass: 'is-plain',
     })
@@ -666,6 +666,7 @@ function addToVIP(nn) {
   } else {
     if (bef.includes(nn)) {
       ElMessageBox.alert(nn + ' 已存在于特别关注中', '用户已存在', {
+        confirmButtonText: '确定',
         closeOnClickModal: true,
         confirmButtonClass: 'is-plain',
       })
@@ -676,6 +677,7 @@ function addToVIP(nn) {
         nn + ' 已存在于屏蔽名单注中, 请将其先从屏蔽名单中移除',
         '用户已存在',
         {
+          confirmButtonText: '确定',
           closeOnClickModal: true,
           confirmButtonClass: 'is-plain',
         },
@@ -684,7 +686,7 @@ function addToVIP(nn) {
         .catch(() => {});
     } else
       ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
-        confimButtonText: '确定',
+        confirmButtonText: '确定',
         cancelButtonText: '取消',
         confirmButtonClass: 'is-plain',
       })
@@ -701,7 +703,7 @@ function addToBan(nn) {
   let vip = options.value.danmaku.vip;
   if (!bef && !vip.includes(nn)) {
     ElMessageBox.confirm('确认添加 ' + nn + ' 到屏蔽名单？', '确认操作', {
-      confimButtonText: '确定',
+      confirmButtonText: '确定',
       cancelButtonText: '取消',
       confirmButtonClass: 'is-plain',
     })
@@ -712,6 +714,7 @@ function addToBan(nn) {
   } else {
     if (bef.includes(nn)) {
       ElMessageBox.alert(nn + ' 已存在于屏蔽名单中', '用户已存在', {
+        confirmButtonText: '确定',
         closeOnClickModal: true,
         confirmButtonClass: 'is-plain',
       })
@@ -722,6 +725,7 @@ function addToBan(nn) {
         nn + ' 已存在于特别关注中, 请将其先从特别关注中移除',
         '用户已存在',
         {
+          confirmButtonText: '确定',
           closeOnClickModal: true,
           confirmButtonClass: 'is-plain',
         },
@@ -729,8 +733,8 @@ function addToBan(nn) {
         .then(() => {})
         .catch(() => {});
     } else
-      ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
-        confimButtonText: '确定',
+      ElMessageBox.confirm('确认添加 ' + nn + ' 到屏蔽名单？', '确认操作', {
+        confirmButtonText: '确定',
         cancelButtonText: '取消',
         confirmButtonClass: 'is-plain',
       })

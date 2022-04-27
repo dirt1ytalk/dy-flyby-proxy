@@ -7,9 +7,5 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 .DS_Store
-dist
-dist-ssr
-*.local
-history
-out/
-entry
+dist/
+entry/

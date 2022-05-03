@@ -361,10 +361,10 @@ onMounted(async () => {
   //监听超管信息
   window.addEventListener('pg-message', (e) => {
     displayNotifyMessage(
-      '超管信息',
+      '超管信息 - 需要手动关闭 ➡️',
       e.detail.nn + ': ' + e.detail.txt,
       'warning',
-      10000,
+      0,
     );
   });
 
@@ -674,7 +674,7 @@ function addToVIP(nn) {
         .catch(() => {});
     } else if (ban.includes(nn)) {
       ElMessageBox.alert(
-        nn + ' 已存在于屏蔽名单注中, 请将其先从屏蔽名单中移除',
+        nn + ' 已存在于屏蔽名单中, 请将其先从屏蔽名单中移除',
         '用户已存在',
         {
           confirmButtonText: '确定',

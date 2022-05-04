@@ -368,6 +368,16 @@ export function useWebsocket(options, allGiftData) {
     }
     if (msgType === 'uenter') {
       let data = stt.deserialize(msg);
+      if (data.nn.match(/鲨鱼((?=.{2}$)\1+)/)) {
+        window.dispatchEvent(
+          new CustomEvent('pg-enter', {
+            detail: {
+              nn: data.nn,
+            },
+          }),
+        );
+        return;
+      }
       if (!checkDanmakuIsVIP(data)) {
         return;
       }

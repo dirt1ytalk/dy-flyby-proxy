@@ -250,6 +250,12 @@
           <el-form-item label="超粉团任务追踪">
             <el-switch v-model="options.taskTracking.enabled" />
           </el-form-item>
+          <el-form-item label="单行模式">
+            <el-switch v-model="options.taskTracking.inline" />
+          </el-form-item>
+          <el-form-item label="总是显示循环任务">
+            <el-switch v-model="options.taskTracking.alwaysShowCircle" />
+          </el-form-item>
           <el-form-item label="更新间隔(秒)">
             <el-input-number
               v-model="options.taskTracking.interval"
@@ -474,8 +480,18 @@ async function checkAndWriteSuperFanStatus() {
   let taskList = data.data.superfans.tasklist;
   let filtered = taskList.filter((task) => task.taskstatus.status === 0);
   let enrtires = '';
+  if (
+    options.value.taskTracking.alwaysShowCircle === false &&
+    filtered.length > 2
+  ) {
+    filtered = filtered.filter((task) => task.taskdesc.circleStatus === 0);
+  }
   filtered.forEach((task) => {
-    enrtires += superFansEntry(task) + '\n';
+    if (options.value.taskTracking.inline === true) {
+      enrtires += superFansEntry(task) + '  ';
+    } else {
+      enrtires += superFansEntry(task) + '\n';
+    }
   });
   try {
     await fs.promises.truncate(path).catch((err) => {
@@ -926,11 +942,13 @@ watch(
   () => options.value.taskTracking.enabled,
   (n, o) => {
     if (n !== o && n === false) clearInterval(superFansIntervalId.value);
-    else if (n !== o && n === true)
+    else if (n !== o && n === true) {
       superFansIntervalId.value = setInterval(
         () => checkAndWriteSuperFanStatus(),
         options.value.taskTracking.interval * 1000,
       );
+      checkAndWriteSuperFanStatus();
+    }
   },
 );
 
@@ -947,6 +965,21 @@ watch(
         () => checkAndWriteSuperFanStatus(),
         options.value.taskTracking.interval * 1000,
       );
+    }
+  },
+);
+
+watch(
+  [
+    () => options.value.taskTracking.inline,
+    () => options.value.taskTracking.alwaysShowCircle,
+  ],
+  () => {
+    if (
+      superFansIntervalId.value !== 0 &&
+      options.value.taskTracking.enabled === true
+    ) {
+      checkAndWriteSuperFanStatus();
     }
   },
 );

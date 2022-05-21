@@ -13,6 +13,8 @@ export const defaultOptions = {
   //超粉团任务监控
   taskTracking: {
     enabled: false,
+    inline: false,
+    alwaysShowCircle: false,
     interval: 5,
   },
   // 弹幕设置

@@ -270,7 +270,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.5</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.6</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -478,7 +478,9 @@ async function checkAndWriteSuperFanStatus() {
   const data = await getSuperFansData();
   const path = desktopDir.value + '\\超粉任务数据.txt';
   let taskList = data.data.superfans.tasklist;
-  let filtered = taskList.filter((task) => task.taskstatus.status === 0);
+  let filtered = taskList.filter(
+    (task) => task.taskstatus.status === 0 || task.taskdesc.circleStatus !== 0,
+  );
   let enrtires = '';
   if (
     options.value.taskTracking.alwaysShowCircle === false &&

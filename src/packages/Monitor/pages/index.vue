@@ -270,7 +270,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.6</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.7</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -508,28 +508,12 @@ async function checkAndWriteSuperFanStatus() {
 }
 
 function superFansEntry(task) {
-  switch (task.taskdesc.id) {
-    case 111369:
-      return '办卡 - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
-    case 111372:
-      return '贡献值 - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
-    case 111367:
-      return '1鱼翅 - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
-    case 111371:
-      return '0.1鱼翅 - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
-    case 111368:
-      return '飞机 - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
-    case 111370:
-      return '火箭 - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
-    case 111373:
-      return (
-        '贡献值(循环) - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max
-      );
-    case 111374:
-      return (
-        '办卡(循环) - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max
-      );
-  }
+  const regex = /(?<=收到)(.*?)(?=价格|或等|礼物|有价)/g;
+  const rawStr = task.taskdesc.name;
+  let nameRes = rawStr.match(regex)[0].replace(/(16000|180000)/g, '');
+  console.log(nameRes);
+  if (task.taskdesc.circleStatus === 1) nameRes += '(循环)';
+  return nameRes + ' - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
 }
 
 function showDialog(index) {

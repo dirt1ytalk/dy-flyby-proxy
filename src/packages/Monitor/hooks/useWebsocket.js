@@ -26,9 +26,10 @@ export function useWebsocket(options, allGiftData) {
       },
       () => {
         // 重连
+        window.dispatchEvent(new Event('wserror'));
         ws.close();
         ws = null;
-        connectWs();
+        connectWs(rid);
       },
     );
   };

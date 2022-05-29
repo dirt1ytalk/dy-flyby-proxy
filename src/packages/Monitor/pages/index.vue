@@ -270,7 +270,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.7</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.9</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -392,6 +392,10 @@ onMounted(async () => {
     );
   });
 
+  window.addEventListener('wserror', () => {
+    displayNotifyMessage('网络连接', '网络连接中断, 正在尝试重新连接', 'error');
+  });
+
   //监听超管信息
   window.addEventListener('pg-message', (e) => {
     displayNotifyMessage(
@@ -511,8 +515,7 @@ function superFansEntry(task) {
   const regex = /(?<=收到)(.*?)(?=价格|或等|礼物|有价)/g;
   const rawStr = task.taskdesc.name;
   let nameRes = rawStr.match(regex)[0].replace(/(16000|180000)/g, '');
-  console.log(nameRes);
-  if (task.taskdesc.circleStatus === 1) nameRes += '(循环)';
+  if (task.taskdesc.circleStatus !== 0) nameRes += '(循环)';
   return nameRes + ' - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
 }
 
@@ -739,10 +742,16 @@ async function readOptionsFromUpload(res) {
   }
 }
 
+function regExExactMatch(target, toMatch) {
+  const pattern = `(?<= )(${target})(?= )`;
+  const reg = new RegExp(pattern, 'g');
+  return reg.test(' ' + toMatch + ' ');
+}
+
 function addToVIP(nn) {
   let bef = options.value.danmaku.vip;
   let ban = options.value.danmaku.ban.nicknames;
-  if (!bef && !ban.includes(nn)) {
+  if (!bef && !regExExactMatch(nn, ban)) {
     ElMessageBox.confirm('确认添加 ' + nn + ' 到特别关注？', '确认操作', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -753,7 +762,7 @@ function addToVIP(nn) {
       })
       .catch(() => {});
   } else {
-    if (bef.includes(nn)) {
+    if (regExExactMatch(nn, bef)) {
       ElMessageBox.alert(nn + ' 已存在于特别关注中', '用户已存在', {
         confirmButtonText: '确定',
         closeOnClickModal: true,
@@ -761,7 +770,7 @@ function addToVIP(nn) {
       })
         .then(() => {})
         .catch(() => {});
-    } else if (ban.includes(nn)) {
+    } else if (regExExactMatch(nn, ban)) {
       ElMessageBox.alert(
         nn + ' 已存在于屏蔽名单中, 请将其先从屏蔽名单中移除',
         '用户已存在',
@@ -790,7 +799,7 @@ function addToVIP(nn) {
 function addToBan(nn) {
   let bef = options.value.danmaku.ban.nicknames;
   let vip = options.value.danmaku.vip;
-  if (!bef && !vip.includes(nn)) {
+  if (!bef && !regExExactMatch(nn, vip)) {
     ElMessageBox.confirm('确认添加 ' + nn + ' 到屏蔽名单？', '确认操作', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -801,7 +810,7 @@ function addToBan(nn) {
       })
       .catch(() => {});
   } else {
-    if (bef.includes(nn)) {
+    if (regExExactMatch(nn, bef)) {
       ElMessageBox.alert(nn + ' 已存在于屏蔽名单中', '用户已存在', {
         confirmButtonText: '确定',
         closeOnClickModal: true,
@@ -809,7 +818,7 @@ function addToBan(nn) {
       })
         .then(() => {})
         .catch(() => {});
-    } else if (vip.includes(nn)) {
+    } else if (regExExactMatch(nn, vip)) {
       ElMessageBox.alert(
         nn + ' 已存在于特别关注中, 请将其先从特别关注中移除',
         '用户已存在',

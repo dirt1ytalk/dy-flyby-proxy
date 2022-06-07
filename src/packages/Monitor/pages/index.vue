@@ -483,7 +483,9 @@ async function checkAndWriteSuperFanStatus() {
   const path = desktopDir.value + '\\超粉任务数据.txt';
   let taskList = data.data.superfans.tasklist;
   let filtered = taskList.filter(
-    (task) => task.taskstatus.status === 0 || task.taskdesc.circleStatus !== 0,
+    (task) =>
+      (task.taskstatus.status === 0 || task.taskdesc.circleStatus === 2) &&
+      !task.taskdesc.name.includes('直播间'),
   );
   let enrtires = '';
   if (

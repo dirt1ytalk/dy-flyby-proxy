@@ -41,44 +41,55 @@ export function useWebsocket(options, allGiftData) {
     }
     //debug
     // let excludes = [
-    //     "anbc",
-    //     "rnewbc",
-    //     "uenter",
-    //     "chatmsg",
-    //     "dgb",
-    //     "odfbc",
-    //     "rndfbc",
-    //     "spbc",
-    //     "synexp",
-    //     "dfrank",
-    //     "noble_num_info",
-    //     "qausrespond",
-    //     "ranklist",
-    //     "fswrank",
-    //     "srres",
-    //     "rtss_update",
-    //     "framl",
-    //     "rri",
-    //     "tsboxb",
-    //     "rankup",
-    //     "upgrade",
-    //     "frank",
-    //     "blab",
-    //     "tsgs",
-    //     "wiru",
-    //     "lucky_wheel_star_pool",
-    //     "cthn",
-    //     "wirt",
-    //     "defAltLogin",
-    //     "dealtarlock",
-    //     "yinpinshejiao"
-    // ]
+    //   'anbc',
+    //   'rnewbc',
+    //   'uenter',
+    //   'chatmsg',
+    //   'dgb',
+    //   //"odfbc",
+    //   //"rndfbc",
+    //   'spbc',
+    //   'synexp',
+    //   'dfrank',
+    //   'noble_num_info',
+    //   'qausrespond',
+    //   'ranklist',
+    //   'fswrank',
+    //   'srres',
+    //   'rtss_update',
+    //   'framl',
+    //   'rri',
+    //   'tsboxb',
+    //   'rankup',
+    //   'upgrade',
+    //   'frank',
+    //   'blab',
+    //   'tsgs',
+    //   'wiru',
+    //   'lucky_wheel_star_pool',
+    //   'cthn',
+    //   'wirt',
+    //   'defAltLogin',
+    //   'dealtarlock',
+    //   'yinpinshejiao',
+    //   'qzs202207s2info',
+    //   'anchorclub',
+    //   'qzs202207',
+    //   '202207_camp',
+    //   'diamondfansv2',
+    //   'gbroadcast',
+    //   'rdfpbc',
+    //   'musicopen',
+    //   'voicelevel',
+    //   'ro_date_succ',
+    //   'romantic_screen',
+    // ];
 
     // if (!excludes.includes(msgType)) {
-    //     console.log(msgType)
-    //     console.log(msg)
-    //     let dataObj = stt.deserialize(msg);
-    //     console.log(dataObj)
+    //   console.log(msgType);
+    //   console.log(msg);
+    //   let dataObj = stt.deserialize(msg);
+    //   console.log(dataObj);
     // }
 
     if (msgType === 'chatmsg') {
@@ -196,7 +207,7 @@ export function useWebsocket(options, allGiftData) {
             nn: data.nick,
             lv: data.level,
             gfid: '0',
-            gfcnt: '1',
+            gfcnt: data.mn,
             hits: '1',
             avatar: data.icon, //头像
             fansName: data.bn, // 粉丝牌名字
@@ -223,7 +234,7 @@ export function useWebsocket(options, allGiftData) {
             nn: data.nick,
             lv: data.level,
             gfid: '0',
-            gfcnt: '1',
+            gfcnt: data.mn,
             hits: '1',
             avatar: data.icon, //头像
             fansName: data.bn, // 粉丝牌名字

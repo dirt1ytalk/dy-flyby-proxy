@@ -129,7 +129,7 @@ let giftMsg = computed(() => {
       ret = `${props.giftData.n}*${props.data.gfcnt}`;
       break;
     case '钻粉':
-      ret = props.data.msg;
+      ret = `${props.data.msg}*${props.data.gfcnt}`;
       break;
     case '贵族':
       ret = props.data.msg;
@@ -162,16 +162,14 @@ function getItemClass(item) {
       }
       break;
     case '钻粉':
-      ret = 'highlight';
+      if (props.data.gfcnt >= 3) ret = 'highlight';
       break;
     case '贵族':
       ret = 'highlight';
       break;
     case '粉丝牌升级':
       // 当粉丝牌升级大于25级则高亮
-      if (item.blv >= 26) {
-        ret = 'highlight';
-      }
+      if (item.blv >= 26) ret = 'highlight';
       break;
     default:
       break;

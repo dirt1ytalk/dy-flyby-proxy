@@ -270,7 +270,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.10</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.11</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -516,7 +516,7 @@ async function checkAndWriteSuperFanStatus() {
 function superFansEntry(task) {
   const regex = /(?<=收到)(.*?)(?=价格|或等|礼物|有价)/g;
   const rawStr = task.taskdesc.name;
-  let nameRes = rawStr.match(regex)[0].replace(/(16000|180000)/g, '');
+  let nameRes = rawStr.match(regex)[0].replace(/(\d{1,6})/g, '');
   if (task.taskdesc.circleStatus !== 0) nameRes += '(循环)';
   return nameRes + ' - ' + task.taskstatus.cur + ' / ' + task.taskstatus.max;
 }

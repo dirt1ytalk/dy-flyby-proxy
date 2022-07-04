@@ -519,7 +519,8 @@ export function useWebsocket(options, allGiftData) {
       case '特殊事件':
         timeStr = data.dt;
         userNameStr = data.nn;
-        msgContent = data.msg;
+        if (data.type === '钻粉') msgContent = `${data.msg} * ${data.gfcnt} 月`;
+        else msgContent = data.msg;
         arrConcat = [timeStr, ' - ', userNameStr, ' - ', msgContent];
         strToWrite = ''.concat(...arrConcat);
         return strToWrite;

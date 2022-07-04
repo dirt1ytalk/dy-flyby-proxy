@@ -129,7 +129,7 @@ let giftMsg = computed(() => {
       ret = `${props.giftData.n}*${props.data.gfcnt}`;
       break;
     case '钻粉':
-      ret = `${props.data.msg}*${props.data.gfcnt}`;
+      ret = `${props.data.msg} * ${props.data.gfcnt}月`;
       break;
     case '贵族':
       ret = props.data.msg;

@@ -270,7 +270,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.12</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.13</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -401,16 +401,6 @@ onMounted(async () => {
     displayNotifyMessage(
       '超管信息 - 需要手动关闭 ➡️',
       e.detail.nn + ': ' + e.detail.txt,
-      'warning',
-      0,
-    );
-  });
-
-  //监听超管进入
-  window.addEventListener('pg-enter', (e) => {
-    displayNotifyMessage(
-      '疑似超管进场 - 需要手动关闭 ➡️',
-      e.detail.nn + ' 进入了直播间',
       'warning',
       0,
     );

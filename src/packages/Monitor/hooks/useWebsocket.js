@@ -14,6 +14,12 @@ export function useWebsocket(options, allGiftData) {
   let giftList = ref([]);
   let giftListUnfiltered = ref([]);
   let targetRid = '520';
+  let timeCodeStart = 0;
+
+  //Reset every 4 hrs
+  setTimeout(() => {
+    timeCodeStart = 0;
+  }, 14400000);
 
   const connectWs = (rid) => {
     if (rid === '') {
@@ -380,15 +386,8 @@ export function useWebsocket(options, allGiftData) {
     }
     if (msgType === 'uenter') {
       let data = stt.deserialize(msg);
-      if (data.nn.match(/^鲨鱼((?=.{2}$)\1+)/)) {
-        window.dispatchEvent(
-          new CustomEvent('pg-enter', {
-            detail: {
-              nn: data.nn,
-            },
-          }),
-        );
-        return;
+      if (data.nn === '阿冷aleng丶' && timeCodeStart === 0) {
+        timeCodeStart = Date.now();
       }
       if (!checkDanmakuIsVIP(data)) {
         return;
@@ -473,6 +472,11 @@ export function useWebsocket(options, allGiftData) {
           minute: '2-digit',
           second: '2-digit',
         });
+        if (timeCodeStart !== 0) {
+          let offset = Date.now() - timeCodeStart;
+          let offsetStr = new Date(offset).toISOString().slice(11, 19);
+          timeStr += ` / +${offsetStr}`;
+        }
         userNameStr = data.nn;
         msgContentStr = data.txt;
         fansDisplayStr = data.bnn ? '[' + data.bnn + '/' + data.bl + ']' : '';
@@ -501,16 +505,16 @@ export function useWebsocket(options, allGiftData) {
           ' - ',
           '用户名: ',
           userNameStr,
-          ' | ',
+          ' / ',
           '礼物ID: ',
           giftIdStr,
-          ' | ',
+          ' / ',
           '礼物名: ',
           giftNameStr,
-          ' | ',
+          ' / ',
           '礼物数量: ',
           giftCountStr,
-          ' | ',
+          ' / ',
           '礼物连击数: ',
           giftHits,
         ];

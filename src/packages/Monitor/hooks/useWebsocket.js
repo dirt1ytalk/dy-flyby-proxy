@@ -3,6 +3,7 @@ import { Ex_WebSocket_UnLogin } from '@/global/utils/websocket.js';
 import { STT } from '@/global/utils/stt.js';
 import { getStrMiddle } from '@/global/utils';
 import { nobleData } from '@/global/utils/dydata/nobleData.js';
+import { useWindowScroll } from '@vueuse/core';
 
 const fs = window.fs;
 
@@ -15,11 +16,6 @@ export function useWebsocket(options, allGiftData) {
   let giftListUnfiltered = ref([]);
   let targetRid = '520';
   let timeCodeStart = 0;
-
-  //Reset every 4 hrs
-  setTimeout(() => {
-    timeCodeStart = 0;
-  }, 14400000);
 
   const connectWs = (rid) => {
     if (rid === '') {
@@ -386,8 +382,17 @@ export function useWebsocket(options, allGiftData) {
     }
     if (msgType === 'uenter') {
       let data = stt.deserialize(msg);
-      if (data.nn === '阿冷aleng丶' && timeCodeStart === 0) {
+      if (
+        data.nn === '阿冷aleng丶' &&
+        timeCodeStart === 0 &&
+        options.value.log.recordTimecode
+      ) {
         timeCodeStart = Date.now();
+        setTimeout(() => {
+          timeCodeStart = 0;
+          window.dispatchEvent(new Event('tc-reset'));
+        }, options.value.log.timecodeResetTimer * 3600 * 1000);
+        window.dispatchEvent(new Event('host-enter'));
       }
       if (!checkDanmakuIsVIP(data)) {
         return;
@@ -461,6 +466,7 @@ export function useWebsocket(options, allGiftData) {
     let giftIdStr = null;
     let giftNameStr = null;
     let giftCountStr = null;
+    let giftPriceStr = null;
     let giftHits = null;
     let msgContent = null;
     let arrConcat = null;
@@ -472,7 +478,7 @@ export function useWebsocket(options, allGiftData) {
           minute: '2-digit',
           second: '2-digit',
         });
-        if (timeCodeStart !== 0) {
+        if (timeCodeStart !== 0 && options.value.log.recordTimecode) {
           let offset = Date.now() - timeCodeStart;
           let offsetStr = new Date(offset).toISOString().slice(11, 19);
           timeStr += ` / +${offsetStr}`;
@@ -498,6 +504,11 @@ export function useWebsocket(options, allGiftData) {
         userNameStr = data.nn;
         giftIdStr = data.gfid;
         giftCountStr = data.gfcnt;
+        giftPriceStr = giftData
+          ? giftData.pc
+            ? giftData.pc / 100
+            : 'N/A'
+          : '未知';
         giftHits = data.hits;
 
         arrConcat = [
@@ -511,6 +522,9 @@ export function useWebsocket(options, allGiftData) {
           ' / ',
           '礼物名: ',
           giftNameStr,
+          ' / ',
+          '礼物价值: ',
+          giftPriceStr,
           ' / ',
           '礼物数量: ',
           giftCountStr,

@@ -54,5 +54,7 @@ export const defaultOptions = {
   },
   log: {
     dir: '',
+    recordTimecode: false,
+    timecodeResetTimer: 4,
   },
 };

@@ -90,7 +90,7 @@
               v-model="options.bgcolora"
             ></el-color-picker>
           </el-form-item>
-          <el-form-item label="字号 (12-30)">
+          <el-form-item label="字号(12-30)">
             <el-input-number
               v-model="options.fontSize"
               :min="12"
@@ -152,6 +152,19 @@
               <el-checkbox label="diamond">钻粉</el-checkbox>
               <el-checkbox label="vip">VIP</el-checkbox>
             </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="记录Timecode">
+            <el-switch v-model="options.log.recordTimecode" />
+          </el-form-item>
+          <el-form-item label="TC重置时间(小时, 下次生效)">
+            <el-input-number
+              v-model="options.log.timecodeResetTimer"
+              :step="1"
+              :min="1"
+              :max="12"
+              controls-position="right"
+              step-strictly="true"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="屏蔽等级">
             <el-input-number
@@ -270,7 +283,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.13</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.14</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -393,7 +406,12 @@ onMounted(async () => {
   });
 
   window.addEventListener('wserror', () => {
-    displayNotifyMessage('网络连接', '网络连接中断, 正在尝试重新连接', 'error');
+    displayNotifyMessage(
+      '网络错误 - 需要手动关闭 ➡️',
+      '网络连接中断, 正在尝试重新连接, 如长时间无反应请重启应用',
+      'error',
+      0,
+    );
   });
 
   //监听超管信息
@@ -412,6 +430,18 @@ onMounted(async () => {
       '未知礼物',
       '礼物ID: ' + e.detail.id + ' 获取数据失败, 已记录至日志文件',
     );
+  });
+
+  window.addEventListener('host-enter', () => {
+    displayNotifyMessage(
+      '主播进入房间',
+      'Timecode将会被记录到弹幕日志',
+      'info',
+    );
+  });
+
+  window.addEventListener('tc-reset', () => {
+    displayNotifyMessage('计时器重置', 'Timecode计时器已重置', 'info');
   });
 
   //创建日志文件夹

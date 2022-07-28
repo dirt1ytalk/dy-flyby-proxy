@@ -56,5 +56,6 @@ export const defaultOptions = {
     dir: '',
     recordTimecode: false,
     timecodeResetTimer: 4,
+    timecodeOffset: -3,
   },
 };

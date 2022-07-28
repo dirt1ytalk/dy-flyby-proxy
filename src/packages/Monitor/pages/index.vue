@@ -156,7 +156,23 @@
           <el-form-item label="记录Timecode">
             <el-switch v-model="options.log.recordTimecode" />
           </el-form-item>
-          <el-form-item label="TC重置时间(小时, 下次生效)">
+          <el-form-item
+            v-if="options.log.recordTimecode"
+            label="TC偏移(分钟)"
+          >
+            <el-input-number
+              v-model="options.log.timecodeOffset"
+              :step="1"
+              :min="-5"
+              :max="5"
+              controls-position="right"
+              step-strictly="true"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item
+            v-if="options.log.recordTimecode"
+            label="TC重置时间(小时, 下次生效)"
+          >
             <el-input-number
               v-model="options.log.timecodeResetTimer"
               :step="1"
@@ -283,7 +299,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.14</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.15</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>

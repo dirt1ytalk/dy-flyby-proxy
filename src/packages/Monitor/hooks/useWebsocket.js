@@ -3,7 +3,6 @@ import { Ex_WebSocket_UnLogin } from '@/global/utils/websocket.js';
 import { STT } from '@/global/utils/stt.js';
 import { getStrMiddle } from '@/global/utils';
 import { nobleData } from '@/global/utils/dydata/nobleData.js';
-import { useWindowScroll } from '@vueuse/core';
 
 const fs = window.fs;
 
@@ -479,7 +478,10 @@ export function useWebsocket(options, allGiftData) {
           second: '2-digit',
         });
         if (timeCodeStart !== 0 && options.value.log.recordTimecode) {
-          let offset = Date.now() - timeCodeStart;
+          let offset =
+            Date.now() -
+            timeCodeStart +
+            options.value.log.timecodeOffset * 60 * 1000;
           let offsetStr = new Date(offset).toISOString().slice(11, 19);
           timeStr += ` / +${offsetStr}`;
         }

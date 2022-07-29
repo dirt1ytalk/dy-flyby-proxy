@@ -482,8 +482,10 @@ export function useWebsocket(options, allGiftData) {
             Date.now() -
             timeCodeStart +
             options.value.log.timecodeOffset * 60 * 1000;
-          let offsetStr = new Date(offset).toISOString().slice(11, 19);
-          timeStr += ` / +${offsetStr}`;
+          if (offset >= 0) {
+            let offsetStr = new Date(offset).toISOString().slice(11, 19);
+            timeStr += ` / +${offsetStr}`;
+          }
         }
         userNameStr = data.nn;
         msgContentStr = data.txt;

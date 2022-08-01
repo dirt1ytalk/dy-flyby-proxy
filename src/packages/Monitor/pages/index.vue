@@ -78,7 +78,7 @@
     :with-header="false"
   >
     <el-tabs v-model="activeTab">
-      <el-tab-pane>
+      <el-tab-pane name="general">
         <template #label>
           <el-icon><operation /></el-icon>
           <span>通用</span>
@@ -136,7 +136,7 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane name="chat">
         <template #label>
           <el-icon><chat-dot-round /></el-icon>
           <span>弹幕</span>
@@ -221,7 +221,7 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane name="gift">
         <template #label>
           <el-icon><present /></el-icon>
           <span>礼物</span>
@@ -270,7 +270,7 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane name="exp">
         <template #label>
           <el-icon><MagicStick /></el-icon>
           <span>实验性功能</span>
@@ -388,7 +388,7 @@ let desktopDir = ref('');
 let dialogArrTmp = ref([]);
 let dialogIndex = ref(0);
 let strToAdd = ref('');
-let activeTab = ref(0);
+let activeTab = ref('general');
 let { fontSizeStyle, avatarImgSizeStyle, bgColorValue } =
   useNormalStyle(options);
 let { connectWs, danmakuList, danmakuListVIP, giftList, giftListUnfiltered } =

@@ -15,7 +15,7 @@ https://www.douyu.com/520
 - 安装依赖
 
   ```bash
-  yarn
+  pnpm i
   ```
 
 - 使用 `electron-builder` 打包为electron应用
@@ -23,7 +23,7 @@ https://www.douyu.com/520
   - 仅应用
 
     ```bash
-    yarn run pack
+    pnpm build
     ```
 
     
@@ -31,7 +31,7 @@ https://www.douyu.com/520
   - 打包为安装包(nsis)
 
     ```bash
-    yarn run dist
+    pnpm dist
     ```
 
 
@@ -40,7 +40,7 @@ https://www.douyu.com/520
 房间号默认定义为 `520` ，如需要修改请定位至 `src/packages/Monitor/pages/index.vue` 下的 `onMounted` 方法
 
 ```javascript
-let rid = 520 //change here
+const rid = 520 //change here
 ```
 
 将 `rid` 修改为目标房间号

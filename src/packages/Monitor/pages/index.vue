@@ -237,6 +237,7 @@
               <el-checkbox label="roomAdmin">房管</el-checkbox>
               <el-checkbox label="diamond">钻粉</el-checkbox>
               <el-checkbox label="vip">VIP</el-checkbox>
+              <el-checkbox label="price">价值</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="过滤阈值">
@@ -299,7 +300,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.15</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.16</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>

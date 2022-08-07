@@ -43,6 +43,7 @@ export const defaultOptions = {
       'roomAdmin',
       'diamond',
       'vip',
+      'price',
     ],
     // 屏蔽项
     ban: {

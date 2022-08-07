@@ -17,6 +17,7 @@
       :showRoomAdmin="options.gift.show.includes('roomAdmin')"
       :showAvatar="options.gift.show.includes('avatar')"
       :showVip="options.gift.show.includes('vip')"
+      :showPrice="options.gift.show.includes('price')"
     ></Deafult>
     <div
       v-show="isLock"

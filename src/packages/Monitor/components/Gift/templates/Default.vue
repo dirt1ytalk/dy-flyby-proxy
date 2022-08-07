@@ -56,7 +56,12 @@
       />
     </span>
     <div class="item__name">{{ data.nn }}</div>
-    <div class="item__cnt">{{ giftMsg }}</div>
+    <div class="item__cnt">
+      {{ giftMsg
+      }}<span v-if="showPrice">{{
+        giftData ? (giftData.pc ? `(${giftData.pc / 100})` : '') : ''
+      }}</span>
+    </div>
     <div
       v-if="Number(data.hits) > 1"
       class="item__hits"
@@ -99,6 +104,7 @@ let props = defineProps([
   'showRoomAdmin',
   'showAvatar',
   'showVip',
+  'showPrice',
 ]);
 
 let avatarSrc = computed(() => {

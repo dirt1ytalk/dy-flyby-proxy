@@ -59,7 +59,7 @@
     <div class="item__cnt">
       {{ giftMsg
       }}<span v-if="showPrice">{{
-        giftData ? (giftData.pc ? `(${giftData.pc / 100})` : '') : ''
+        giftData && giftData.pc ? `(${giftData.pc / 100})` : ''
       }}</span>
     </div>
     <div

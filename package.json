@@ -6,12 +6,10 @@
   "description": "https://www.douyu.com/520",
   "main": "main.js",
   "scripts": {
-    "dev": "vite",
-    "vbuild": "vite build",
-    "serve": "vite preview",
     "start": "vite build && electron .",
     "build": "vite build && electron-builder --dir",
-    "dist": "vite build && electron-builder && cd dist && pnpm dlx http-server --log-ip"
+    "dist": "vite build && electron-builder",
+    "serve": "cd dist && pnpm dlx http-server --log-ip"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",

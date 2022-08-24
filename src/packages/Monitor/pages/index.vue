@@ -300,7 +300,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.16</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.17</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>

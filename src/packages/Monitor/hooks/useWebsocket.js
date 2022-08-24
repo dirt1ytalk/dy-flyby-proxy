@@ -28,7 +28,6 @@ export function useWebsocket(options, allGiftData) {
       () => {
         // 重连
         window.dispatchEvent(new Event('wserror'));
-        ws.close();
         ws = null;
         connectWs(rid);
       },
@@ -47,8 +46,8 @@ export function useWebsocket(options, allGiftData) {
     //   'uenter',
     //   'chatmsg',
     //   'dgb',
-    //   //"odfbc",
-    //   //"rndfbc",
+    //   'odfbc',
+    //   'rndfbc',
     //   'spbc',
     //   'synexp',
     //   'dfrank',
@@ -135,7 +134,9 @@ export function useWebsocket(options, allGiftData) {
         //nobleC: data.nc, // 贵族弹幕是否开启，1开
         roomAdmin: data.rg, // 房管，data.rg为4则是房管
         //super: data.pg, // 超管，data.pg为5则为超管
-        vip: data.ail == '453/' || data.ail == '454/', // vip，如果是 453/则为vip  454/则为超级vip
+        vip: data.ail
+          ? data.ail.includes('/453/') || data.ail.includes('/454/')
+          : undefined, // vip，如果是 453/则为vip  454/则为超级vip
         key: data.cid, // 时间戳
         dt: new Date().toLocaleTimeString(['en-GB'], {
           hour: '2-digit',
@@ -147,38 +148,12 @@ export function useWebsocket(options, allGiftData) {
         danmakuList.value.shift();
       }
       danmakuList.value.push(obj);
-    }
-
-    if (msgType === 'chatmsg') {
-      let data = stt.deserialize(msg);
-      if (!checkDanmakuIsVIP(data)) {
-        return;
+      if (checkDanmakuIsVIP(data)) {
+        if (danmakuListVIP.value.length + 1 > options.value.threshold) {
+          danmakuListVIP.value.shift();
+        }
+        danmakuListVIP.value.push(obj);
       }
-      let obj = {
-        nn: data.nn, // 昵称
-        avatar: data.ic, // 头像地址 https://apic.douyucdn.cn/upload/ + avatar + _small.jpg
-        lv: data.level, // 等级
-        txt: data.txt, // 弹幕内容
-        //color: data.col, // 弹幕颜色 undefine就是普通弹幕 2蓝色 3绿色 6粉色 4橙色 5紫色 1红色
-        fansName: data.bnn, // 粉丝牌名字
-        fansLv: data.bl, // 粉丝牌等级
-        diamond: data.diaf, // 是否是钻粉
-        noble: data.nl, // 贵族等级
-        //nobleC: data.nc, // 贵族弹幕是否开启，1开
-        roomAdmin: data.rg, // 房管，data.rg为4则是房管
-        //super: data.pg, // 超管，data.pg为5则为超管
-        vip: data.ail == '453/' || data.ail == '454/', // vip，如果是 453/则为vip  454/则为超级vip
-        key: data.cid, // 时间戳
-        dt: new Date().toLocaleTimeString(['en-GB'], {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        }),
-      };
-      if (danmakuListVIP.value.length + 1 > options.value.threshold) {
-        danmakuListVIP.value.shift();
-      }
-      danmakuListVIP.value.push(obj);
     }
 
     if (

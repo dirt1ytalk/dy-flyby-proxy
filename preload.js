@@ -14,3 +14,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
 contextBridge.exposeInMainWorld('ipcRenderer', ipcRenderer);
 contextBridge.exposeInMainWorld('fs', fs);
+contextBridge.exposeInMainWorld('platform', process.platform);

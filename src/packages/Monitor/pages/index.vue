@@ -300,7 +300,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.17</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.20</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -317,7 +317,7 @@
       <el-table-column prop="name"></el-table-column>
       <el-table-column
         fixed="right"
-        label="编辑"
+        label="操作"
         width="80"
       >
         <template #default="scope">
@@ -377,7 +377,6 @@ let allGiftData = ref({});
 let isShowOption = ref(false);
 let isShowDialog = ref(false);
 let superFansIntervalId = ref(0);
-let dialogArrTmp = ref([]);
 let dialogIndex = ref(0);
 let strToAdd = ref('');
 let activeTab = ref('general');
@@ -511,44 +510,32 @@ function dialogUpdateOptions(index, res) {
 }
 
 function parseDialogData(index) {
-  //console.log(str);
-  console.log('parse');
-  let res = dialogGetOptions(index)
-    .split(' ')
-    .map((el) => {
-      return {
-        name: el,
-      };
-    });
-  //console.log(res);
-  dialogArrTmp.value = res;
-  //console.log(_arr);
-  if (res.length === 1 && res[0].name === '') return undefined;
-  return res;
+  return dialogGetOptions(index) !== ''
+    ? dialogGetOptions(index)
+        .split(' ')
+        .map((el) => {
+          return {
+            name: el,
+          };
+        })
+    : undefined;
 }
 
 function handleKeyWordDelete(index, item) {
-  let str = dialogGetOptions(index);
-  str = str
-    .split(' ')
-    .filter((e) => e !== item)
-    .join(' ');
-  dialogUpdateOptions(index, str);
+  dialogUpdateOptions(
+    index,
+    dialogGetOptions(index)
+      .split(' ')
+      .filter((e) => e !== item)
+      .join(' '),
+  );
 }
 
 function handleKeyWordAdd(index) {
   if (dialogGetOptions(index) === '') {
     dialogUpdateOptions(index, strToAdd.value);
   } else {
-    let res =
-      dialogArrTmp.value
-        .map((obj) => {
-          return obj.name;
-        })
-        .join(' ') +
-      ' ' +
-      strToAdd.value;
-    dialogUpdateOptions(index, res);
+    dialogUpdateOptions(index, dialogGetOptions(index) + ' ' + strToAdd.value);
   }
   strToAdd.value = '';
 }

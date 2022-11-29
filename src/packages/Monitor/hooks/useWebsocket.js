@@ -4,8 +4,6 @@ import { STT } from '@/global/utils/stt.js';
 import { getStrMiddle } from '@/global/utils';
 import { nobleData } from '@/global/utils/dydata/nobleData.js';
 
-const fs = window.fs;
-
 export function useWebsocket(options, allGiftData, missingGiftFetch, logging) {
   let ws = null;
   let stt = new STT();

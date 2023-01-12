@@ -459,8 +459,8 @@ async function checkAndWriteSuperFanStatus() {
   try {
     await overwriteFile(entries, path);
   } catch (error) {
-    console.log('sfdata', err.message);
-    window.dispatchEvent('fserror');
+    console.log('sfdata', error.message);
+    window.dispatchEvent(new Event('fserror'));
   }
 }
 

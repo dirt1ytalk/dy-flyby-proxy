@@ -12,7 +12,7 @@ export function useNode(options) {
   //记录弹幕信息到本地文件
   const logToLocalFile = async (str, fileDir) => {
     await fs.promises.appendFile(fileDir, str + '\n').catch(async (err) => {
-      if (err.code === 'ENOENT') {
+      if (err.message.includes('ENOENT')) {
         await createFileDir(fileDir);
         logToLocalFile(str, fileDir);
       } else {
@@ -24,7 +24,7 @@ export function useNode(options) {
 
   const overwriteFile = async (str, path) => {
     await fs.promises.truncate(path).catch((err) => {
-      if (err.err.code === 'ENOENT') return;
+      if (err.message.includes('ENOENT')) return;
       else throw err;
     });
     await fs.promises.appendFile(path, str);
@@ -62,7 +62,7 @@ export function useNode(options) {
       await fs.promises.appendFile(fileDir, initLogMsg);
     } catch (err) {
       console.log('logInit', err.message);
-      window.dispatchEvent('fserror');
+      window.dispatchEvent(new Event('fserror'));
     }
   };
 
@@ -81,7 +81,7 @@ export function useNode(options) {
       await fs.promises.mkdir(dirLog, { recursive: true });
     } catch (err) {
       console.log('onMounted md', err.message);
-      window.dispatchEvent('fserror');
+      window.dispatchEvent(new Event('fserror'));
     }
 
     ['弹幕', '礼物', '特殊事件'].forEach(async (el) => {

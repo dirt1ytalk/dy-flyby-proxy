@@ -79,7 +79,7 @@ export function useFetch(rid) {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log('ERR::SG::Fetch - ', err);
           resolve('500');
         });
     });
@@ -101,7 +101,7 @@ export function useFetch(rid) {
           resolve(ret);
         })
         .catch((err) => {
-          console.log(err);
+          console.log('ERR::SF::Fetch - ', err);
           resolve('500');
         });
     });

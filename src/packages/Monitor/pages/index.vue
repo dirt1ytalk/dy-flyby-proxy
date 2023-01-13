@@ -300,7 +300,7 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.20</div>
+      <div class="text-xs flex-auto">Recomposed by: 星落 | V2.3.22</div>
       <div class="text-xs flex-auto">
         Based on github: qianjiachun/douyu-monitor
       </div>
@@ -431,6 +431,16 @@ onMounted(async () => {
   }
   allGiftData.value = { ...roomGiftData, ...giftData };
   connectWs(rid);
+
+  if (options.value.taskTracking.enabled === true) {
+    checkAndWriteSuperFanStatus();
+    if (superFansIntervalId.value !== 0)
+      clearInterval(superFansIntervalId.value);
+    superFansIntervalId.value = setInterval(
+      () => checkAndWriteSuperFanStatus(),
+      options.value.taskTracking.interval * 1000,
+    );
+  }
 });
 
 async function checkAndWriteSuperFanStatus() {
@@ -459,7 +469,7 @@ async function checkAndWriteSuperFanStatus() {
   try {
     await overwriteFile(entries, path);
   } catch (error) {
-    console.log('sfdata', error.message);
+    console.log('ERR::SF::IO - ', error.message, ', Target: ', path);
     window.dispatchEvent(new Event('fserror'));
   }
 }
@@ -557,6 +567,12 @@ async function saveOptionsWithDialog() {
     displayNotifyMessage('导出设置成功', '设置文件已存储到指定路径', 'success');
   } catch (err) {
     displayNotifyMessage('导出设置失败', '错误信息: ' + err.message, 'error');
+    console.log(
+      'ERR::OP::IO - ',
+      err.message,
+      ', Target: ',
+      winPath.filePath,
+    );
   }
 }
 
@@ -679,11 +695,11 @@ watch(
   (n, o) => {
     if (n !== o && n === false) clearInterval(superFansIntervalId.value);
     else if (n !== o && n === true) {
+      checkAndWriteSuperFanStatus();
       superFansIntervalId.value = setInterval(
         () => checkAndWriteSuperFanStatus(),
         options.value.taskTracking.interval * 1000,
       );
-      checkAndWriteSuperFanStatus();
     }
   },
 );
@@ -696,6 +712,7 @@ watch(
       superFansIntervalId.value !== 0 &&
       options.value.taskTracking.enabled === true
     ) {
+      checkAndWriteSuperFanStatus();
       clearInterval(superFansIntervalId.value);
       superFansIntervalId.value = setInterval(
         () => checkAndWriteSuperFanStatus(),

@@ -185,7 +185,7 @@ autoUpdater.on('error', (err) => {
   clipboard.writeText(String(err));
   new Notification({
     title: '无法获取更新',
-    body: '错误信息已复制到剪贴板, 请反馈开发者',
+    body: '错误信息已复制到剪贴板',
   }).show();
 });
 

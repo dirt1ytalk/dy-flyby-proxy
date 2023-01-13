@@ -10,13 +10,17 @@ export function useNode(options) {
   };
 
   //记录弹幕信息到本地文件
-  const logToLocalFile = async (str, fileDir) => {
-    await fs.promises.appendFile(fileDir, str + '\n').catch(async (err) => {
+  const logToLocalFile = async (str, pathObj) => {
+    const path = pathObj.path;
+    const fileName = pathObj.fileName;
+    const fullPath = path + '\\' + fileName;
+
+    await fs.promises.appendFile(fullPath, str + '\n').catch(async (err) => {
       if (err.message.includes('ENOENT')) {
-        await createFileDir(fileDir);
-        logToLocalFile(str, fileDir);
+        await createFileDir(path);
+        logToLocalFile(str, pathObj);
       } else {
-        console.log('logToLocalFile', err);
+        console.log('ERR::LOG::IO - ', err, ', Target:', pathObj);
         window.dispatchEvent(new Event('fserror'));
       }
     });
@@ -37,7 +41,7 @@ export function useNode(options) {
   //创建文件夹(如不存在)
   const createFileDir = async (fileDir) => {
     await fs.promises.mkdir(fileDir, { recursive: true }).catch((err) => {
-      console.log('createFileDir', err);
+      console.log('ERR::ROOT::MD - ', err, ', Target: ', fileDir);
       window.dispatchEvent(new Event('fserror'));
     });
   };
@@ -61,7 +65,7 @@ export function useNode(options) {
     try {
       await fs.promises.appendFile(fileDir, initLogMsg);
     } catch (err) {
-      console.log('logInit', err.message);
+      console.log('ERR::OM::IO - ', err.message, ', Target: ', fileDir);
       window.dispatchEvent(new Event('fserror'));
     }
   };
@@ -80,7 +84,7 @@ export function useNode(options) {
     try {
       await fs.promises.mkdir(dirLog, { recursive: true });
     } catch (err) {
-      console.log('onMounted md', err.message);
+      console.log('ERR::OM::MD - ', err.message, ', Target: ', dirLog);
       window.dispatchEvent(new Event('fserror'));
     }
 

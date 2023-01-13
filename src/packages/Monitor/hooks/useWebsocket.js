@@ -390,25 +390,26 @@ export function useWebsocket(options, allGiftData, missingGiftFetch, logging) {
 
   //记录弹幕信息到本地文件
   const logToLocalFile = async (data, index) => {
-    let fileDir = getFileDir(index, true);
+    let pathObj = getPathObj(index);
     let strToWrite = getMsgStruc(data, index);
-    await logging(strToWrite, fileDir);
+    await logging(strToWrite, pathObj);
   };
 
   //根据日期以及父目录生成路径与文件名
-  const getFileDir = (index = undefined, isFullPath = false) => {
+  const getPathObj = (index) => {
     let dir = options.value.log.dir;
     let date = new Date();
+    let path = '';
+    let fileName = '';
     let dateStr =
       String(date.getFullYear()) +
       '-' +
       String(date.getMonth() + 1) +
       '-' +
       String(date.getDate());
-    dir = dir + '\\' + dateStr;
-    if (isFullPath === true && !!index)
-      return dir + '\\' + dateStr + '_' + index + '.txt';
-    else return dir;
+    path = dir + '\\' + dateStr;
+    fileName = dateStr + '_' + index + '.txt';
+    return { path, fileName };
   };
 
   //生成日志消息本体

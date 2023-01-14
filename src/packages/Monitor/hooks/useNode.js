@@ -15,7 +15,9 @@ export function useNode(options) {
     const fileName = pathObj.fileName;
     const fullPath = path + '\\' + fileName;
 
-    await fs.promises.appendFile(fullPath, str + '\n').catch(async (err) => {
+    try {
+      await fs.promises.appendFile(fullPath, str + '\n');
+    } catch (err) {
       if (err.message.includes('ENOENT')) {
         await createFileDir(path);
         logToLocalFile(str, pathObj);
@@ -23,14 +25,15 @@ export function useNode(options) {
         console.log('ERR::LOG::IO - ', err, ', Target:', pathObj);
         window.dispatchEvent(new Event('fserror'));
       }
-    });
+    }
   };
 
   const overwriteFile = async (str, path) => {
-    await fs.promises.truncate(path).catch((err) => {
-      if (err.message.includes('ENOENT')) return;
-      else throw err;
-    });
+    try {
+      await fs.promises.truncate(path);
+    } catch (err) {
+      if (!err.message.includes('ENOENT')) throw err;
+    }
     await fs.promises.appendFile(path, str);
   };
 
@@ -40,10 +43,12 @@ export function useNode(options) {
 
   //创建文件夹(如不存在)
   const createFileDir = async (fileDir) => {
-    await fs.promises.mkdir(fileDir, { recursive: true }).catch((err) => {
+    try {
+      await fs.promises.mkdir(fileDir, { recursive: true });
+    } catch (err) {
       console.log('ERR::ROOT::MD - ', err, ', Target: ', fileDir);
       window.dispatchEvent(new Event('fserror'));
-    });
+    }
   };
 
   const logInit = async (dir, date, name) => {
@@ -65,7 +70,7 @@ export function useNode(options) {
     try {
       await fs.promises.appendFile(fileDir, initLogMsg);
     } catch (err) {
-      console.log('ERR::OM::IO - ', err.message, ', Target: ', fileDir);
+      console.log('ERR::OM::INIT - ', err.message, ', Target: ', fileDir);
       window.dispatchEvent(new Event('fserror'));
     }
   };
@@ -80,13 +85,9 @@ export function useNode(options) {
       String(date.getMonth() + 1) +
       '-' +
       String(date.getDate());
+
     dirLog = dirLog + '\\' + dateStr;
-    try {
-      await fs.promises.mkdir(dirLog, { recursive: true });
-    } catch (err) {
-      console.log('ERR::OM::MD - ', err.message, ', Target: ', dirLog);
-      window.dispatchEvent(new Event('fserror'));
-    }
+    await createFileDir(dirLog);
 
     ['弹幕', '礼物', '特殊事件'].forEach(async (el) => {
       await logInit(dirLog, dateStr, el);

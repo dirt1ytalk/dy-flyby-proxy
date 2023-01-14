@@ -566,13 +566,8 @@ async function saveOptionsWithDialog() {
     await overwriteFile(optionsStr, winPath.filePath);
     displayNotifyMessage('导出设置成功', '设置文件已存储到指定路径', 'success');
   } catch (err) {
-    displayNotifyMessage('导出设置失败', '错误信息: ' + err.message, 'error');
-    console.log(
-      'ERR::OP::IO - ',
-      err.message,
-      ', Target: ',
-      winPath.filePath,
-    );
+    displayNotifyMessage('导出设置失败', '错误信息请至控制台查看');
+    console.log('ERR::OP::IO - ', err.message, ', Target: ', winPath.filePath);
   }
 }
 

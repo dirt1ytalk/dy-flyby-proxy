@@ -11,7 +11,7 @@ export function useWebsocket(options, allGiftData, missingGiftFetch, logging) {
   let danmakuListVIP = ref([]);
   let giftList = ref([]);
   let giftListUnfiltered = ref([]);
-  let targetRid = '520';
+  let targetRid = '617';
   let timeCodeStart = 0;
 
   const connectWs = (rid) => {

@@ -371,7 +371,7 @@ import { useFetch } from '../hooks/useFetch';
 import { useNotification } from '../hooks/useNotification';
 import { useNode } from '../hooks/useNode';
 
-const rid = 520;
+const rid = 617;
 
 let allGiftData = ref({});
 let isShowOption = ref(false);

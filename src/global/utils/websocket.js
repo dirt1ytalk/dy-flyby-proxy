@@ -1,7 +1,7 @@
 import { getRandom } from '@/global/utils';
 /*
    DouyuEx WebSocket UnLogin
-    By: 小淳
+    By: 小丁
 */
 class Ex_WebSocket_UnLogin {
   // 调用方法：
@@ -52,7 +52,7 @@ class Ex_WebSocket_UnLogin {
 
 /*
    DouyuEx WebSocket
-    By: 小淳
+    By: 小丁
     此处为一些公共函数
 */
 

@@ -48,7 +48,7 @@ export const defaultOptions = {
     // 屏蔽项
     ban: {
       // 价格低于
-      price: 50,
+      price: 6,
       // 礼物名称
       keywords: '',
     },

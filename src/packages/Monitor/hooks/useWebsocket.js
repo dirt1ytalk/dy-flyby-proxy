@@ -11,7 +11,7 @@ export function useWebsocket(options, allGiftData, missingGiftFetch, logging) {
   let danmakuListVIP = ref([]);
   let giftList = ref([]);
   let giftListUnfiltered = ref([]);
-  let targetRid = '617';
+  let targetRid = "6775193";
   let timeCodeStart = 0;
 
   const connectWs = (rid) => {
@@ -355,7 +355,7 @@ export function useWebsocket(options, allGiftData, missingGiftFetch, logging) {
     if (msgType === 'uenter') {
       let data = stt.deserialize(msg);
       if (
-        data.nn === '阿冷aleng丶' &&
+        data.nn === '617丶新一' &&
         timeCodeStart === 0 &&
         options.value.log.recordTimecode
       ) {
@@ -595,7 +595,7 @@ export function useWebsocket(options, allGiftData, missingGiftFetch, logging) {
     // 屏蔽荧光棒
     if (giftData.n.includes('荧光棒')) return false;
     // 屏蔽单价
-    let expThreshold = threshold * 100;
+    let expThreshold = threshold * 6;
     if (Number(giftData.pc) < expThreshold) {
       //判断连击或捆绑是否总值小于阈值, 如是, 则抛弃该礼物
       if (

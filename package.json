@@ -1,9 +1,9 @@
 {
   "name": "dy-flyby-proxy",
-  "version": "2.3.22",
-  "author": "星落",
+  "version": "1.0.0",
+  "author": "小丁",
   "license": "MIT",
-  "description": "https://www.douyu.com/520",
+  "description": "https://www.douyu.com/6775193",
   "main": "main.js",
   "scripts": {
     "start": "vite build && electron .",
@@ -34,7 +34,7 @@
   },
   "build": {
     "appId": "com.skysway.dyassistant",
-    "productName": "520弹幕助手",
+    "productName": "617小丁弹幕助手",
     "files": [
       "**/{main.js,preload.js}",
       "entry/",
@@ -54,7 +54,7 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "520弹幕助手 Setup ${version}.${ext}",
+      "artifactName": "617小丁弹幕助手 Setup ${version}.${ext}",
       "perMachine": false
     }
   }

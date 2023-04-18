@@ -75,7 +75,7 @@ const contextMenu = Menu.buildFromTemplate([
   {
     label: '打开日志文件夹',
     click: () => {
-      dir = app.getPath('documents') + '\\520-Logs';
+      dir = app.getPath('documents') + '\\617-Logs';
       require('child_process').exec('start "" "' + dir + '"');
     },
   },
@@ -90,7 +90,7 @@ const contextMenu = Menu.buildFromTemplate([
 
 app.whenReady().then(async () => {
   tray = new Tray(icon);
-  tray.setToolTip('520弹幕助手');
+  tray.setToolTip('617弹幕助手');
   tray.setContextMenu(contextMenu);
 
   createWindow();
@@ -99,7 +99,7 @@ app.whenReady().then(async () => {
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       tray = new Tray(icon);
-      tray.setToolTip('520弹幕助手');
+      tray.setToolTip('617弹幕助手');
       tray.setContextMenu(contextMenu);
 
       createWindow();
